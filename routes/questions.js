@@ -1,15 +1,15 @@
 var express = require('express');
 var router = express.Router();
 
-var questionsCtrl = require('../controllers/comments');
+var questionsCtrl = require('../controllers/questions');
 
-router.get('/questions', questionsCtrl.findAll); //retrieve all questions
-router.get('/questions/nextTenQuestions/:requestNumber', questionsCtrl.nextTenQuestions); //retrieve all questions
-router.get('/questions/:id', questionsCtrl.findById); //retrieve questions with id
-router.post('/questions', questionsCtrl.addQuestion ); //add a question
-router.put('/questions/:id', questionsCtrl.updateQuestion); //update a question
-router.put('/questions/upvote/:id', questionsCtrl.upVote); //upvote uestion
-router.put('/questions/dnvote/:id', questionsCtrl.dnVote); //downvote a question
-router.delete('/questions/:id', questionsCtrl.deleteQuestion); //delete a question
+router.get('/', questionsCtrl.retrieveAll);
+router.get('/tenMore/:requestNumber', questionsCtrl.nextTenQuestions);
+router.get('/:questionId', questionsCtrl.findById);
+router.post('/', questionsCtrl.addQuestion);
+router.put('/:questionId', questionsCtrl.updateQuestion);
+// router.put('/upvote/:id', questionsCtrl.upVote); //upvote uestion
+// router.put('/dnvote/:id', questionsCtrl.dnVote); //downvote a question
+// router.delete('/:id', questionsCtrl.deleteQuestion); //delete a question
 
 module.exports = router;

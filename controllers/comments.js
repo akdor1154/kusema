@@ -1,113 +1,68 @@
+var Comment = require('../models/comment');
+
 var exp = module.exports;
 
-exp.nextTenQuestions = function(req, res) {
-	var requestNumber = parseInt(req.params.requestNumber);
-	db.collection('questions', function (err, collection) {
-		collection.find().sort({score:-1}).skip( requestNumber*10 ).limit(10).toArray(function(err, items) {
-			res.send(items);
-		});
+exp.retrieveAll = function(req, res, next) {
+	var getComments = Comment.find(
+		{ '_questionId': req.params.questionId }
+	).exec();
+
+	getComments.addBack(function (err, comments) {
+		if (err) return next(err);
+		res.json(comments);
+	})
+};
+
+exp.addComment = function(req, res, next) {
+	var comment = new Comment();
+	
+	comment.author = "example user";//TODO Add real users
+	comment.message = req.body.message;
+	comment._questionId = req.body.questionId;
+
+	comment.save( function (err, comment) {
+		if (err) return next(err);
+		res.json(comment)
 	});
 };
 
-exp.findAll = function(req, res) {
-	var id = req.params.id;
-	db.collection('comments', function (err, collection) {
-		collection.find({'question_id': id}).toArray( function(err, item) {
-      console.log(item);
-			res.send(item);
-		});
-	});
+exp.deleteComment = function(req, res, next) {
+	var deleteComment = Comment.find(
+		{ '_id': req.params.commentId }
+	).remove().exec();
+
+	deleteComment.addBack( function (err, comments) {
+		if (err) return next(err);
+		res.json({ 'deleted': true });//TODO: check if this is needed
+	})
 };
 
-exp.addComment = function(req, res) {
-	var comment = req.body;
-  comment.date = new Date();
-	comment.score = 0;
-	console.log(comment);
-	db.collection('comments', function (err, collection) {
-		collection.insert(comment, {safe:true}, function (err, result) {
-			if (err) {
-				res.send({'error':'Error adding comment'});
-			} else {
-				res.send(result[0]);
-			}
-		});
-	});
+exp.upVote = function(req, res, next) {
+	// TODO add auth info ensure 1 vote per person
+
+	var upVote = Comment.update(
+		{ '_id': req.params.commentId },
+		{ $inc: { 'upVotes': 1 }}
+	).exec();
+
+	upVote.addBack( function (err) {
+		if(err) return next(err);
+		// TODO Add return value?
+	})
+
 };
 
-exp.updateQuestion = function(req, res) {
-	var id = req.params.id;
-	var question = req.body;
+exp.downVote = function(req, res, next) {
+	// TODO add auth info ensure 1 vote per person
 
-	db.collection('questions', function(err, collection) {
-		collection.update({'_id':new BSON.ObjectID(id)}, {$set: {
-			title: question.title,
-			author: question.author,
-			comment: question.comment
-		}}, {safe:true}, function(err, result) {
-			if (err) {
-				res.send({'error':'Error updating question'});
-			} else {
-				res.send(question);
-			}
-		});
-	});
-};
+	var downVote = Comment.update(
+		{ '_id': req.params.commentId },
+		{ $inc: { 'downVotes': 1 }}
+	).exec();
 
-exp.deleteComment = function(req, res) {
-  var commentId = req.params.commentId;
+	upVote.addBack( function (err) {
+		if(err) return next(err);
+		// TODO Add return value?
+	})
 
-	db.collection('comments', function (err, collection) {
-		collection.remove({'_id':new BSON.ObjectID(commentId)}, {safe:true}, function (err, result) {
-			if (err) {
-				res.send({'error':'Error deleting comment'});
-			} else {
-				res.send(req.body);
-			}
-		});
-	});	
-};
-
-exp.upVote = function(req, res) {
-  var id = req.params.id;
-  // add auth info
-
-  db.collection('questions', function(err, collection) {
-    collection.update({'_id':new BSON.ObjectID(id)}, {$inc:{
-      score: 1
-    }}, {safe:true}, function(err, result) {
-      if (err) {
-        res.send({'error':'Error upvoting question'});
-      } else {
-        res.send(result);
-      }
-    });
-  });
-};
-
-exp.dnVote = function(req, res) {
-  var id = req.params.id;
-  // add auth info
-
-  db.collection('questions', function(err, collection) {
-    collection.update({'_id':new BSON.ObjectID(id)}, {$inc:{
-      score: -1
-    }}, {safe:true}, function(err, result) {
-      if (err) {
-        res.send({'error':'Error downvoting question'});
-      } else {
-        res.send(result);
-      }
-    });
-  });
-};
-
-
-// populate the database with sample data
-var populate = function() {
-
-	db.collection('questions', function(err, collection) {
-		collection.insert({}, {safe:true}, function(err, result) {});
-	});
-	 
 };

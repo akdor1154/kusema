@@ -13,13 +13,13 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var questions = require('./routes/questions');
 var comments = require('./routes/comments');
-var routes = require('./routes/index');
+//var routes = require('./routes/index');
 var mongoose = require('mongoose');
 
 var app = express();
 
 // connect to database
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/kusema');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {

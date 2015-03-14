@@ -1,212 +1,99 @@
+var Question = require('../models/question');
+var ObjectId = require('mongoose').Types.ObjectId;
+
 var exp = module.exports;
 
-exp.findAll = function(req, res) {
-	db.collection('questions', function (err, collection) {
-		collection.find().toArray(function(err, items) {
-			res.send(items);
-		});
-	});
-};
+exp.findById = function(req, res, next) {
+  var getQuestion = Question.findOne(
+    { '_id': new ObjectId(req.params.questionId) }
+  ).exec();
 
-exp.nextTenQuestions = function(req, res) {
-	var requestNumber = parseInt(req.params.requestNumber);
-	db.collection('questions', function (err, collection) {
-		collection.find().sort({score:-1}).skip( requestNumber*10 ).limit(10).toArray(function(err, items) {
-			res.send(items);
-		});
-	});
-};
-
-exp.findById = function(req, res) {
-	var id = req.params.id;
-	db.collection('questions', function (err, collection) {
-		collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, item) {
-			res.send(item);
-		});
-	});
-};
-
-exp.addQuestion = function(req, res) {
-	var question = req.body;
-  question.date = new Date();
-	question.score = 0;
-	console.log(question);
-	db.collection('questions', function (err, collection) {
-		collection.insert(question, {safe:true}, function (err, result) {
-			if (err) {
-				res.send({'error':'Error adding question'});
-			} else {
-				res.send(result[0]);
-			}
-		});
-	});
-};
-
-exp.updateQuestion = function(req, res) {
-	var id = req.params.id;
-	var question = req.body;
-
-	db.collection('questions', function(err, collection) {
-		collection.update({'_id':new BSON.ObjectID(id)}, {$set: {
-			title: question.title,
-			author: question.author,
-			comment: question.comment
-		}}, {safe:true}, function(err, result) {
-			if (err) {
-				res.send({'error':'Error updating question'});
-			} else {
-				res.send(question);
-			}
-		});
-	});
-};
-
-exp.deleteQuestion = function(req, res) {
-	var id = req.params.id;
-	db.collection('questions', function (err, collection) {
-		collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function (err, result) {
-			if (err) {
-				res.send({'error':'Error deleting question'});
-			} else {
-				res.send(req.body);
-			}
-		});
-	});	
-};
-
-exp.upVote = function(req, res) {
-  var id = req.params.id;
-  // add auth info
-
-  db.collection('questions', function(err, collection) {
-    collection.update({'_id':new BSON.ObjectID(id)}, {$inc:{
-      score: 1
-    }}, {safe:true}, function(err, result) {
-      if (err) {
-        res.send({'error':'Error upvoting question'});
-      } else {
-        res.send(result);
-      }
-    });
+  getQuestion.addBack( function(err, question) {
+    if (err) return next(err);
+    res.json(question);
   });
 };
 
-exp.dnVote = function(req, res) {
-  var id = req.params.id;
-  // add auth info
-
-  db.collection('questions', function(err, collection) {
-    collection.update({'_id':new BSON.ObjectID(id)}, {$inc:{
-      score: -1
-    }}, {safe:true}, function(err, result) {
-      if (err) {
-        res.send({'error':'Error downvoting question'});
-      } else {
-        res.send(result);
-      }
-    });
+exp.nextTenQuestions = function(req, res, next) {
+  Question.find()
+  .sort({ 'upVotes': 1, 'downVotes': -1 })
+  .skip(10*req.params.requestNumber)
+  .limit(10)
+  .exec( function (err, questions) {
+    if(err) return next(err);
+    res.json(questions)
   });
 };
 
+exp.retrieveAll = function(req, res, next) {
+  var getQuestions = Question.find().exec();
 
-// populate the database with sample data
-var populate = function() {
- 
-var questions = [
-    {
-      title: 'I made this forum! ... And I would like your feedback on how useful it is! Also feel free to give me huge amounts of money. I am always happy to accept money.',
-      author: 'nathansherburn',
-      comment: 'hello bananas everyone from nathan!'
-    },
-    {
-      author: 'jon_li',
-      title: 'who likes bananas!?',
-      comment: 'hello everyone from jon!'
-    },
-    {
-      author: 'jamie28',
-      title: 'I teach eng1030 And I would like your feedback on how useful it is',
-      comment: 'hello lorum everyone from jamie!'
-    },
-    {
-      author: 'ashan123',
-      title: 'Hi my name is Ashan',
-      comment: 'hello everyone bananas from ashan!'
-    },
-    {
-      author: 'don25',
-      title: 'this is my first post',
-      comment: 'hello everyone from don!'
-    },
-    {
-      author: 'jon_li',
-      title: 'hello hello hello!?',
-      comment: 'hello hello everyone from jon hello!'
-    },
-    {
-      author: 'jamie28',
-      title: 'This is a title from Jamie! And I would like your feedback on how useful it is',
-      comment: 'hello everyone bananas again from jamie!'
-    },
-    {
-      author: 'ashan123',
-      title: 'Hi I am posting to the forum',
-      comment: 'hello everyone from ashan hello, hello!'
-    },
-    {
-      author: 'don2225',
-      title: 'this is my second post',
-      comment: 'hello everyone bananas again from don!'
-    },
-    {
-      title: 'I made this forum! ... And I would like your feedback on how useful it is! Also feel free to give me huge amounts of money. I am always happy to accept money.',
-      author: 'nathansherburn',
-      comment: 'hello everyone lorum from nathan!'
-    },
-    {
-      author: 'jon_li',
-      title: 'who likes bananas!?',
-      comment: 'hello everyone lorum bananas from jon!'
-    },
-    {
-      author: 'jamie287',
-      title: 'I teach eng1030 always',
-      comment: 'hello everyone from jamie hello from hello!'
-    },
-    {
-      author: 'ashan123123',
-      title: 'Hi my name is Ashan And I would like your feedback on how useful it is',
-      comment: 'hello everyone lorum from ashan!'
-    },
-    {
-      author: 'don255',
-      title: 'this is my first post',
-      comment: 'hello everyone lorum from don!'
-    },
-    {
-      author: 'jon_li_00',
-      title: 'hello hello hello!?',
-      comment: 'hello hello lorum everyone from jon hello!'
-    },
-    {
-      author: 'jamie728',
-      title: 'This is a title from Jamie! And I would like your feedback on how useful it is',
-      comment: 'hello everyone lorum again from jamie!'
-    },
-    {
-      author: 'ashan1723',
-      title: 'Hi I am posting to the forum',
-      comment: 'hello everyone lorum from ashan hello, hello!'
-    },
-    {
-      author: 'don625',
-      title: 'this is my second post',
-      comment: 'hello everyone lorum again from don! And I would like your feedback on how useful it is'
-    }
-  ];
-	 
-	db.collection('questions', function(err, collection) {
-		collection.insert(questions, {safe:true}, function(err, result) {});
-	});
-	 
+  getQuestions.addBack(function (err, questions) {
+    if (err) return next(err);
+    res.json(questions);
+  })
 };
+
+exp.addQuestion = function(req, res, next) {
+  var question = new Question();
+  //question.author = "example user";//TODO Add real users
+  question.message = req.body.message;
+
+  question.save( function (err, question) {
+    if (err) return next(err);
+    res.json(question)
+  });
+};
+
+exp.updateQuestion = function(req, res, next) {
+  var updateQuestion = Question.update(
+    { '_id': new ObjectId(req.params.questionId) },
+    { $set: { 'message': req.body.message, 'dateModified': new Date() }}
+  ).exec();
+
+  updateQuestion.addBack( function(err, numAffected, raw) {
+    if (err) return next(err);
+    res.json(raw);
+  });
+};
+
+// exp.deleteComment = function(req, res, next) {
+// var deleteComment = Comment.find(
+// { '_id': req.params.commentId }
+// ).remove().exec();
+
+// deleteComment.addBack( function (err, comments) {
+// if (err) return next(err);
+// res.json({ 'deleted': true });//TODO: check if this is needed
+// })
+// };
+
+// exp.upVote = function(req, res, next) {
+// // TODO add auth info ensure 1 vote per person
+
+// var upVote = Comment.update(
+// { '_id': req.params.commentId },
+// { $inc: { 'upVotes': 1 }}
+// ).exec();
+
+// upVote.addBack( function (err) {
+// if(err) return next(err);
+// // TODO Add return value?
+// })
+
+// };
+
+// exp.downVote = function(req, res, next) {
+// // TODO add auth info ensure 1 vote per person
+
+// var downVote = Comment.update(
+// { '_id': req.params.commentId },
+// { $inc: { 'downVotes': 1 }}
+// ).exec();
+
+// upVote.addBack( function (err) {
+// if(err) return next(err);
+// // TODO Add return value?
+// })
+
+// };
