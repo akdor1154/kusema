@@ -1,10 +1,12 @@
 var Comment = require('../models/comment');
+var ObjectId = require('mongoose').Types.ObjectId;
 
 var exp = module.exports;
 
 exp.retrieveAll = function(req, res, next) {
+console.log("ejflsdkf")
 	var getComments = Comment.find(
-		{ '_questionId': req.params.questionId }
+		{ '_questionId': new ObjectId(req.params.questionId) }
 	).exec();
 
 	getComments.addBack(function (err, comments) {
@@ -16,9 +18,9 @@ exp.retrieveAll = function(req, res, next) {
 exp.addComment = function(req, res, next) {
 	var comment = new Comment();
 	
-	comment.author = "example user";//TODO Add real users
+	//comment.author = "example user";//TODO Add real users
 	comment.message = req.body.message;
-	comment._questionId = req.body.questionId;
+	comment._questionId = new ObjectId(req.params.questionId);
 
 	comment.save( function (err, comment) {
 		if (err) return next(err);
@@ -28,12 +30,12 @@ exp.addComment = function(req, res, next) {
 
 exp.deleteComment = function(req, res, next) {
 	var deleteComment = Comment.find(
-		{ '_id': req.params.commentId }
+		{ '_id': new ObjectId(req.params.commentId) }
 	).remove().exec();
 
-	deleteComment.addBack( function (err, comments) {
+	deleteComment.addBack( function (err, deleted) {
 		if (err) return next(err);
-		res.json({ 'deleted': true });//TODO: check if this is needed
+		res.json(deleted);
 	})
 };
 
@@ -41,13 +43,13 @@ exp.upVote = function(req, res, next) {
 	// TODO add auth info ensure 1 vote per person
 
 	var upVote = Comment.update(
-		{ '_id': req.params.commentId },
+		{ '_id': new ObjectId(req.params.commentId) },
 		{ $inc: { 'upVotes': 1 }}
 	).exec();
 
-	upVote.addBack( function (err) {
+	upVote.addBack( function (err, upVoted) {
 		if(err) return next(err);
-		// TODO Add return value?
+		res.json(upVoted);
 	})
 
 };
@@ -56,13 +58,13 @@ exp.downVote = function(req, res, next) {
 	// TODO add auth info ensure 1 vote per person
 
 	var downVote = Comment.update(
-		{ '_id': req.params.commentId },
+		{ '_id': new ObjectId(req.params.commentId) },
 		{ $inc: { 'downVotes': 1 }}
 	).exec();
 
-	upVote.addBack( function (err) {
+	downVote.addBack( function (err, downVoted) {
 		if(err) return next(err);
-		// TODO Add return value?
+		res.json(downVoted);
 	})
 
 };
