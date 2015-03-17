@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var objectId = mongoose.Schema.Types.ObjectId;
 
 var questionSchema = mongoose.Schema({
-	author: { type: objectId }, //TODO add requirement here
+	title: { type: String, required: true },
+	author: { type: String }, //TODO add object ID requirement here
 	message: { type: String, required: true },
 	dateCreated: { type: Date, default: Date.now },
 	dateModified: { type: Date, default: Date.now },

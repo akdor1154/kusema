@@ -1,16 +1,5 @@
 'use strict';
 
-/*global io */
-
-/**
- * @ngdoc overview
- * @name forumApp
- * @description
- * # forumApp
- *
- * Main module of the application.
- */
-
  var kusema = angular.module('kusema', [
   'ngRoute', //add animate back later
   ]);
@@ -37,12 +26,10 @@
  kusema.factory('questionFactory', ['$http' , '$routeParams', function($http, $routeParams) {
 
     var questionFactory = {};
-    var urlBase = 'http://0.0.0.0:3000/questions';
+    var urlBase = 'http://localhost:3000/questions';
 
     questionFactory.getQuestions = function () {
         return $http.get(urlBase);
-        console.log("workind")
-
     };
 
     questionFactory.getNextTenQuestions = function (requestNumber) {
@@ -53,8 +40,8 @@
         return $http.get(urlBase + '/' + id);
     };
 
-    questionFactory.addQuestion = function (post) {
-        return $http.post(urlBase, post);
+    questionFactory.addQuestion = function (question) {
+        return $http.post(urlBase, question);
     };
 
     questionFactory.updateQuestion = function (editedQuestion) {
@@ -93,7 +80,7 @@
 
  kusema.factory('commentFactory', ['$http' , '$routeParams', function($http, $routeParams) {
     var commentFactory = {};
-    var urlBase = 'http://0.0.0.0:3000/comments';
+    var urlBase = 'http://localhost:3000/comments';
 
     commentFactory.getComments = function (id) {
         return $http.get(urlBase + '/' + id);
@@ -141,7 +128,7 @@
 }])
 
   kusema.factory('socketFactory', ['$rootScope', function ($rootScope) {
-    var socket = io.connect('http://0.0.0.0:3000/');
+    var socket = io.connect('http://localhost:3000/');
       return {
       
       on: function (eventName, callback) {

@@ -33,7 +33,7 @@ input, textarea {
   top: 0;
   z-index: -100;
   width: 100%;
-  background-color: #990099;
+  background-color: #110011;
   height: 100px;
   color: #fff;
 }
@@ -63,9 +63,11 @@ input, textarea {
   margin-left: 60px;
     font-size: 1em;
     color: #555;
-  a {
+
+}
+
+.title a {
     color: #555;
-  }
 }
 
 /* Define card author */

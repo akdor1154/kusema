@@ -9,7 +9,7 @@ kusema.controller('MainCtrl', [
    function ($scope, $routeParams, $timeout, questionFactory, toolboxFactory) {
 
     var allowMoreRequests = true; 
-  
+
     $scope.questions = questionFactory.questions;
 
     toolboxFactory.scrollMax(function(){
@@ -20,8 +20,8 @@ kusema.controller('MainCtrl', [
       allowMoreRequests = false;
 
       $scope.$apply(function() {
-        questionFactory.getNextTenQuestions(
-          questionFactory.questions.numberOfRequestsForQuestions)
+
+        questionFactory.getNextTenQuestions(questionFactory.questions.numberOfRequestsForQuestions)
         .success(function (quest) {
           questionFactory.questions.questionList = questionFactory.questions.questionList.concat(quest);
           questionFactory.questions.numberOfRequestsForQuestions++; 

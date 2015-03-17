@@ -55,7 +55,7 @@ kusema.controller('NewQuestionCtrl', [
         $scope.newPost.comment = '';
       })
       .error(function (error) {
-        $scope.status = 'Unable to load questions: ' + error.message;
+        $scope.status = 'Unable to add question: ' + error.message;
       });
     };
   }]);

@@ -19,6 +19,9 @@ var cors = require('cors');
 
 var app = express();
 
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+
 // connect to database
 mongoose.connect('mongodb://localhost/kusema');
 var db = mongoose.connection;
@@ -53,6 +56,41 @@ app.use(function(req, res, next) {
     next(err);
 });
 
+
+
+
+io.on('connection', function (socket) {
+  console.log('new connection');
+
+  // Add users to discussion rooms
+  socket.on('enter discussion', function (data) {
+
+    // Check if user already joined
+    if (socket.rooms.indexOf(data.question_id) === -1) {
+      socket.join(data.question_id);
+      // console.log(socket.rooms);
+    }
+  });
+
+  // Wait for new messages then boadcast to room
+  socket.on('message sent', function (data) {
+
+    // we tell the client to execute 'new message'
+    socket.broadcast.to(data.question_id).emit('new message', data);
+  });
+
+
+  // Remove users from discussion rooms
+  socket.on('leave discussion', function (data) {
+    socket.leave(data.question_id);
+    console.log(data.username + ' left question: ' + data.question_id)
+  });
+
+});
+
+
+
+
 /// error handlers
 
 // development error handler
@@ -79,4 +117,4 @@ app.use(function(err, req, res, next) {
 });
 
 
-module.exports = app;
+module.exports = server;

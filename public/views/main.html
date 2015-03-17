@@ -1,11 +1,13 @@
-<div>
+<div ng-controller="MainCtrl">
+
+{{}}
     
     <input type="text" ng-model="searchtest">
 
 	<div class="card" ng-repeat="question in questions.questionList | orderBy:score | filter:searchAuthor">
 		<div class="score">
 			<img src="../images/upvote.png" ng-click="upVote(question._id)"><br>
-			{{ question.score }}<br>
+			{{ question.upVotes - question.downVotes }}<br>
 			<img src="../images/dnvote.png" ng-click="dnVote(question._id)">
 		</div>
 		<div class="title">
@@ -42,7 +44,7 @@
 
 				<input name="title" ng-model="newPost.title" placeholder="title">
 				<input name="author" ng-model="newPost.author" placeholder="posted by">
-				<textarea ng-model="newPost.comment" placeholder="question"></textarea>
+				<textarea ng-model="newPost.message" placeholder="question"></textarea>
 			</div>
 			<div ng-click="addQuestion()" class="button send-button">
 				post

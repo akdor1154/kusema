@@ -1,7 +1,7 @@
-<div>
+<div ng-controller="QuestionCtrl">
   <div class="card">
     <div class="score">
-     {{ question.score }}
+     {{ question.upVotes - question.downVotes }}
     </div>
     <div class="title">
      {{ question.title }}
@@ -10,7 +10,7 @@
       {{ question.author }}
     </div>
     <div class="comment">
-      {{ question.comment }}
+      {{ question.message }}
     </div>
 
 
