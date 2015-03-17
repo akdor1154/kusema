@@ -1,0 +1,67 @@
+<div>
+  <div class="card">
+    <div class="score">
+     {{ question.score }}
+    </div>
+    <div class="title">
+     {{ question.title }}
+    </div>
+    <div class="author">
+      {{ question.author }}
+    </div>
+    <div class="comment">
+      {{ question.comment }}
+    </div>
+
+
+    <div class="edit-question" style="display: none;">
+    <br>
+    <br>
+    <br>
+    	EDIT QUESTION:<br>
+		<input name="title" ng-model="editedQuestion.title" placeholder="title" style="width: 100%;">
+		<input name="author" ng-model="editedQuestion.author" placeholder="posted by" style="width: 100%;">
+		<br><br>
+		<textarea name="comment" ng-model="editedQuestion.comment" style="width: 100%;">
+		</textarea>
+		<br><br>
+	    <div class="button" ng-click="updateQuestion()">
+	    	edit
+	    </div>
+    </div>
+  </div>
+
+
+  <div class="card" ng-repeat="previousComment in previousComments | orderBy:date">
+    <b>{{ previousComment.author }}:</b> {{ previousComment.message }}
+    <div ng-click="deleteComment(previousComment._id)" class="button" style="display:none;">
+      delete
+    </div>
+  </div>
+
+  <div class="card" ng-repeat="comment in comments | orderBy:date">
+    <b>{{ comment.author }}:</b> {{ comment.message }}
+    <div ng-click="deleteComment(comment._id)" class="button" style="display:none;">
+      delete
+    </div>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="contribute reply">
+    <div id="cross"></div>
+  </div>
+
+  <div class="messager">
+    <div class="container">
+      <div class="input-box-container">
+        <textarea class="reply-box" ng-model="newComment" placeholder="reply here"></textarea>
+      </div>
+      <div ng-click="addComment()" class="button send-button">
+        send
+      </div>
+    </div>
+  </div>
+
+
+</div>

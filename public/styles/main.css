@@ -1,0 +1,263 @@
+/* Set initial properties */
+* {
+  font-family: Helvetica, sans serif;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  text-decoration: none;
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+/* Remove standard HTML decoration for links */
+
+html, body {
+  height: 100%;
+}
+
+input, textarea {
+  font-size: 1em;
+}
+
+/* Create a basic container */ 
+.container {
+  padding: 10px;
+}
+
+/* Define header */
+.header {
+  background-image: url('../images/header.jpg');
+  background-size: 100% Auto;
+  position: fixed;
+  top: 0;
+  z-index: -100;
+  width: 100%;
+  background-color: #990099;
+  height: 100px;
+  color: #fff;
+}
+
+.header a{
+  color: white;
+  font-size: 2em;
+}
+
+/* Define footer */
+.footer {
+  background-color: #ddd;
+  color: #555;
+}
+
+/* Define cards */
+.card {
+  background-color: #fff;
+  box-shadow: 0px 2px 4px #aaa;
+  margin-top: 14px;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+/* Define card titles */
+.title {
+  margin-left: 60px;
+    font-size: 1em;
+    color: #555;
+  a {
+    color: #555;
+  }
+}
+
+/* Define card author */
+.author {
+  margin-left: 60px;
+}
+
+/* Define card score */
+.score {
+  float: left;
+  width: 50px;
+  overflow: hidden;
+  color: #ff8933;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  text-align: center;
+
+}
+
+.score img {
+    width: 25px;
+    margin: 0;
+    padding: 0;
+  }
+
+/* Define card authors */
+.author {
+  font-size: 0.7em;
+  color: #999;
+  font-weight: bold;
+}
+
+.writer {
+  position: fixed;
+  bottom: -145px;
+  left: 0;
+  background-color: #eee;
+  width: 100%;
+  box-shadow: 0px 0px 5px #999;
+
+}
+
+ .writer input, textarea {
+    float: left;
+    width: 100%;
+    padding: 4px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+  }
+
+.messager {
+  height: 150px;
+  position: fixed;
+  bottom: -145px;
+  left: 0;
+  background-color: #eee;
+  width: 100%;
+  box-shadow: 0px 0px 5px #999;
+}
+
+.bg-white {
+  background-color: #fff;
+  box-shadow: 0px -4px 10px #000;
+}
+
+.offset-top {
+  margin-top: 100px;
+}
+
+.fill-height {
+  min-height: 100%;
+}
+
+.clear {
+  clear: both;
+}
+
+.button {
+  background-color: #555;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  width: 100px;
+  border-radius: 4px;
+}
+
+.spacer {
+  clear: both;
+  height: 200px;
+}
+
+
+.contribute {
+  position: fixed;
+  position: fixed;
+  bottom: 55px;
+  right: 90px;
+  z-index: 20;
+  height: 60px;
+  width: 60px;
+  border-radius: 60px;
+  text-align: center;
+  font-size: 43px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0px 4px 4px #999;
+  margin-right: -30px;
+}
+
+.ask {
+  background-color: #ff5151;
+}
+
+.reply {
+  background-color: #2c1e3a;
+}
+
+.input-box-container {
+  margin-right: 100px;
+}
+
+.reply-box {
+  float: left;
+  width: 100%;
+  height: 115px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.send-button {
+  float: left;
+  margin: 0px 0px 0px 10px;
+  height: 65px;
+  width: 90px;
+  line-height: 400%;
+}
+
+.post-button {
+  float: left;
+  margin: 50px 0px 0px 10px;
+  height: 65px;
+  width: 90px;
+  line-height: 400%;
+}
+
+
+#cross {
+   width: 20px;
+   height: 20px;
+   position: relative;
+   left: 20px;
+   top: 20px;
+}
+
+#cross:before, #cross:after {
+  content: "";
+  position: absolute;
+  z-index: 10;
+  background: #fff;
+}
+
+#cross:before {
+  left: 50%;
+  width: 15%;
+  margin-left: -7%;
+  height: 100%;
+}
+
+#cross:after {
+  top: 50%;
+  height: 15%;
+  margin-top: -7%;
+  margin-left: -50%;
+  width: 100%;
+}
+
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  /* Resize header for large screens */
+  .header {
+    height: 180px;
+  }
+
+  /* Move content away from header */
+  .offset-top {
+    margin-top: 180px;
+  }
+
+}

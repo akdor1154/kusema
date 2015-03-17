@@ -15,6 +15,7 @@ var questions = require('./routes/questions');
 var comments = require('./routes/comments');
 //var routes = require('./routes/index');
 var mongoose = require('mongoose');
+var cors = require('cors');
 
 var app = express();
 
@@ -29,6 +30,9 @@ db.once('open', function (callback) {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+// enable all cors
+app.use(cors());
 
 app.use(favicon());
 app.use(logger('dev'));

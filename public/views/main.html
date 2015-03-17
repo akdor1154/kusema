@@ -1,0 +1,55 @@
+<div>
+    
+    <input type="text" ng-model="searchtest">
+
+	<div class="card" ng-repeat="question in questions.questionList | orderBy:score | filter:searchAuthor">
+		<div class="score">
+			<img src="../images/upvote.png" ng-click="upVote(question._id)"><br>
+			{{ question.score }}<br>
+			<img src="../images/dnvote.png" ng-click="dnVote(question._id)">
+		</div>
+		<div class="title">
+			<a href="#/question/{{question._id}}">{{ question.title }}</a>
+		</div>
+		<div class="author">
+			{{ question.author }}
+		</div>
+		<br>
+		<br>
+		<div ng-click="deleteQuestion(question._id)" class="button" style="display:none;">
+			delete
+		</div>
+	</div>
+    
+    <div id="circleG">
+      <div id="circleG_1" class="circleG">
+      </div>
+      <div id="circleG_2" class="circleG">
+      </div>
+      <div id="circleG_3" class="circleG">
+      </div>
+    </div>
+
+<div ng-controller="NewQuestionCtrl">
+	<div class="contribute-container">
+		<div class="contribute ask">
+			<div id="cross"></div>
+		</div>
+	</div>
+	<div class="writer">
+		<div class="container">
+			<div class="input-box-container">
+
+				<input name="title" ng-model="newPost.title" placeholder="title">
+				<input name="author" ng-model="newPost.author" placeholder="posted by">
+				<textarea ng-model="newPost.comment" placeholder="question"></textarea>
+			</div>
+			<div ng-click="addQuestion()" class="button send-button">
+				post
+			</div>
+		</div>
+	</div>	
+</div>
+</div>
+<!-- 
+newPost.title, newPost.author, newPost.comment -->
