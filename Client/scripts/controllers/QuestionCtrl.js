@@ -102,8 +102,6 @@ kusema.controller('QuestionCtrl', [
       commentFactory.addComment(questionId, message);
       socketFactory.emit('message sent', message);
       $scope.comments = $scope.comments.concat(message);
-      // console.log('sent- ' + $scope.newComment);
-      // console.log($scope.comments);
       $scope.newComment = '';
     }
   };
@@ -134,14 +132,13 @@ $scope.deleteComment = function(commentId) {
 
 
 
-    var sendOnEnter = true;
+    $scope.sendOnEnter = true;
+
     $('.reply-box').on('keydown', function(e) {
-        if (e.which === 13) {
-            if (sendOnEnter) {            
-              e.preventDefault();
-              $scope.$apply($scope.addComment());
-            }
-        }
+      if (e.which === 13 && $scope.sendOnEnter === true) {            
+        e.preventDefault();
+        $scope.addComment();
+      }
     });
 
     var messagerOpen = false;

@@ -1,8 +1,6 @@
-<div ng-controller="MainCtrl">
+<div>
 
-{{}}
-    
-    <input type="text" ng-model="searchtest">
+	<input type="text" ng-model="searchtest">
 
 	<div class="card" ng-repeat="question in questions.questionList | orderBy:score | filter:searchAuthor">
 		<div class="score">
@@ -22,36 +20,31 @@
 			delete
 		</div>
 	</div>
-    
-    <div id="circleG">
-      <div id="circleG_1" class="circleG">
-      </div>
-      <div id="circleG_2" class="circleG">
-      </div>
-      <div id="circleG_3" class="circleG">
-      </div>
-    </div>
 
-<div ng-controller="NewQuestionCtrl">
-	<div class="contribute-container">
-		<div class="contribute ask">
-			<div id="cross"></div>
-		</div>
+	<div id="circleG">
+		<div id="circleG_1" class="circleG"></div>
+		<div id="circleG_2" class="circleG"></div>
+		<div id="circleG_3" class="circleG"></div>
 	</div>
-	<div class="writer">
-		<div class="container">
-			<div class="input-box-container">
 
-				<input name="title" ng-model="newPost.title" placeholder="title">
-				<input name="author" ng-model="newPost.author" placeholder="posted by">
-				<textarea ng-model="newPost.message" placeholder="question"></textarea>
-			</div>
-			<div ng-click="addQuestion()" class="button send-button">
-				post
+	<div ng-controller="NewQuestionCtrl">
+		<div class="contribute-container">
+			<div class="contribute ask">
+				<div id="cross"></div>
 			</div>
 		</div>
-	</div>	
+		<div class="writer">
+			<div class="container">
+				<div class="input-box-container">
+
+					<input name="title" ng-model="newPost.title" placeholder="title">
+					<input name="author" ng-model="newPost.author" placeholder="posted by">
+					<textarea ng-model="newPost.message" placeholder="question"></textarea>
+				</div>
+				<div ng-click="addQuestion()" class="button send-button">
+					post
+				</div>
+			</div>
+		</div>	
+	</div>
 </div>
-</div>
-<!-- 
-newPost.title, newPost.author, newPost.comment -->

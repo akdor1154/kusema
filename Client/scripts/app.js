@@ -21,4 +21,4 @@ kusema.config(function($routeProvider) {
     templateUrl: 'views/question.html',
     controller: 'QuestionCtrl'
   });    
-};)
+});

@@ -17,7 +17,7 @@ console.log("ejflsdkf")
 
 exp.addComment = function(req, res, next) {
 	var comment = new Comment();
-	
+	console.log(req.body)
 	//comment.author = "example user";//TODO Add real users
 	comment.message = req.body.message;
 	comment._questionId = new ObjectId(req.params.questionId);
