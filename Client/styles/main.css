@@ -263,3 +263,14 @@ input, textarea {
   }
 
 }
+
+/* FOR EXAMPLE DIRECTIVE */
+.example-box {
+    position: absolute;
+    background-color: #000;
+    width: 100px;
+    height: 100px;
+    margin: 10px;
+    cursor: pointer;
+    color: #fff;
+}

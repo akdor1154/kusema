@@ -45,7 +45,7 @@ kusema.controller('QuestionCtrl', [
         }      
         // socketFactory.emit('my other event', { my: 'data' });
       }
-  });
+    });
 
 
     // Make an empty object for the edited question.
@@ -63,72 +63,72 @@ kusema.controller('QuestionCtrl', [
         });
 
 
-      $scope.updateQuestion = function() {
-        questionFactory.updateQuestion($scope.editedQuestion)
-          .success(function () {
-          	console.log($scope.editedQuestion);
-      			$scope.question.title = $scope.editedQuestion.title;
-      			$scope.question.author = $scope.editedQuestion.author;
-      			$scope.question.comment = $scope.editedQuestion.comment;
+    $scope.updateQuestion = function() {
+      questionFactory.updateQuestion($scope.editedQuestion)
+        .success(function () {
+        	console.log($scope.editedQuestion);
+    			$scope.question.title = $scope.editedQuestion.title;
+    			$scope.question.author = $scope.editedQuestion.author;
+    			$scope.question.comment = $scope.editedQuestion.comment;
 
-            var searchResults = toolboxFactory.findObjectInArray(
-                      questionFactory.questions.questionList,
-                      '_id',
-                      questionId
-                    );
-                    searchResults.referenceToObject.title = $scope.editedQuestion.title;
-                    searchResults.referenceToObject.author = $scope.editedQuestion.author;
-                    searchResults.referenceToObject.comment = $scope.editedQuestion.comment;
-
-
-        		$scope.status = 'Question uploaded';
-          })
-          .error(function (error) {
-			$scope.status = 'Unable to load questions: ' + error.message;
-          });
-      };
+          var searchResults = toolboxFactory.findObjectInArray(
+                    questionFactory.questions.questionList,
+                    '_id',
+                    questionId
+                  );
+                  searchResults.referenceToObject.title = $scope.editedQuestion.title;
+                  searchResults.referenceToObject.author = $scope.editedQuestion.author;
+                  searchResults.referenceToObject.comment = $scope.editedQuestion.comment;
 
 
-
-  $scope.addComment = function () {
-    if ($scope.newComment !== '') {
-      // Save comment to database
-      var message = {
-        question_id: questionId,
-        author: 'sherbinator2014 ',
-        message: $scope.newComment
-      };
-      $('html, body').animate({scrollTop:$(document).height() - 1}, 'slow');
-      commentFactory.addComment(questionId, message);
-      socketFactory.emit('message sent', message);
-      $scope.comments = $scope.comments.concat(message);
-      $scope.newComment = '';
-    }
-  };
+      		$scope.status = 'Question uploaded';
+        })
+        .error(function (error) {
+  	$scope.status = 'Unable to load questions: ' + error.message;
+        });
+    };
 
 
-$scope.deleteComment = function(commentId) {
-  commentFactory.deleteComment(commentId);
-  var index = -1;
 
-  index = toolboxFactory.findObjectInArray(
-    $scope.comments,
-    '_id',
-    commentId
-    ).objectPosition;
-  if(index !== -1) {
-      $scope.comments.splice(index, 1);
-  } else {
-    index = toolboxFactory.findObjectInArray(
-      $scope.previousComments,
-      '_id',
-      commentId
-      ).objectPosition;
-      if (index !== -1) {
-          $scope.previousComments.splice(index, 1);
+    $scope.addComment = function () {
+      if ($scope.newComment !== '') {
+        // Save comment to database
+        var message = {
+          question_id: questionId,
+          author: 'sherbinator2014 ',
+          message: $scope.newComment
+        };
+        $('html, body').animate({scrollTop:$(document).height() - 1}, 'slow');
+        commentFactory.addComment(questionId, message);
+        socketFactory.emit('message sent', message);
+        $scope.comments = $scope.comments.concat(message);
+        $scope.newComment = '';
       }
-  }
-};
+    };
+
+
+    $scope.deleteComment = function(commentId) {
+      commentFactory.deleteComment(commentId);
+      var index = -1;
+
+      index = toolboxFactory.findObjectInArray(
+        $scope.comments,
+        '_id',
+        commentId
+        ).objectPosition;
+      if(index !== -1) {
+          $scope.comments.splice(index, 1);
+      } else {
+        index = toolboxFactory.findObjectInArray(
+          $scope.previousComments,
+          '_id',
+          commentId
+          ).objectPosition;
+          if (index !== -1) {
+              $scope.previousComments.splice(index, 1);
+          }
+      }
+    };
 
 
 
