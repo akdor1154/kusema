@@ -1,14 +1,5 @@
 'use strict';
 
-/*global $ */
-
-/**
- * @ngdoc function
- * @name forumApp.controller:NewQuestionCtrl
- * @description
- * # NewQuestionCtrl
- * Controller of the forumApp
- */
 kusema.controller('NewQuestionCtrl', [
    '$scope',
    '$routeParams',

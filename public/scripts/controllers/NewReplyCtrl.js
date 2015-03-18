@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name forumApp.controller:NewReplyCtrl
- * @description
- * # NewReplyCtrl
- * Controller of the forumApp
- */
 kusema.controller('NewReplyCtrl', [
   	'$scope',
   	'$routeParams',
