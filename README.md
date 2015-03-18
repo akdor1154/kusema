@@ -7,3 +7,4 @@ A new social platform for university students.
 
 ## Dev notes:
 - [AngularJS best practices](https://github.com/mgechev/angularjs-style-guide)
+- [API Reference](https://github.com/nathansherburn/kusema/wiki)
