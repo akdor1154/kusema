@@ -35,9 +35,6 @@ exp.retrieveAll = function (req, res, next) {
 };
 
 exp.addQuestion = function (req, res, next) {
-  console.log(req.body.author)
-  console.log(req.body.title)
-  console.log(req.body.message)
   var question = new Question();
   question.author = req.body.author;//TODO Add real users
   question.title = req.body.title;

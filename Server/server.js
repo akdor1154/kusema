@@ -5,17 +5,21 @@
 // 14/03/2015
 //
 
+// Dependencies
 var express = require('express');
 var path = require('path');
 var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var questions = require('./routes/questions');
-var comments = require('./routes/comments');
-//var routes = require('./routes/index');
 var mongoose = require('mongoose');
 var cors = require('cors');
+
+// Routes
+var questions = require('./routes/questions');
+var comments = require('./routes/comments');
+var users = require('./routes/users');
+
 
 var app = express();
 
@@ -37,16 +41,15 @@ app.set('view engine', 'jade');
 // enable all cors
 app.use(cors());
 
-app.use(favicon());
+app.use(favicon('../Client/favicon.ico'));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-//app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static('../Client'));
 
 //app.use('/', routes);
-//app.use('/users', users);
+app.use('/users', users);
 app.use('/questions', questions);
 app.use('/comments', comments);
 
