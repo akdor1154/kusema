@@ -3,7 +3,7 @@
 kusema.factory('questionFactory', ['$http' , '$routeParams', function($http, $routeParams) {
 
     var questionFactory = {};
-    var urlBase = 'http://localhost:3000/questions';
+    var urlBase = 'http://localhost:3000/api/questions';
 
     questionFactory.getQuestions = function () {
         return $http.get(urlBase);

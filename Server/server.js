@@ -17,12 +17,10 @@ var cors           = require('cors');
 var passport       = require('passport');
 var expressSession = require('express-session');
 
-// Instantiate app
+// Instantiate app and server
 var app            = express();
-
-// Configure socket.io
 var server         = require('http').createServer(app);
-var io             = require('socket.io')(server);
+
 
 // Configure database
 var dbConfig = require('./config/database.js');
@@ -69,39 +67,8 @@ app.use(function(req, res, next) {
 });
 
 
-
-// TODO: Move this out into its own file
-// Socket IO events
-io.on('connection', function (socket) {
-  console.log('new connection');
-
-  // Add users to discussion rooms
-  socket.on('enter discussion', function (data) {
-
-    // Check if user already joined
-    if (socket.rooms.indexOf(data.question_id) === -1) {
-      socket.join(data.question_id);
-      // console.log(socket.rooms);
-    }
-  });
-
-  // Wait for new messages then boadcast to room
-  socket.on('message sent', function (data) {
-
-    // Broadcast to everyone in the room/everyone viewing the question
-    socket.broadcast.to(data.question_id).emit('new message', data);
-  });
-
-
-  // Remove users from discussion rooms
-  socket.on('leave discussion', function (data) {
-    socket.leave(data.question_id);
-    console.log(data.username + ' left question: ' + data.question_id)
-  });
-
-});
-
-
+// Configure Socket IO
+require('./config/socketio')(server);
 
 
 /// Error handlers

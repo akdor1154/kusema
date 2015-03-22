@@ -11,7 +11,8 @@ var commentsCtrl   = require('../controllers/comments');
 function auth(req, res, next) {
 	if (req.isAuthenticated()) return next();
 	// Kick un-authed out
-	res.json(false);
+	res.status(401);
+	res.send("Not logged in.")
 }
 
 // All API routes require auth
@@ -33,10 +34,10 @@ router.get('/user/:userId', usersCtrl.findUserById);
 router.get('/user/:username', usersCtrl.findUserByUsername);
 
 // Comment Routes
-router.get('/comment/:questionId', commentsCtrl.retrieveAll);
-router.post('/comment/:questionId', commentsCtrl.addComment);
-router.delete('/comment/:commentId', commentsCtrl.deleteComment); //delete a question
-router.put('/comment/upvote/:commentId', commentsCtrl.upVote); //add a comments
-router.put('/comment/downvote/:commentId', commentsCtrl.downVote); //add a comments
+router.get('/comments/:questionId', commentsCtrl.retrieveAll);
+router.post('/comments/:questionId', commentsCtrl.addComment);
+router.delete('/comments/:commentId', commentsCtrl.deleteComment); //delete a question
+router.put('/comments/upvote/:commentId', commentsCtrl.upVote); //add a comments
+router.put('/comments/downvote/:commentId', commentsCtrl.downVote); //add a comments
 
 module.exports = router;

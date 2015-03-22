@@ -2,7 +2,7 @@
 
 kusema.factory('commentFactory', ['$http' , '$routeParams', function($http, $routeParams) {
     var commentFactory = {};
-    var urlBase = 'http://localhost:3000/comments';
+    var urlBase = 'http://localhost:3000/api/comments';
 
     commentFactory.getComments = function (id) {
         return $http.get(urlBase + '/' + id);
