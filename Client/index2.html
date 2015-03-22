@@ -1,0 +1,58 @@
+<!doctype html>
+<html class="no-js">
+  <head>
+    <meta charset="utf-8">
+    <title>kusema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/animate.css">
+    <link rel="stylesheet" href="styles/loader.css">
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body ng-app="kusema">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="header">
+
+      <example-directive>
+      </example-directive>
+
+      <div class="container">
+        <a href="#/">kusema</a><span style="color: #979; font-size: 0.8em;"> alpha v0.0.1</span>
+        <br>
+        Engineering
+      </div>
+    </div>
+
+    <div class="bg-white offset-top fill-height">
+      <div class="container">
+        <div ng-view></div>
+
+        <div class="clear"></div>
+      </div>
+    </div>
+
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/socket.io-client/socket.io.js"></script>
+
+    <script src="scripts/app.js"></script>
+
+    <script src="scripts/directives/exampleDirective.js"></script>
+
+    <script src="scripts/controllers/MainCtrl.js"></script>
+    <script src="scripts/controllers/QuestionCtrl.js"></script>
+    <script src="scripts/controllers/NewQuestionCtrl.js"></script>
+    <script src="scripts/controllers/NewReplyCtrl.js"></script>
+
+    <script src="scripts/services/CommentService.js"></script>
+    <script src="scripts/services/QuestionService.js"></script>
+    <script src="scripts/services/SocketService.js"></script>
+    <script src="scripts/services/ToolboxService.js"></script>
+</body>
+</html>

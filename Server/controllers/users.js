@@ -14,12 +14,13 @@ exp.findUserById = function (req, res, next) {
   });
 };
 
-exp.addUser = function (req, res, next) {
-  var user = new User();
-  user.authcate = req.body.authcate;
+exp.findUserByUsername = function (req, res, next) {
+  var getUser = User.findOne(
+    { 'local.username': req.body.username }
+  ).exec();
 
-  user.save( function (err, user) {
+  getUser.addBack( function (err, user) {
     if (err) return next(err);
-    res.json(user)
+    res.json(user);
   });
 };
