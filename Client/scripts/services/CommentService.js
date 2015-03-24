@@ -1,8 +1,8 @@
 'use strict';
 
-kusema.factory('commentFactory', ['$http' , '$routeParams', function($http, $routeParams) {
+kusema.factory('commentFactory', ['$http' , '$routeParams', 'kusemaConfig', function($http, $routeParams, kusemaConfig) {
     var commentFactory = {};
-    var urlBase = 'http://localhost:3000/api/comments';
+    var urlBase = kusemaConfig.url()+'api/comments';
 
     commentFactory.getComments = function (id) {
         return $http.get(urlBase + '/' + id);
