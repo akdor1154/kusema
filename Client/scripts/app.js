@@ -2,6 +2,7 @@
 
 var kusema = angular.module('kusema', [
 'ngRoute', //add animate back later
+'kusema.config'
 ]);
 
 kusema.config(function($routeProvider) {
@@ -22,3 +23,10 @@ kusema.config(function($routeProvider) {
     controller: 'QuestionCtrl'
   });    
 });
+
+var kusemaConfigModule = angular.module('kusema.config', [])
+  .constant('kusemaConfig', {
+    'host': 'localhost',
+    'port': '3000',
+    'url': function() { return 'http://'+this.host+':'+this.port+'/'; }
+  });
