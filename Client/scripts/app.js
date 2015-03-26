@@ -5,7 +5,9 @@ var kusema = angular.module('kusema', [
 'kusema.config'
 ]);
 
-kusema.config(function($routeProvider) {
+kusema.config(function($routeProvider, $httpProvider) {
+  
+  $httpProvider.defaults.withCredentials = true;
   
   /* Direct unmatched urls */
   $routeProvider.otherwise({
