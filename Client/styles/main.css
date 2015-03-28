@@ -13,7 +13,50 @@
 /* Remove standard HTML decoration for links */
 
 html, body {
+  padding: 0;
+  margin: 0;
+  background-color: #3D2D53;
+  overflow: hidden;
   height: 100%;
+}
+
+.browser-content {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#main-panel {
+  -webkit-overflow-scrolling: touch; /* make safari scroll smoothly */
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+  box-shadow: 4px 0px 20px #000;
+  position: relative;
+  top: 0px;
+  right: 0px;
+  overflow: hidden;
+  transition-property: right;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+#main-panel.open {
+  right: 150px;
+  transition-property: right;
+  transition-duration: .5s;
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.page-content {
+  height: 100%;
+  margin: 0 auto;
+  max-width: 960px;
+}
+
+.page {
+  height: calc(100% - 100px); /* calc is not official yet - any work arounds? */
+    overflow-y: scroll;
 }
 
 input, textarea {
@@ -29,9 +72,7 @@ input, textarea {
 .header {
   background-image: url('../images/header.jpg');
   background-size: 100% Auto;
-  position: fixed;
   top: 0;
-  z-index: -100;
   width: 100%;
   background-color: #110011;
   height: 100px;
@@ -247,15 +288,23 @@ input, textarea {
 
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
+
   .container {
     max-width: 960px;
     margin: 0 auto;
+    padding: 15px 0px;
   }
 
   /* Resize header for large screens */
   .header {
     height: 180px;
   }
+
+  .page {
+    height: calc(100% - 180px); /* calc is not official yet - any work arounds? */
+      overflow-y: scroll;
+  }
+
 
   /* Move content away from header */
   .offset-top {

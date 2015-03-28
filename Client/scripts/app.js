@@ -1,18 +1,18 @@
 'use strict';
 
 var kusema = angular.module('kusema', [
-'ngRoute', //add animate back later
+'ngRoute',
 'kusema.config'
 ]);
 
 kusema.config(function($routeProvider) {
   
-  /* Where to direct unmatched urls */
+  /* Direct unmatched urls */
   $routeProvider.otherwise({
     templateUrl: '404.html',
   });
 
-  /* Where to direct urls */
+  /* Direct urls */
   $routeProvider
   .when('/', {
     templateUrl: 'views/main.html',
