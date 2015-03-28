@@ -1,6 +1,6 @@
 'use strict';
 
-kusema.factory('socketFactory', ['$rootScope', 'kusemaconfig', function ($rootScope, kusemaConfig) {
+kusema.factory('socketFactory', ['$rootScope', 'kusemaConfig', function ($rootScope, kusemaConfig) {
   var socket = io.connect(kusemaConfig.url());
     return {
     
