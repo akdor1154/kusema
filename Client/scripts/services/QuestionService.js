@@ -6,11 +6,11 @@ kusema.factory('questionFactory', ['$http' , '$routeParams', 'kusemaConfig', fun
     var urlBase = kusemaConfig.url()+'api/questions';
 
     questionFactory.getQuestions = function () {
-        return $http.get(urlBase);
+        return $http.get(urlBase, {withCredentials: true});
     };
 
     questionFactory.getNextTenQuestions = function (requestNumber) {
-        return $http.get(urlBase + '/tenMore/' + requestNumber);
+        return $http.get(urlBase + '/tenMore/' + requestNumber, {withCredentials: true});
     };
 
     questionFactory.getQuestionById = function (id) {
