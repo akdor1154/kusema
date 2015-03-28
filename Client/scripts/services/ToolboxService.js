@@ -4,7 +4,7 @@ kusema.factory('toolboxFactory', [function() {
 
   /* Provides useful browser events, properties and functions to controllers */
   var toolboxFactory = {};
-
+  
   toolboxFactory.findObjectInArray = function(array, property, value){
     for (var i = 0, len = array.length; i < len; i++) {
       if (array[i][property] === value) {

@@ -16,71 +16,77 @@
 	<div class="page">
 
 	<div class="page-content">
-
-		<div>
-			<form id="tmp-register-form" action="/account/register" method="post">
-		    	<input type="text" name="username" style="background-color: #eee;">
-		    	<input type="password" name="password" style="background-color: #eee;">
-		    	<input type="submit" value="register">
-			</form>
-		</div>
-
-		<br>
-
-		<div>
-			<form id="tmp-login-form" action="/account/login" method="post">
-		    	<input type="text" name="username" style="background-color: #eee;">
-		    	<input type="password" name="password" style="background-color: #eee;">
-		    	<input type="submit" value="login">
-			</form>
-		</div>
-
-		<div class="card" ng-repeat="question in questions.questionList | orderBy:'-upVotes'">
-			<div class="score">
-				<img src="../images/upvote.png" ng-click="upVote(question._id)"><br>
-				{{ question.upVotes - question.downVotes }}<br>
-				<img src="../images/dnvote.png" ng-click="dnVote(question._id)">
-			</div>
-			<div class="title">
-				<a href="#/question/{{question._id}}">{{ question.title }}</a>
-			</div>
-			<div class="author">
-				{{ question.author }}
-			</div>
-			<br>
-			<br>
-			<div ng-click="deleteQuestion(question._id)" class="button" style="display:none;">
-				delete
-			</div>
-		</div>
-
-		<div id="circleG">
-			<div id="circleG_1" class="circleG"></div>
-			<div id="circleG_2" class="circleG"></div>
-			<div id="circleG_3" class="circleG"></div>
-		</div>
-
-	</div>
-
-
-	<!-- TODO make this a directive -->
-	<div ng-controller="NewQuestionCtrl">
-			<div id="add-button" class="contribute ask">
-				<div id="cross"></div>
-			</div>
-		<div class="writer">
-			<div class="container">
-				<div class="input-box-container">
-
-					<input name="title" ng-model="newPost.title" placeholder="title">
-					<input name="author" ng-model="newPost.author" placeholder="posted by">
-					<textarea ng-model="newPost.message" placeholder="question"></textarea>
+	
+		<div ng-controller="SearchController as searchCtrl" id="search_panel" class="card">
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="form-group form-group-sm input-group">
+						<label class="input-group-addon" ng-model="search.criterias.topic">Topic: </label>
+						<input ng-model="form.topic" type="text" placeholder="the Topic of Question" class="form-control input-sm">
+					</div>
 				</div>
-				<div ng-click="addQuestion()" class="button send-button">
-					post
+				<div class="col-sm-3">
+					<div class="form-group form-group-sm input-group">
+						<label class="input-group-addon" ng-model="search.criterias.name">Name: </label>
+						<input ng-model="form.name" type="text" placeholder="the Name of Author" class="form-control input-sm">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group form-group-sm input-group">
+						<label class="input-group-addon" ng-model="search.criterias.date">Date: </label>
+						<input ng-model="form.date" type="text" placeholder="the Date of Question" class="form-control input-sm">
+					</div>
+				</div>
+				<div class="col-sm-2 pull-right text-right">
+					<div ng-click="submit(form)" type="submit" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></div>
 				</div>
 			</div>
-		</div>	
-	</div>
+			<pre ng-show="debug">frontend = {{form | json}}</pre>
+			<pre ng-show="debug">backend = {{criteria | json}}</pre>
+		</div>
+	
+		<div id="questionList" ng-controller="QuestionListController as questionCtrl">
+			<div class="card" ng-repeat="question in questionCtrl.questions.questionList | orderBy:score | filter:searchAuthor"">
+				<div class="score">
+					<img class="upvote" src="../images/upvote.png" ng-click="questionCtrl.upVote(question._id)">
+					<br>
+						{{ question.upVotes - question.downVotes }}
+					<br> 
+					<img class="downvote" src="../images/dnvote.png" ng-click="questionCtrl.downVote(question._id)">
+				</div>
+				<div class="title">
+					<a href="#/question/{{question._id}}">{{ question.title }}</a>
+				</div>
+				<div class="author">{{ question.author }}</div>
+				<br> <br>
+				<div ng-click="questionCtrl.deleteQuestion(question._id)" class="button btn-danger">delete</div>
+			</div>
+			<div id="loadingImage" ng-include="'views/loadingImage.html'"></div>
+		</div>
+	
+
+
+		<!-- TODO make this a directive -->
+		<div ng-controller="NewQuestionCtrl">
+				<div id="add-button" class="contribute ask">
+					<div id="cross"></div>
+				</div>
+			<div class="writer">
+				<div class="container">
+					<div class="input-box-container">
+
+						<input name="title" ng-model="newPost.title" placeholder="title">
+						<input name="author" ng-model="newPost.author" placeholder="posted by">
+						<textarea ng-model="newPost.message" placeholder="question"></textarea>
+					</div>
+					<div ng-click="addQuestion()" class="button send-button">
+						post
+					</div>
+				</div>
+			</div>	
+		</div>
 
 </div>
+</div>
+</div>
+

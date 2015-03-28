@@ -15,8 +15,7 @@ kusema.config(function($routeProvider) {
   /* Direct urls */
   $routeProvider
   .when('/', {
-    templateUrl: 'views/main.html',
-    controller: 'MainCtrl'
+    templateUrl: 'views/main.html'
   })
   .when('/question/:id', {
     templateUrl: 'views/question.html',
