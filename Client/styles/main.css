@@ -115,7 +115,8 @@ input, textarea {
 }
 
 /* Define card author */
-.author {
+.author
+,.message {
   margin-left: 60px;
 }
 
