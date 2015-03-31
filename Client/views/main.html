@@ -17,7 +17,7 @@
 
 	<div class="page-content">
 	
-	<div ng-controller="SearchController as searchCtrl" id="search_panel" class="row card">
+	<div ng-init="debug=true" ng-controller="SearchController as searchCtrl" id="search_panel" class="row card">
 		<div class="row">
 			<div class="col-sm-4">
 				<div class="form-group form-group-sm input-group">
@@ -46,7 +46,7 @@
 		</div>
 	
 	<div id="questionList" ng-controller="QuestionListController as questionCtrl">
-		<div class="row card" ng-repeat="question in questionCtrl.questions.questionList | orderBy:score | filter:searchAuthor">
+		<div class="row card" ng-repeat="question in questionCtrl.questions.questionList | orderBy:questionCtrl.getScore | filter:searchAuthor">
 			<div class="score">
 				<img class="upvote" src="../images/upvote.png" ng-click="questionCtrl.upVote(question._id)">
 				<br>
@@ -57,12 +57,10 @@
 			<div class="title">
 				<a href="#/question/{{question._id}}">{{ question.title }}</a>
 			</div>
-			<div id="loadingImage" ng-include="'views/loadingImage.html'"></div>
 		</div>
-
 		
 		<div id="loadingImage" ng-include="'views/loadingImage.html'"></div>
-		
+
 		<div ng-show="questionCtrl.writerOpen === true" class="row card">
 			<div class="col-sm-2">
 				<div ng-hide="newPost.title===''"><strong>Title: </strong></div>

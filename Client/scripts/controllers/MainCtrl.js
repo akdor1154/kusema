@@ -22,6 +22,11 @@ kusema
 					this.writerOpen = false;
 					
 					tmp.me.questions = questionFactory.questions;
+					
+					tmp.me.getScore = function(data) {
+						return -(data.upVotes - data.downVotes);
+					}
+					
 					console.debug(tmp.me.questions);
 				    
 					tmp.me.upVote = function(id, btn) {
