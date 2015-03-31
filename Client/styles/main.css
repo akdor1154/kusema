@@ -147,12 +147,20 @@ input, textarea {
 
 .writer {
   position: fixed;
-  bottom: -145px;
   left: 0;
   background-color: #eee;
   width: 100%;
   box-shadow: 0px 0px 5px #999;
+  transition-property: bottom;
+  transition-duration: 0.2s;
+  transition-timing-function: cubic-bezier(1,0,0,1);
+}
 
+.writer.writerClosed {
+  bottom: -145px;
+}
+.writer.writerOpen {
+  bottom: 0px;
 }
 
  .writer input, textarea {
@@ -276,6 +284,12 @@ input, textarea {
   margin-top: -7%;
   margin-left: -50%;
   width: 100%;
+}
+#cross.writerOpen {
+  transform: rotate(45deg);
+}
+#cross.writerClosed {
+  transform: rotate(45deg);
 }
 
 

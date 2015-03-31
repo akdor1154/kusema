@@ -18,23 +18,23 @@
 	<div class="page">
 		<div class="page-content">
 			<!-- Search panel -->
-			<div ng-init="debug=true" ng-controller="SearchController as searchCtrl" id="search_panel" class="row card">
+			<div ng-init="debug=true" ng-controller="SearchController as search" id="search_panel" class="row card">
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon">Topic: </label>
+							<label class="input-group-addon" ng-model="search.criteria.topic">Topic: </label>
 							<input ng-model="form.topic" type="text" placeholder="the Topic of Question" class="form-control input-sm">
 						</div>
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon">Name: </label>
+							<label class="input-group-addon" ng-model="search.criteria.name">Name: </label>
 							<input ng-model="form.name" type="text" placeholder="the Name of Author" class="form-control input-sm">
 						</div>
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon">Date: </label>
+							<label class="input-group-addon" ng-model="search.criteria.date">Date: </label>
 							<input ng-model="form.date" type="text" placeholder="the Date of Question" class="form-control input-sm">
 						</div>
 					</div>
@@ -46,15 +46,15 @@
 				<pre ng-show="debug">backend = {{criteria | json}}</pre>
 			</div>
 				
-			<div id="questionList" ng-controller="QuestionListController as questionCtrl">
+			<div id="questionList" ng-controller="QuestionListController as qc">
 				<!-- Question Listing -->
-				<div class="row card" ng-repeat="question in questionCtrl.questions.questionList | orderBy:questionCtrl.getScore | filter:searchAuthor">
+				<div class="row card" ng-repeat="question in qc.questions.questionsList">
 					<div class="score">
-						<img class="upvote" src="../images/upvote.png" ng-click="questionCtrl.upVote(question._id)">
-						<br>
-							{{ question.upVotes - question.downVotes }}
-						<br> 
-						<img class="downvote" src="../images/dnvote.png" ng-click="questionCtrl.downVote(question._id)">
+						<img class="upvote" src="../images/upvote.png" ng-click="question.upVote()">
+						<br/>
+							{{ question.score }}
+						<br/> 
+						<img class="downvote" src="../images/dnvote.png" ng-click="question.downVote()">
 					</div>
 					<div class="title">
 						<a href="#/question/{{question._id}}">{{ question.title }}</a>
@@ -67,7 +67,7 @@
 				<div id="loadingImage" ng-include="'views/loadingImage.html'"></div>
 		
 				<!-- New Question -->
-				<div ng-show="questionCtrl.writerOpen === true" class="row card">
+				<div ng-show="qc.writerOpen === true" class="row card">
 					<div class="col-sm-2">
 						<div ng-hide="newPost.title===''"><strong>Title: </strong></div>
 						<div ng-hide="newPost.author===''"><strong>Author: </strong></div>
@@ -81,18 +81,18 @@
 				</div>
 				
 				<div class="contribute-container">
-					<div id="add-button" class="contribute ask" ng-click="questionCtrl.writerOpen === true ? questionCtrl.closeWriter() : questionCtrl.openWriter()">
+					<div id="add-button" class="contribute ask" ng-click="qc.toggleWriter()">
 						<div id="cross"></div>
 					</div>
 				</div>
-				<div ng-show="questionCtrl.writerOpen === true" class="writer">
+				<div class="writer" ng-class="{writerOpen: qc.writerOpen}">
 					<div class="container">
 						<div class="input-box-container" ng-init="newPost.title = ''; newPost.author = ''; newPost.message = ''">
 							<input name="title" ng-model="newPost.title" placeholder="title">
 							<input name="author" ng-model="newPost.author" placeholder="posted by">
 							<textarea ng-model="newPost.message" placeholder="question"></textarea>
 						</div>
-						<div ng-click="questionCtrl.addQuestion(newPost)" class="button send-button">
+						<div ng-click="qc.addQuestion(newPost)" class="button send-button">
 							post
 						</div>
 					</div>	

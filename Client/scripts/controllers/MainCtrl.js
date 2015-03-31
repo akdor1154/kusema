@@ -1,89 +1,58 @@
 'use strict';
 
-kusema
+var SearchCriteria = function() {
+		return this;
+	}
+	SearchCriteria.prototype = Object.create(Object.prototype, {
+		topic: {writable: true, value: null},
+		name: {writable: true, value: null},
+		date: {writable: true, value: null},
+	})
+// } SearchCriteria
 
-.controller(
-		'SearchController',
-		[ '$scope', '$routeParams', '$timeout', 'questionFactory',
-				'toolboxFactory', function($scope, $routeParams, $timeout, questionFactory, toolboxFactory) {
-					$scope.criteria = {};
-					
-					$scope.submit = function(form) {
-						$scope.criteria = angular.copy(form);
-					};
-} ])
-.controller(
-		'QuestionListController',
-		[ '$scope', '$routeParams', '$timeout', 'questionFactory',
-				'toolboxFactory', function($scope, $routeParams, $timeout, questionFactory, toolboxFactory) {
-					var tmp = {};
-					tmp.me = this;
-					this.allowMoreRequests = true;
-					this.writerOpen = false;
-					
-					tmp.me.questions = questionFactory.questions;
-					
-					tmp.me.getScore = function(data) {
-						return -(data.upVotes - data.downVotes);
-					}
-					
-					tmp.me.upVote = function(id, btn) {
-				    	tmp.search = toolboxFactory.findObjectInArray(tmp.me.questions.questionList, '_id', id);
-				    	if(tmp.search.objectPosition !== -1) {
-				    		tmp.search.referenceToObject.upVotes++;
-				    		questionFactory.upVoteQuestion(id);
-				    	} else {alert('Invalid Question. (id: ' + id + ')')}
-				    }
-				    
-					tmp.me.downVote = function(id) {
-				    	tmp.search = toolboxFactory.findObjectInArray(tmp.me.questions.questionList, '_id', id);
-				    	if(tmp.search.objectPosition !== -1) {
-				    		tmp.search.referenceToObject.downVotes++;
-				    		questionFactory.dnVoteQuestion(id);
-				    	} else {alert('Invalid Question. (id: ' + id + ')')}
-				    }
-				    
-					tmp.me.deleteQuestion = function(id) {
-				    	tmp.search = toolboxFactory.findObjectInArray(tmp.me.questions.questionList, '_id', id);
-				    	if(tmp.search.objectPosition !== -1) {
-				    		tmp.me.questions.questionList.splice(tmp.search.objectPosition, 1);
-				    		questionFactory.deleteQuestion(id);
-				    	} else {alert('Invalid Question. (id: ' + id + ')')}
-				    }
-				    
-					tmp.me.closeWriter = function () {
-						tmp.me.writerOpen = false;
-				        $('.writer').animate({bottom:'-145px'}, 200);
-				        $('.contribute').animate({bottom:'55px', right:'90px', opacity: 1}, 200);
-				        $('#cross').css({'-webkit-transform' : 'rotate('+ 0 +'deg)',
-				         '-moz-transform' : 'rotate('+ 0 +'deg)',
-				         '-ms-transform' : 'rotate('+ 0 +'deg)',
-				         'transform' : 'rotate('+ 0 +'deg)'});
-				    };
 
-				    tmp.me.openWriter = function () {
-				    	tmp.me.writerOpen = true;
-				        $('.writer').animate({bottom:'0px'}, 200);
-				        $('.contribute').animate({bottom:'155px', right:'50%', opacity: 1}, 200);
-				        $('#cross').css({'-webkit-transform' : 'rotate('+ 45 +'deg)',
-				         '-moz-transform' : 'rotate('+ 45 +'deg)',
-				         '-ms-transform' : 'rotate('+ 45 +'deg)',
-				         'transform' : 'rotate('+ 45 +'deg)'});
-				    };
-				    
-				    tmp.me.addQuestion = function (data) {
-				    	tmp.newPost = {};
-				    	tmp.newPost.title = data.title;
-				        tmp.newPost.author = data.author;
-				        tmp.newPost.message = data.message;
-				        questionFactory.addQuestion(tmp.newPost).success(
-						function(response) {
-							tmp.me.closeWriter();
-							tmp.me.questions.questionList.push(response);
-						}).error(
-						function(error) {
-							$scope.status = 'Unable to add question: ' + error.message;
-						});
-				    }
-} ])			
-;
+var SearchController = function() {
+		this.critera = new SearchCriteria();
+		return this;
+	}
+	SearchController.prototype = Object.create(Object.prototype, {
+		criteria: {writable: true, value: null}
+	});
+	SearchController.prototype.submit = function(form) {
+		this.criteria = angular.copy(form); // Is this just a placeholder?
+	}
+// } SearchController
+
+
+kusema.controller('SearchController',	SearchController);
+
+var QuestionListController = function($scope, questionFactory) {
+		this.$scope = $scope;
+		this.qf = questionFactory;
+		this.allowMoreRequests = true;
+		this.writerOpen = false;
+		this.questions = this.qf.questions;
+	}
+	QuestionListController.prototype = Object.create(Object.prototype, {
+		allowMoreRequests: {writable: true, value: true},
+		writerOpen: {writable: true, value: false}
+	});
+	QuestionListController.prototype.toggleWriter = function() {
+		this.writerOpen = !this.writerOpen;
+	}
+	QuestionListController.prototype.addQuestion = function(formData) {
+		var newQuestion = new Question(formData, this.qf);
+		this.qf.addQuestion(newQuestion).
+		success(
+			function(response) {
+				this.writerOpen = false;
+				this.qf.questions.questionsList.push(response);
+			}.bind(this)).
+		error(
+			function(response) {
+				this.$scope.status = 'Unable to add question: ' + response.message;
+			}.bind(this));
+	}
+// } QuestionListController
+
+kusema.controller( 'QuestionListController', [ '$scope', 'questionFactory', QuestionListController ] );
