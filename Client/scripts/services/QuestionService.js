@@ -1,9 +1,9 @@
 'use strict';
 
-kusema.factory('questionFactory', ['$http' , '$routeParams', function($http, $routeParams) {
+kusema.factory('questionFactory', ['$http' , '$routeParams', 'kusemaConfig', function($http, $routeParams, kusemaConfig) {
 
     var questionFactory = {};
-    var urlBase = 'http://localhost:3000/questions';
+    var urlBase = kusemaConfig.url()+'api/questions';
 
     questionFactory.getQuestions = function () {
         return $http.get(urlBase);
@@ -48,7 +48,7 @@ kusema.factory('questionFactory', ['$http' , '$routeParams', function($http, $ro
       questionFactory.questions.questionList = quest;
     })
     .error(function (error) {
-      console.log('Unable to load questions: ' + error.message);
+      console.log('Unable to load questions: ' + error + error.message);
     });
 
 
