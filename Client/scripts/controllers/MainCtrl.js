@@ -27,10 +27,7 @@ kusema
 						return -(data.upVotes - data.downVotes);
 					}
 					
-					console.debug(tmp.me.questions);
-				    
 					tmp.me.upVote = function(id, btn) {
-						console.debug(btn);
 				    	tmp.search = toolboxFactory.findObjectInArray(tmp.me.questions.questionList, '_id', id);
 				    	if(tmp.search.objectPosition !== -1) {
 				    		tmp.search.referenceToObject.upVotes++;
