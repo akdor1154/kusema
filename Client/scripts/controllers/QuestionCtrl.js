@@ -1,176 +1,106 @@
 'use strict';
+kusema
 
-kusema.controller('QuestionCtrl', [
-  	'$scope', 
-  	'$routeParams', 
-    'questionFactory',
-    'commentFactory',
-    'socketFactory',
-    'toolboxFactory', 
-  	function ($scope, $routeParams, questionFactory, commentFactory, socketFactory, toolboxFactory) {
+.controller(
+		'QuestionController',
+		[ '$scope', '$routeParams', '$timeout', 'questionFactory', 'commentFactory',
+				'toolboxFactory', function($scope, $routeParams, $timeout, questionFactory, commentFactory, toolboxFactory) {
+					var tmp = {};
+					tmp.me = this;
+					tmp.me.questionEditorOpen = false;
+					tmp.me.button = {'text': 'Edit', 'class': 'btn btn-success', 'disabled': false};
+					
+					questionFactory.getQuestionById($routeParams.id)
+						.success(function(data) {
+							tmp.me.question = data;
+							tmp.me.questionForm = {'title': data.title, 'message': data.message};
+						})
+						.error(function(error) {
+							console.log('Invalid question ID passed in (id=' + routeParams.id + '): '+ error.message);
+							alert('Invalid question ID passed in (id=' + routeParams.id + '): '+ error.message);
+						});
+					
+					tmp.me.editQuestion = function() {
+						if(tmp.me.questionForm.title !== tmp.me.question.title || tmp.me.questionForm.message !== tmp.me.question.message) {
+							tmp.me.button.disabled = true;
+							tmp.me.button.text = 'loading ...';
+							questionFactory.updateQuestion(tmp.me.questionForm)
+								.success(function(data) {
+									tmp.me.button.disabled = false;
+									tmp.me.button.text = 'Edit';
+									tmp.me.question.title = tmp.me.questionForm.title;
+									tmp.me.question.message = tmp.me.questionForm.message;
+								})
+								.error(function(error) {
+									console.debug('Error saving question (id=' + $routeParams.id + '). ' + error.message);
+									alert('Error saving question (id=' + $routeParams.id + '). ' + error.message);
+								});
+						}
+					};
+} ])
 
-    // Grab the question id from the route params
-    var questionId = $routeParams.id;
+.controller(
+		'CommentController',
+		[ '$scope', '$routeParams', '$timeout', 'questionFactory', 'commentFactory', 'socketFactory', 'toolboxFactory', 
+		  function($scope, $routeParams, $timeout, questionFactory, commentFactory, socketFactory, toolboxFactory) {
+				var tmp = {};
+				tmp.me = this;
+				tmp.me.comments = [];
+				tmp.me.messagerOpen = false;
+				tmp.me.newComment = '';
+				
+				commentFactory.getComments($routeParams.id)
+					.success(function(data) {
+						tmp.me.comments = data;
+					})
+					.error(function(error) {
+						console.log('Unable to load comments: '+ error.message);
+						alert('Unable to load comments: '+ error.message);
+					});
+				
+				tmp.me.deleteComment = function(id) {
+			    	tmp.search = toolboxFactory.findObjectInArray(tmp.me.comments, '_id', id);
+			    	if(tmp.search.objectPosition !== -1) {
+			    		tmp.me.comments.splice(tmp.search.objectPosition, 1);
+			    		commentFactory.deleteComment(id);
+			    	} else {alert('Invalid Comment. (id: ' + id + ')')}
+			    }
+				
 
-    $scope.previousComments = [];
+			    tmp.me.closeWriter = function () {
+			    	tmp.me.messagerOpen = false;
+			        $('.messager').animate({bottom:'-145px'}, 200);
+			        $('.contribute').animate({bottom:'55px', right:'90px', opacity: 1}, 200);
+			        $('#cross').css({'-webkit-transform' : 'rotate('+ 0 +'deg)',
+			         '-moz-transform' : 'rotate('+ 0 +'deg)',
+			         '-ms-transform' : 'rotate('+ 0 +'deg)',
+			         'transform' : 'rotate('+ 0 +'deg)'});
+			    };
 
-    // Retrieve previous comments
-    commentFactory.getComments(questionId)
-    .success(function (comm) {
-      $scope.previousComments = comm;
-      console.log($scope.previousComments);
-    })
-    .error(function (error) {
-      console.log('Unable to load comments: ' + error.message);
-    });
-    
-
-    // Holds the array of comment objects
-    $scope.comments = [];
-
-
-    // Tells socket.io that participant has entered the question's discussion page 
-    socketFactory.emit('enter discussion', {
-      username: 'bobby',
-      question_id: questionId
-    });
-
-    // MAY NEED AN ON-LEAVE EVENT TOO? 
-
-    socketFactory.on('new message', function (data) {
-      if (data.question_id === questionId) {
-        $scope.comments = $scope.comments.concat(data);
-        if (messagerOpen === true) {
-          $('html, body').animate({scrollTop:$(document).height()}, 'slow');  
-        }      
-        // socketFactory.emit('my other event', { my: 'data' });
-      }
-    });
-
-
-    // Make an empty object for the edited question.
-    $scope.editedQuestion = {};
-
-    questionFactory.getQuestionById(questionId)
-        .success(function (quest) {
-            $scope.question = quest;
-      			$scope.editedQuestion.title = $scope.question.title;
-      			$scope.editedQuestion.author = $scope.question.author;
-      			$scope.editedQuestion.comment = $scope.question.comment;
-        })
-        .error(function (error) {
-            $scope.status = 'Unable to load questions: ' + error.message;
-        });
-
-
-    $scope.updateQuestion = function() {
-      questionFactory.updateQuestion($scope.editedQuestion)
-        .success(function () {
-        	console.log($scope.editedQuestion);
-    			$scope.question.title = $scope.editedQuestion.title;
-    			$scope.question.author = $scope.editedQuestion.author;
-    			$scope.question.comment = $scope.editedQuestion.comment;
-
-          var searchResults = toolboxFactory.findObjectInArray(
-                    questionFactory.questions.questionList,
-                    '_id',
-                    questionId
-                  );
-                  searchResults.referenceToObject.title = $scope.editedQuestion.title;
-                  searchResults.referenceToObject.author = $scope.editedQuestion.author;
-                  searchResults.referenceToObject.comment = $scope.editedQuestion.comment;
-
-
-      		$scope.status = 'Question uploaded';
-        })
-        .error(function (error) {
-  	$scope.status = 'Unable to load questions: ' + error.message;
-        });
-    };
-
-
-
-    $scope.addComment = function () {
-      if ($scope.newComment !== '') {
-        // Save comment to database
-        var message = {
-          question_id: questionId,
-          author: 'sherbinator2014 ',
-          message: $scope.newComment
-        };
-        $('html, body').animate({scrollTop:$(document).height() - 1}, 'slow');
-        commentFactory.addComment(questionId, message);
-        socketFactory.emit('message sent', message);
-        $scope.comments = $scope.comments.concat(message);
-        $scope.newComment = '';
-      }
-    };
-
-
-    $scope.deleteComment = function(commentId) {
-      commentFactory.deleteComment(commentId);
-      var index = -1;
-
-      index = toolboxFactory.findObjectInArray(
-        $scope.comments,
-        '_id',
-        commentId
-        ).objectPosition;
-      if(index !== -1) {
-          $scope.comments.splice(index, 1);
-      } else {
-        index = toolboxFactory.findObjectInArray(
-          $scope.previousComments,
-          '_id',
-          commentId
-          ).objectPosition;
-          if (index !== -1) {
-              $scope.previousComments.splice(index, 1);
-          }
-      }
-    };
-
-
-
-    $scope.sendOnEnter = true;
-
-    $('.reply-box').on('keydown', function(e) {
-      if (e.which === 13 && $scope.sendOnEnter === true) {            
-        e.preventDefault();
-        $scope.addComment();
-      }
-    });
-
-    var messagerOpen = false;
-
-    var closeWriter = function () {
-        messagerOpen = false;
-        $('.messager').animate({bottom:'-145px'}, 200);
-        $('.contribute').animate({bottom:'55px', right:'90px', opacity: 1}, 200);
-        $('#cross').css({'-webkit-transform' : 'rotate('+ 0 +'deg)',
-         '-moz-transform' : 'rotate('+ 0 +'deg)',
-         '-ms-transform' : 'rotate('+ 0 +'deg)',
-         'transform' : 'rotate('+ 0 +'deg)'});
-    };
-
-    var openWriter = function () {
-        messagerOpen = true;
-        $('.messager').animate({bottom:'0px'}, 200);
-        $('.contribute').animate({bottom:'155px', right:'50%', opacity: 1}, 200);
-        $('#cross').css({'-webkit-transform' : 'rotate('+ 45 +'deg)',
-         '-moz-transform' : 'rotate('+ 45 +'deg)',
-         '-ms-transform' : 'rotate('+ 45 +'deg)',
-         'transform' : 'rotate('+ 45 +'deg)'});
-    };
-
-    $('.contribute').click(function(){
-      if (messagerOpen) {
-        closeWriter();
-      } else {
-        openWriter();
-      }
-    });  
-
-
-
-  }]);
+			    tmp.me.openWriter = function () {
+			    	tmp.me.messagerOpen = true;
+			        $('.messager').animate({bottom:'0px'}, 200);
+			        $('.contribute').animate({bottom:'155px', right:'50%', opacity: 1}, 200);
+			        $('#cross').css({'-webkit-transform' : 'rotate('+ 45 +'deg)',
+			         '-moz-transform' : 'rotate('+ 45 +'deg)',
+			         '-ms-transform' : 'rotate('+ 45 +'deg)',
+			         'transform' : 'rotate('+ 45 +'deg)'});
+			    };
+			    
+			    tmp.me.addComment = function () {
+			        if (tmp.me.newComment !== '') {
+			          // Save comment to database
+			          var message = {
+			            question_id: $routeParams.id,
+			            author: 'sherbinator2014 ',
+			            message: tmp.me.newComment
+			          };
+			          $('html, body').animate({scrollTop:$(document).height() - 1}, 'slow');
+			          commentFactory.addComment($routeParams.id, message);
+			          socketFactory.emit('message sent', message);
+			          tmp.me.comments = tmp.me.comments.concat(message);
+			          tmp.me.newComment = '';
+			        }
+			      };
+} ])
+;

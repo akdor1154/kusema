@@ -11,7 +11,7 @@ kusema
 					$scope.submit = function(form) {
 						$scope.criteria = angular.copy(form);
 					};
-				} ])
+} ])
 .controller(
 		'QuestionListController',
 		[ '$scope', '$routeParams', '$timeout', 'questionFactory',
@@ -85,5 +85,5 @@ kusema
 							$scope.status = 'Unable to add question: ' + error.message;
 						});
 				    }
-				} ])			
+} ])			
 ;

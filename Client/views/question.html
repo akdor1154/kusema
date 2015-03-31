@@ -1,67 +1,77 @@
-<div>
-  <div class="card">
-    <div class="score">
-     {{ question.upVotes - question.downVotes }}
-    </div>
-    <div class="title">
-     {{ question.title }}
-    </div>
-    <div class="author">
-      {{ question.author }}
-    </div>
-    <div class="comment">
-      {{ question.message }}
-    </div>
+<app-menu></app-menu>
 
+<div id="main-panel">
+	<!-- Header -->
+	<div class="header">
+		<div class="container">
+			<div class="page-header">
+				<h1><a href="#/">kusema</a>&nbsp;<small>alpha v0.0.1</small></h1>
+				<br> Engineering
+			</div>
+		</div>
+	</div>
+	
+	<div id="hamburger"><i class="fa fa-bars fa-2x"></i></div>
 
-    <div class="edit-question" style="display: none;">
-    <br>
-    <br>
-    <br>
-    	EDIT QUESTION:<br>
-		<input name="title" ng-model="editedQuestion.title" placeholder="title" style="width: 100%;">
-		<input name="author" ng-model="editedQuestion.author" placeholder="posted by" style="width: 100%;">
-		<br><br>
-		<textarea name="comment" ng-model="editedQuestion.comment" style="width: 100%;">
-		</textarea>
-		<br><br>
-	    <div class="button" ng-click="updateQuestion()">
-	    	edit
-	    </div>
-    </div>
-  </div>
-
-
-  <div class="card" ng-repeat="previousComment in previousComments | orderBy:date">
-    <b>{{ previousComment.author }}:</b> {{ previousComment.message }}
-    <div ng-click="deleteComment(previousComment._id)" class="button" style="display:none;">
-      delete
-    </div>
-  </div>
-
-  <div class="card" ng-repeat="comment in comments | orderBy:date">
-    <b>{{ comment.author }}:</b> {{ comment.message }}
-    <div ng-click="deleteComment(comment._id)" class="button" style="display:none;">
-      delete
-    </div>
-  </div>
-
-  <div class="spacer"></div>
-
-  <div class="contribute reply">
-    <div id="cross"></div>
-  </div>
-
-  <div class="messager">
-    <div class="container">
-      <div class="input-box-container">
-        <textarea class="reply-box" ng-model="newComment" placeholder="reply here"></textarea>
-      </div>
-      <div ng-click="addComment()" class="button send-button">
-        send
-      </div>
-    </div>
-  </div>
-
-
+	<div class="page">
+		<div class="page-content">
+			<!-- NEW -->
+			<div ng-controller="QuestionController as QuestionCtrl" class="card" id="question-container">
+				<div class="score">{{ QuestionCtrl.question.upVotes - QuestionCtrl.question.downVotes }}</div>
+				<div class="title">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.title : QuestionCtrl.question.title }}</div>
+				<div class="author">{{ QuestionCtrl.question.author }}</div>
+				<div class="comment">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.message : QuestionCtrl.question.message }}</div>
+				
+				<br>				
+				<div ng-hide="QuestionCtrl.questionEditorOpen" 
+						ng-click="QuestionCtrl.questionEditorOpen = !QuestionCtrl.questionEditorOpen;QuestionCtrl.button.text='Save';" 
+						class="{{QuestionCtrl.button.class}}">
+						{{QuestionCtrl.button.text}}
+				</div>
+				
+				<div ng-show="QuestionCtrl.questionEditorOpen" id="questionEditor">
+					<br> 
+					<div class="form-group form-group-sm input-group">
+						<label class="input-group-addon ng-pristine ng-valid">Topic: </label>
+						<input ng-model="QuestionCtrl.questionForm.title" class="form-control input-sm ng-valid ng-dirty" type="text"">
+					</div>
+					<br>
+					<div class="form-group form-group-sm input-group">
+						<label class="input-group-addon ng-pristine ng-valid">Content: </label>
+						<textarea ng-model="QuestionCtrl.questionForm.message" class="form-control input-sm ng-valid" type="text"></textarea>
+					</div>
+					<div ng-click="QuestionCtrl.editQuestion();QuestionCtrl.questionEditorOpen=!QuestionCtrl.questionEditorOpen;" 
+						ng-class="{disabled: QuestionCtrl.button.disabled === true}" 
+						class="{{QuestionCtrl.button.class}}">
+						{{QuestionCtrl.button.text}}
+					</div>
+				</div>
+			</div>
+			
+			<div ng-controller="CommentController as CommentCtrl" id="comment-container">
+				<div ng-repeat="comment in CommentCtrl.comments | orderBy:dateCreated" class="card">
+					<strong>{{ comment.author }}:</strong>
+					{{ comment.message }}
+					<br>
+					<div ng-click="CommentCtrl.deleteComment(comment._id)" class="btn btn-default" >delete</div>
+				</div>
+				
+				<div class="spacer"></div>
+			
+				<div ng-click="CommentCtrl.messagerOpen === true ? CommentCtrl.closeWriter() : CommentCtrl.openWriter()" class="contribute reply">
+					<div id="cross"></div>
+				</div>
+			
+				<div ng-show="CommentCtrl.messagerOpen === true" class="messager">
+					<div class="container">
+						{{QuestionController.question | json}}
+						<div class="input-box-container">
+							<textarea ng-model="CommentCtrl.newComment" class="reply-box" placeholder="reply here"></textarea>
+						</div>
+						<div ng-click="CommentCtrl.addComment()" class="button send-button">send</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>

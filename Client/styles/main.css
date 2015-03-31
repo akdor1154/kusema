@@ -177,13 +177,15 @@ input, textarea {
   clear: both;
 }
 
-.button {
+.button
+,.btn {
   background-color: #555;
   text-align: center;
   cursor: pointer;
   color: #fff;
-  width: 100px;
-  border-radius: 4px;
+  width: 100px !important;
+  border-radius: 4px !important;
+  padding: unset !important;
 }
 
 .spacer {

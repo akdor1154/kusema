@@ -19,7 +19,6 @@ kusema.config(function($routeProvider) {
   })
   .when('/question/:id', {
     templateUrl: 'views/question.html',
-    controller: 'QuestionCtrl'
   });    
 });
 

@@ -21,19 +21,19 @@
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon" ng-model="search.criterias.topic">Topic: </label>
+							<label class="input-group-addon">Topic: </label>
 							<input ng-model="form.topic" type="text" placeholder="the Topic of Question" class="form-control input-sm">
 						</div>
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon" ng-model="search.criterias.name">Name: </label>
+							<label class="input-group-addon">Name: </label>
 							<input ng-model="form.name" type="text" placeholder="the Name of Author" class="form-control input-sm">
 						</div>
 					</div>
 					<div class="col-sm-3">
 						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon" ng-model="search.criterias.date">Date: </label>
+							<label class="input-group-addon">Date: </label>
 							<input ng-model="form.date" type="text" placeholder="the Date of Question" class="form-control input-sm">
 						</div>
 					</div>
@@ -50,14 +50,17 @@
 				<div class="row card" ng-repeat="question in questionCtrl.questions.questionList | orderBy:questionCtrl.getScore | filter:searchAuthor">
 					<div class="score">
 						<img class="upvote" src="../images/upvote.png" ng-click="questionCtrl.upVote(question._id)">
-						<br/>
+						<br>
 							{{ question.upVotes - question.downVotes }}
-						<br/> 
+						<br> 
 						<img class="downvote" src="../images/dnvote.png" ng-click="questionCtrl.downVote(question._id)">
 					</div>
 					<div class="title">
 						<a href="#/question/{{question._id}}">{{ question.title }}</a>
 					</div>
+					<div class="author">{{ question.author }}</div>
+					<br> <br>
+					<div ng-click="questionCtrl.deleteQuestion(question._id)" class="button btn-danger">delete</div>
 				</div>
 				
 				<div id="loadingImage" ng-include="'views/loadingImage.html'"></div>
@@ -81,7 +84,7 @@
 						<div id="cross"></div>
 					</div>
 				</div>
-				<div class="writer">
+				<div ng-show="questionCtrl.writerOpen === true" class="writer">
 					<div class="container">
 						<div class="input-box-container" ng-init="newPost.title = ''; newPost.author = ''; newPost.message = ''">
 							<input name="title" ng-model="newPost.title" placeholder="title">

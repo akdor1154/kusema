@@ -51,9 +51,10 @@ exp.addQuestion = function (req, res, next) {
 
 exp.updateQuestion = function (req, res, next) {
 // TODO add auth info ensure only user and admin can update
+	console.log(req.body);
   var updateQuestion = Question.update(
     { '_id': new ObjectId(req.params.questionId) },
-    { $set: { 'message': req.body.message, 'dateModified': new Date() }}
+    { $set: { 'message': req.body.message, 'title': req.body.title, 'dateModified': new Date() }}
   ).exec();
 
   updateQuestion.addBack( function (err, updated, raw) {
