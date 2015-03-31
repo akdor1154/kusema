@@ -1,4 +1,11 @@
+* {
+  /* if I have to ctrlc ctrlv this one more time... */
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+
 /* Search Panel */
+
 html div#search_panel {
 	padding-bottom: unset;
 }
@@ -57,14 +64,12 @@ html, body {
   overflow: hidden;
   transition-property: right;
   transition-duration: .5s;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
 #main-panel.open {
   right: 150px;
   transition-property: right;
   transition-duration: .5s;
-  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
 }
 
 .page-content {
@@ -152,13 +157,10 @@ input, textarea {
   width: 100%;
   box-shadow: 0px 0px 5px #999;
   transition-property: bottom;
-  transition-duration: 0.2s;
-  transition-timing-function: cubic-bezier(1,0,0,1);
-}
-
-.writer.writerClosed {
+  transition-duration: 0.5s;
   bottom: -145px;
 }
+
 .writer.writerOpen {
   bottom: 0px;
 }
@@ -203,9 +205,8 @@ input, textarea {
 
 
 .contribute {
-  position: fixed;
-  position: fixed;
-  bottom: 55px;
+  position: absolute;
+  top: -55px;
   right: 90px;
   z-index: 20;
   height: 60px;
@@ -215,8 +216,14 @@ input, textarea {
   font-size: 43px;
   color: #fff;
   cursor: pointer;
-  box-shadow: 0px 4px 4px #999;
+  box-shadow: 0px 4px 4px rgba(0,0,0,0.6);
   margin-right: -30px;
+  transition: right;
+  transition-duration: 0.2s;
+}
+
+.writer.writerOpen .contribute {
+  right: 50%;
 }
 
 .ask {
@@ -269,6 +276,7 @@ input, textarea {
   position: absolute;
   z-index: 10;
   background: #fff;
+  transform: rotate(0deg);
 }
 
 #cross:before {
@@ -286,9 +294,6 @@ input, textarea {
   width: 100%;
 }
 #cross.writerOpen {
-  transform: rotate(45deg);
-}
-#cross.writerClosed {
   transform: rotate(45deg);
 }
 

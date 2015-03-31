@@ -80,12 +80,13 @@
 					</div>
 				</div>
 				
-				<div class="contribute-container">
-					<div id="add-button" class="contribute ask" ng-click="qc.toggleWriter()">
-						<div id="cross"></div>
-					</div>
-				</div>
+
 				<div class="writer" ng-class="{writerOpen: qc.writerOpen}">
+					<div class="contribute-container">
+						<div id="add-button" class="contribute ask" ng-click="qc.toggleWriter()">
+							<div id="cross" ng-class="{writerOpen: qc.writerOpen}"></div>
+						</div>
+					</div>
 					<div class="container">
 						<div class="input-box-container" ng-init="newPost.title = ''; newPost.author = ''; newPost.message = ''">
 							<input name="title" ng-model="newPost.title" placeholder="title">
