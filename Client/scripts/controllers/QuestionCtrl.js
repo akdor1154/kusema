@@ -100,6 +100,7 @@ kusema
 			          socketFactory.emit('message sent', message);
 			          tmp.me.comments = tmp.me.comments.concat(message);
 			          tmp.me.newComment = '';
+			          tmp.me.closeWriter();
 			        }
 			      };
 } ])
