@@ -36,9 +36,11 @@ exp.retrieveAll = function (req, res, next) {
 
 exp.addQuestion = function (req, res, next) {
   var question = new Question();
-  question.author = req.body.author;//TODO Add real users
-  question.title = req.body.title;
-  question.message = req.body.message;
+  question.author   = req.body.author;//TODO Add real users
+  question.title    = req.body.title;
+  question.message  = req.body.message;
+  question.imageUrl = req.body.imageUrl;
+  question.videoUrl = req.body.videoUrl;
 
   question.save( function (err, question) {
     if (err) return next(err);
