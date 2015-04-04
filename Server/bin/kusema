@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+var debug = require('debug')('kusema');
+
+var app = require('../server');
+var program = require('commander');
+
+var port;
+var node_env;
+
+program
+	.option('-p, --port <n>','The port to listen on');
+
+program
+	.command('test')
+	.description('Run a test Kusema server')
+	.action(function() {
+		port = 3000;
+		node_env = 'development';
+	});
+
+program
+	.command('production')
+	.description('Run a production Kusema server')
+	.action(function() {
+		port = 8080;
+		node_env = 'production';
+	});
+
+program.parse(process.argv);
+
+process.env.PORT =
+		(program.port) ? program.port
+		: (process.env.PORT) ? process.env.PORT
+		: (port) ? port
+		: 3000;
+process.env.NODE_ENV = (node_env) ? node_env : (process.env.NODE_ENV) ? process.env.NODE_ENV : 'development';
+
+var server = app.listen(process.env.PORT, function() {
+  console.log('Express server listening on port ' + server.address().port);
+});
