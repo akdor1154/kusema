@@ -1,0 +1,8 @@
+<div ng-controller="LoginController as lc">
+<form id="loginForm">
+<input name="username" placeholder="Username" type="text" ng-model="lc.username" />
+<input name="password" type="password" placeholder="Password" ng-model="lc.password" />
+<input type="button" name="login" value="Login" ng-click="lc.processLogin()" />
+<input type="button" name="register" value="Register" ng-click="lc.processRegister()" />
+</form>
+</div>

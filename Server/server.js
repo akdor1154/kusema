@@ -35,8 +35,13 @@ db.once('open', function (callback) {
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+var corsOptions = {
+  origin: true,
+  credentials: true
+}
+
 // Configure CORs
-app.use(cors());
+app.use(cors(corsOptions));
 
 // Configure Passport
 require('./config/passport')(passport);
