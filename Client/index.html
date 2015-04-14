@@ -5,21 +5,18 @@
     <title>kusema</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles/loader.css">
+    <link rel="stylesheet" href="styles/animations.css">
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="scripts/directives/menu.css">
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <!-- Select2 -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/css/select2.min.css" rel="stylesheet" />
   </head>
 
   <body ng-app="kusema" >
 	<div ng-include="'checkBrowser.html'"></div>
         <ng-include src="'login.html'"></ng-include>
-	<div class="browser-content" ng-view>
+	<div class="browser-content" ng-view class="view-animate">
 		<!-- Pages are inserted here -->
 	</div>
 
@@ -51,8 +48,5 @@
 
     <!-- Bootstrap -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <!-- Select2 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.2/js/select2.min.js"></script>
-
 </body>
 </html>
