@@ -45,7 +45,11 @@ app.use(cors(corsOptions));
 
 // Configure Passport
 require('./config/passport')(passport);
-app.use(expressSession({secret: 'mySecretKey'}));
+app.use(expressSession({ // TODO add a data store to this
+	secret: 'mySecretKey',
+	resave: false,
+	saveUninitialized: false
+}));
 app.use(passport.initialize());
 app.use(passport.session());  
 
