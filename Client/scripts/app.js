@@ -1,6 +1,7 @@
 'use strict';
 
 var kusema = angular.module('kusema', [
+'ngAnimate',
 'ngRoute',
 'kusema.config'
 ]);
