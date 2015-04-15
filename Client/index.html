@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="kusema">
 
   <head>
 
@@ -13,11 +13,11 @@
 
   </head>
 
-  <body ng-app="kusema" >
+  <body ng-view layout="row" ng-controller="MainController">
 
 	<div ng-include="'checkBrowser.html'"></div>
-        
-	<div ng-view>
+
+	<div >
 		<!-- Pages are inserted here -->
 	</div>
 
