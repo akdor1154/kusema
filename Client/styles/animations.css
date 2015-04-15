@@ -1,29 +1,33 @@
-.view-animate {
-  padding:10px;
+.view {
+  position: absolute;
 }
 
-.view-animate.ng-enter, .view-animate.ng-leave {
-  -webkit-transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-  transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1.5s;
-
-  display:block;
-  width:100%;
-  border-left:1px solid black;
-
-  position:absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  padding:10px;
+.view.ng-enter {
+  animation: slideLeft 0.5s linear;
+  -webkit-animation: slideLeft 0.5s linear;
 }
 
-.view-animate.ng-enter {
-  left:100%;
+.view.ng-leave {
+  animation: slideOut 0.5s linear;
+  -webkit-animation: slideOut 0.5s linear;
 }
-.view-animate.ng-enter.ng-enter-active {
-  left:0;
+
+@keyframes slideOut {
+  from { left:0%; }
+  to { left:100%; }
 }
-.view-animate.ng-leave.ng-leave-active {
-  left:-100%;
+
+@-webkit-keyframes slideOut {
+  from { right:0%; }
+  to { right:100%; }
+}
+
+@keyframes slideLeft {
+  from { left:100%; }
+  to { left:0%; }
+}
+
+@-webkit-keyframes slideLeft {
+  from { left:100%; }
+  to { left:0%; }
 }

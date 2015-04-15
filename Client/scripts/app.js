@@ -2,6 +2,7 @@
 
 var kusema = angular.module('kusema', [
 'ngAnimate',
+'ngMaterial',
 'ngRoute',
 'kusema.config'
 ]);

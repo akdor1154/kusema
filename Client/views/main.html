@@ -1,104 +1,38 @@
-<app-menu></app-menu>
+<div layout="column" ng-controller="MainController">
+    <md-toolbar layout="row">
+      <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <h1 class="md-toolbar-tools" layout-align-gt-sm="center">Kusema</h1>
+    </md-toolbar>
 
-<div id="main-panel">
+    <div layout="row" flex>
+        <md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+          
+          side nav here
 
-	<!-- Header -->
-	<div class="header">
-		<div class="container">
-			<div class="page-header">
-				<h1><a href="#/">kusema</a>&nbsp;<small>alpha v0.0.1</small></h1>
-				<br> Engineering
-			</div>
-			<ng-include src="'views/login.html'"></ng-include>
-		</div>
-	</div>
+        </md-sidenav>
+        <div layout="column" flex id="content">
+              <ng-include src="'views/login.html'"></ng-include>
+            <md-content layout="row" flex class="md-padding">
 
-	<div id="hamburger"><i class="fa fa-bars fa-2x"></i></div>
 
-	<div class="page">
-		<div class="page-content">
-			<!-- Search panel -->
-			<div ng-init="debug=true" ng-controller="SearchController as search" id="search_panel" class="row card">
-				<div class="row">
-					<div class="col-sm-4">
-						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon" ng-model="search.criteria.topic">Topic: </label>
-							<input ng-model="form.topic" type="text" placeholder="the Topic of Question" class="form-control input-sm">
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon" ng-model="search.criteria.name">Name: </label>
-							<input ng-model="form.name" type="text" placeholder="the Name of Author" class="form-control input-sm">
-						</div>
-					</div>
-					<div class="col-sm-3">
-						<div class="form-group form-group-sm input-group">
-							<label class="input-group-addon" ng-model="search.criteria.date">Date: </label>
-							<input ng-model="form.date" type="text" placeholder="the Date of Question" class="form-control input-sm">
-						</div>
-					</div>
-					<div class="col-sm-2 pull-right text-right">
-						<div ng-click="submit(form)" type="submit" class="btn btn-info btn-sm"><i class="glyphicon glyphicon-search"></i></div>
-					</div>
-				</div>
-				<pre ng-show="debug">frontend = {{form | json}}</pre>
-				<pre ng-show="debug">backend = {{criteria | json}}</pre>
-			</div>
-				
-			<div id="questionList" ng-controller="QuestionListController as qc">
-				<!-- Question Listing -->
-				<div class="row card" ng-repeat="question in qc.questions.questionsList">
-					<div class="score">
-						<img class="upvote" src="../images/upvote.png" ng-click="question.upVote()">
-						<br/>
-							{{ question.score }}
-						<br/> 
-						<img class="downvote" src="../images/dnvote.png" ng-click="question.downVote()">
-					</div>
-					<div class="title">
-						<a href="#/question/{{question._id}}">{{ question.title }}</a>
-					</div>
-					<div class="author">{{ question.author }}</div>
-					<br> <br>
-					<div ng-click="questionCtrl.deleteQuestion(question._id)" class="button btn-danger">delete</div>
-				</div>
-				
-				<div id="loadingImage" ng-include="'views/loadingImage.html'"></div>
-		
-				<!-- New Question -->
-				<div ng-show="qc.writerOpen === true" class="row card">
-					<div class="col-sm-2">
-						<div ng-hide="newPost.title===''"><strong>Title: </strong></div>
-						<div ng-hide="newPost.author===''"><strong>Author: </strong></div>
-						<div ng-hide="newPost.message===''"><strong>Question: </strong></div>
-					</div>
-					<div class="col-sm-10">
-						<div ng-hide="newPost.title===''">{{ newPost.title }}</div>
-						<div ng-hide="newPost.author===''">{{ newPost.author }}</div>
-						<div ng-hide="newPost.message===''">{{ newPost.message }}</div>
-					</div>
-				</div>
-				
+              <div ng-controller="QuestionListController as qlc">
+                <div ng-repeat="question in questions.questionsList">
+                <md-card>
+                  <img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
+                  <md-card-content>
+                    <h2 class="md-title">{{ question.title }}</h2>
+                    <p>
+                    {{ question.message }}
+                    </p>
+                    <div>{{ question.author }}</div>
+                   </md-card-content>
+                </md-card>
 
-				<div class="writer" ng-class="{writerOpen: qc.writerOpen}">
-					<div class="contribute-container">
-						<div id="add-button" class="contribute ask" ng-click="qc.toggleWriter()">
-							<div id="cross" ng-class="{writerOpen: qc.writerOpen}"></div>
-						</div>
-					</div>
-					<div class="container">
-						<div class="input-box-container" ng-init="newPost.title = ''; newPost.author = ''; newPost.message = ''">
-							<input name="title" ng-model="newPost.title" placeholder="title">
-							<input name="author" ng-model="newPost.author" placeholder="posted by">
-							<textarea ng-model="newPost.message" placeholder="question"></textarea>
-						</div>
-						<div ng-click="qc.addQuestion(newPost)" class="button send-button">
-							post
-						</div>
-					</div>	
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+              </div>
+            </md-content>
+        </div>
+    </div>
 </div>
