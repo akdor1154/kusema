@@ -15,6 +15,10 @@ md-list .md-button {
   width: 100%;
 }
 
+md-card {
+  max-width: 660px;
+}
+
 /* Using Data-URI converted from svg until <md-icon> becomes available 
 https://github.com/google/material-design-icons
 */

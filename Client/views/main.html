@@ -10,34 +10,37 @@
     Unit 6<br>
     Unit 7<br>
 </md-sidenav>
-    <div layout="column" flex>
 
-    <md-toolbar layout="row">
-      <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
-        <span class="visually-hidden">Menu</span>
-      </button>
-      <h1 class="md-toolbar-tools" layout-align-gt-sm="right">Kusema</h1>
-    </md-toolbar>
+<div layout="column" flex>
 
-    <div layout="row" flex>
-        <div layout="column" flex id="content">
-            <ng-include src="'views/login.html'"></ng-include>
-            <md-content layout="row" flex class="md-padding">
-              <div ng-controller="QuestionListController as qlc">
-                <div ng-repeat="question in questions.questionsList">
-                <md-card>
-                  <img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
-                  <md-card-content>
-                    <h2 class="md-title"><a href="#/question/{{ question._id }}">{{ question.title }}</a></h2>
-                    <p>
-                      {{ question.message }}
-                    </p>
-                    <div>{{ question.author }}</div>
-                   </md-card-content>
-                </md-card>
-                </div>
+  <md-toolbar layout="row">
+    <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
+      <span class="visually-hidden">Menu</span>
+    </button>
+    <h1 class="md-toolbar-tools" layout-align-gt-sm="right">Kusema</h1>
+  </md-toolbar>
+
+  <div layout="row" flex>
+      <div layout="column" flex id="content">
+          <ng-include src="'views/login.html'"></ng-include>
+
+          <md-content layout="column" flex class="md-padding">
+            <div ng-controller="QuestionListController as qlc">
+              <div ng-repeat="question in questions.questionsList">
+              <md-card>
+                <img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
+                <md-card-content>
+                  <h2 class="md-title"><a href="#/question/{{ question._id }}">{{ question.title }}</a></h2>
+                  <p>
+                    {{ question.message }}
+                  </p>
+                  <div>{{ question.author }}</div>
+                 </md-card-content>
+              </md-card>
               </div>
-            </md-content>
-        </div>
-    </div>
+            </div>
+          </md-content>
+      </div>
+  </div>
+
 </div>

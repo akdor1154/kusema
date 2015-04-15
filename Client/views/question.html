@@ -10,7 +10,8 @@
     Unit 6<br>
     Unit 7<br>
 </md-sidenav>
-    <div layout="column" flex>
+
+<div layout="column" flex>
 
     <md-toolbar layout="row">
       <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
@@ -21,10 +22,10 @@
 
     <div layout="row" flex>
         <div layout="column" flex id="content">
-            <ng-include src="'views/login.html'"></ng-include>
-            <md-content layout="row" flex class="md-padding">
+            <md-content layout="column" flex class="md-padding">
 
-                <md-card ng-controller="QuestionController as QuestionCtrl">
+				<div ng-controller="QuestionController as QuestionCtrl">
+                <md-card>
                   <img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
                   <md-card-content>
 					<div class="score">{{ QuestionCtrl.question.upVotes - QuestionCtrl.question.downVotes }}</div>
@@ -33,7 +34,16 @@
 					<div class="comment">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.message : QuestionCtrl.question.message }}</div>
                    </md-card-content>
                 </md-card>
-                
+
+
+                <md-card ng-controller="QuestionController as QuestionCtrl">
+                	<img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
+                	<md-card-content>
+                  		Answer placeholder
+                	</md-card-content>
+                </md-card>
+
+				</div>
             </md-content>
         </div>
     </div>
