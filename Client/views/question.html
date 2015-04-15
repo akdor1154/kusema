@@ -1,77 +1,40 @@
-<app-menu></app-menu>
+<md-sidenav layout="column" class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')">
+  <md-toolbar class="md-default-theme">
+    <h1 class="md-toolbar-tools">groups</h1>
+  </md-toolbar>
+    Unit 1<br>
+    Unit 2<br>
+    Unit 3<br>
+    Unit 4<br>
+    Unit 5<br>
+    Unit 6<br>
+    Unit 7<br>
+</md-sidenav>
+    <div layout="column" flex>
 
-<div id="main-panel">
-	<!-- Header -->
-	<div class="header">
-		<div class="container">
-			<div class="page-header">
-				<h1><a href="#/">kusema</a>&nbsp;<small>alpha v0.0.1</small></h1>
-				<br> Engineering
-			</div>
-		</div>
-	</div>
-	
-	<div id="hamburger"><i class="fa fa-bars fa-2x"></i></div>
+    <md-toolbar layout="row">
+      <button ng-click="toggleSidenav('left')" hide-gt-sm class="menuBtn">
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <h1 class="md-toolbar-tools" layout-align-gt-sm="right">Kusema</h1>
+    </md-toolbar>
 
-	<div class="page">
-		<div class="page-content">
-			<!-- NEW -->
-			<div ng-controller="QuestionController as QuestionCtrl" class="card" id="question-container">
-				<div class="score">{{ QuestionCtrl.question.upVotes - QuestionCtrl.question.downVotes }}</div>
-				<div class="title">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.title : QuestionCtrl.question.title }}</div>
-				<div class="author">{{ QuestionCtrl.question.author }}</div>
-				<div class="comment">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.message : QuestionCtrl.question.message }}</div>
-				
-				<br>				
-				<div ng-hide="QuestionCtrl.questionEditorOpen" 
-						ng-click="QuestionCtrl.questionEditorOpen = !QuestionCtrl.questionEditorOpen;QuestionCtrl.button.text='Save';" 
-						class="{{QuestionCtrl.button.class}}">
-						{{QuestionCtrl.button.text}}
-				</div>
-				
-				<div ng-show="QuestionCtrl.questionEditorOpen" id="questionEditor">
-					<br> 
-					<div class="form-group form-group-sm input-group">
-						<label class="input-group-addon ng-pristine ng-valid">Topic: </label>
-						<input ng-model="QuestionCtrl.questionForm.title" class="form-control input-sm ng-valid ng-dirty" type="text"">
-					</div>
-					<br>
-					<div class="form-group form-group-sm input-group">
-						<label class="input-group-addon ng-pristine ng-valid">Content: </label>
-						<textarea ng-model="QuestionCtrl.questionForm.message" class="form-control input-sm ng-valid" type="text"></textarea>
-					</div>
-					<div ng-click="QuestionCtrl.editQuestion();QuestionCtrl.questionEditorOpen=!QuestionCtrl.questionEditorOpen;" 
-						ng-class="{disabled: QuestionCtrl.button.disabled === true}" 
-						class="{{QuestionCtrl.button.class}}">
-						{{QuestionCtrl.button.text}}
-					</div>
-				</div>
-			</div>
-			
-			<div ng-controller="CommentController as CommentCtrl" id="comment-container">
-				<div ng-repeat="comment in CommentCtrl.comments | orderBy:dateCreated" class="card">
-					<strong>{{ comment.author }}:</strong>
-					{{ comment.message }}
-					<br>
-					<div ng-click="CommentCtrl.deleteComment(comment._id)" class="btn btn-default" >delete</div>
-				</div>
-				
-				<div class="spacer"></div>
-			
-				<div ng-click="CommentCtrl.messagerOpen === true ? CommentCtrl.closeWriter() : CommentCtrl.openWriter()" class="contribute reply">
-					<div id="cross"></div>
-				</div>
-			
-				<div ng-show="CommentCtrl.messagerOpen === true" class="messager">
-					<div class="container">
-						{{QuestionController.question | json}}
-						<div class="input-box-container">
-							<textarea ng-model="CommentCtrl.newComment" class="reply-box" placeholder="reply here"></textarea>
-						</div>
-						<div ng-click="CommentCtrl.addComment()" class="button send-button">send</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div layout="row" flex>
+        <div layout="column" flex id="content">
+            <ng-include src="'views/login.html'"></ng-include>
+            <md-content layout="row" flex class="md-padding">
+
+                <md-card ng-controller="QuestionController as QuestionCtrl">
+                  <img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
+                  <md-card-content>
+					<div class="score">{{ QuestionCtrl.question.upVotes - QuestionCtrl.question.downVotes }}</div>
+					<div class="title">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.title : QuestionCtrl.question.title }}</div>
+					<div class="author">{{ QuestionCtrl.question.author }}</div>
+					<div class="comment">{{ QuestionCtrl.questionEditorOpen === true ? QuestionCtrl.questionForm.message : QuestionCtrl.question.message }}</div>
+                   </md-card-content>
+                </md-card>
+                
+            </md-content>
+        </div>
+    </div>
 </div>
