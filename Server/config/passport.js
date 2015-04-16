@@ -1,4 +1,5 @@
 var LocalStrategy   = require('passport-local').Strategy;
+var LdapStrategy    = require('passport-ldapauth');
 var User            = require('../models/user');
 
 // expose this function to our app using module.exports
@@ -72,5 +73,18 @@ module.exports = function(passport) {
             });
         }
     ));
+
+
+    var OPTS = {
+      server: {
+        url: 'ldap://directory.monash.edu.au/',
+        bindDn: '',
+        bindCredentials: '',
+        searchBase: 'ou=Student, o=Monash University, c=AU',
+        searchFilter: '(uid={{username}})'
+      }
+    }
+
+    passport.use(new LdapStrategy(OPTS));
 
 };
