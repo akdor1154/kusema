@@ -22,6 +22,14 @@ module.exports = function (passport) {
 		});
 	});
 
+	router.post('/ldapLogin', passport.authenticate('ldapauth'),
+		function (req, res) {
+		res.json({
+			userId: req.user.id,
+			username: req.user.local.username
+		});
+	});
+
     router.get('/logout', function (req, res) {
         req.logout();
         res.json(true);

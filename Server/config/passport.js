@@ -75,16 +75,20 @@ module.exports = function(passport) {
     ));
 
 
+
     var OPTS = {
       server: {
-        url: 'ldap://directory.monash.edu.au/',
+        url: 'ldap://directory.monash.edu.au:389',
         bindDn: '',
         bindCredentials: '',
         searchBase: 'ou=Student, o=Monash University, c=AU',
         searchFilter: '(uid={{username}})'
       }
     }
-
-    passport.use(new LdapStrategy(OPTS));
-
+console.log("here")
+    passport.use(new LdapStrategy(OPTS, function(req, user, done) {
+        console.log("here")
+        done(null, user);
+        }
+    ));
 };

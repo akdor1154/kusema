@@ -61,9 +61,6 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static('../Client'));
 
-app.get('/ldap', passport.authenticate('ldapauth', {session: false}), function (req, res) {
-  res.send("hello");
-})
 
 
 // Add routes
