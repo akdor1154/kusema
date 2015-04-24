@@ -25,6 +25,9 @@
           <ng-include src="'views/login.html'"></ng-include>
 
           <md-content layout="column" flex class="md-padding">
+          
+          <a href="/#/newquestion" target="_BLANK" title="New Question"><md-button class="md-raised md-primary">New Question</md-button></a>
+          
             <div ng-controller="QuestionListController as qlc">
               <div ng-repeat="question in questions.questionsList">
               <md-card>
