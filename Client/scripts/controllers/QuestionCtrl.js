@@ -7,6 +7,7 @@ kusema
 				'toolboxFactory', function($scope, $routeParams, $timeout, questionFactory, commentFactory, toolboxFactory) {
 					var tmp = {};
 					tmp.me = this;
+					this.questionId = $routeParams.id;
 					tmp.me.questionEditorOpen = false;
 					tmp.me.button = {'text': 'Edit', 'class': 'btn btn-success', 'disabled': false};
 					
