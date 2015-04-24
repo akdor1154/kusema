@@ -14,6 +14,7 @@ var newCommentController = function($scope, $routeParams, commentFactory, socket
 			.success(
 				function(response) {
 					console.debug(response);
+					self.close();
 				}
 			)
 			.error(

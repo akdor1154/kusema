@@ -13,6 +13,7 @@ var newQuestionController = function($scope, questionFactory, $mdSidenav) {
 					$scope.writerOpen = false;
 					questionFactory.questions.questionsList.push(response);
 					console.debug(response);
+					self.close();
 				}
 			)
 			.error(
