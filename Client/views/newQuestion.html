@@ -25,7 +25,7 @@
 		</md-input-container>
 		<md-input-container>
 		    <label>Message</label>
-		    <textarea name="message" title="Message" ng-model="inputData.message" required md-maxlength="150" minlength="4"></textarea>
+		    <textarea style="flex: none !important;" name="message" title="Message" ng-model="inputData.message" required md-maxlength="150" minlength="4"></textarea>
 	        <div ng-messages="newQuestionForm.message.$error" ng-show="newQuestionForm.message.$dirty && newQuestionForm.message.$error">
 				<div ng-show="newQuestionForm.message.$error.required === true" ng-message="required">This is required!</div>
 				<div ng-show="newQuestionForm.message.$error['md-maxlength'] === true" ng-message="md-maxlength">That's too long!</div>
