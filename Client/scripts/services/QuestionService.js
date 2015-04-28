@@ -9,6 +9,8 @@ var QuestionDataPrototype = Object.create(Object.prototype, {
     dateModified: { writable: true, value: 0, enumerable: true },
     upVotes: { writable: true, value: 0, enumerable: true },
     downVotes: { writable: true, value: 0, enumerable: true},
+    videoUrl: { writable: true, value: 0, enumerable: true},
+    imageUrl: { writable: true, value: 0, enumerable: true},
 })
 
 var Question = function(questionJSON, questionFactory) {
