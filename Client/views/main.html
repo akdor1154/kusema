@@ -31,7 +31,10 @@
             <div ng-controller="QuestionListController as qlc">
               <div ng-repeat="question in questions.questionsList">
               <md-card>
-                <img src="http://www.thelostogle.com/wp-content/uploads/2013/12/happy-monkey.jpg" class="md-card-image" alt="a monkey">
+              	{{ question | json }}
+                <img src="{{ question.imageUrl }}" class="md-card-image" alt="image">
+                <video ng-src="{{ question.videoUrl }}" width="200px" controls>
+				</video>
                 <md-card-content>
                   <h2 class="md-title"><a href="#/question/{{ question._id }}">{{ question.title }}</a></h2>
                   <p>
