@@ -30,6 +30,9 @@ kusema.config(function($routeProvider, $httpProvider) {
   .when('/newquestion/', {
 	  templateUrl: 'views/newQuestion.html',
   })
+  .when('/newunit/', {
+	  templateUrl: 'views/newUnit.html',
+  })
   ;    
 });
 

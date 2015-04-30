@@ -5,6 +5,7 @@ var router         = express.Router();
 var usersCtrl      = require('../controllers/users');
 var questionsCtrl  = require('../controllers/questions');
 var commentsCtrl   = require('../controllers/comments');
+var unitsCtrl	   = require('../controllers/units');
 
 
 // Auth middleware
@@ -39,5 +40,13 @@ router.post('/comments/:questionId', commentsCtrl.addComment);
 router.delete('/comments/:commentId', commentsCtrl.deleteComment); //delete a question
 router.put('/comments/upvote/:commentId', commentsCtrl.upVote); //add a comments
 router.put('/comments/downvote/:commentId', commentsCtrl.downVote); //add a comments
+
+// Unit Routes
+router.get('/units', unitsCtrl.retrieveAll);
+router.post('/units/new/', unitsCtrl.addUnit);
+router.get('/units/tenMore/:requestNumber', unitsCtrl.nextTenUnits);
+router.get('/units/:unitId', unitsCtrl.findById);
+router.put('/units/:unitId', unitsCtrl.updateUnit);
+router.delete('/units/:unitId', unitsCtrl.deleteUnit);
 
 module.exports = router;
