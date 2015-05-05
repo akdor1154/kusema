@@ -6,7 +6,7 @@ var usersCtrl      = require('../controllers/users');
 var questionsCtrl  = require('../controllers/questions');
 var commentsCtrl   = require('../controllers/comments');
 var unitsCtrl	   = require('../controllers/units');
-
+var areasCtrl	   = require('../controllers/areas');
 
 // Auth middleware
 function auth(req, res, next) {
@@ -48,5 +48,13 @@ router.get('/units/tenMore/:requestNumber', unitsCtrl.nextTenUnits);
 router.get('/units/:unitId', unitsCtrl.findById);
 router.put('/units/:unitId', unitsCtrl.updateUnit);
 router.delete('/units/:unitId', unitsCtrl.deleteUnit);
+
+//Area Routes
+router.get('/areas', areasCtrl.retrieveAll);
+router.post('/areas/new/', areasCtrl.addArea);
+router.get('/areas/tenMore/:requestNumber', areasCtrl.nextTenAreas);
+router.get('/areas/:areaId', areasCtrl.findById);
+router.put('/areas/:areaId', areasCtrl.updateArea);
+router.delete('/areas/:areaId', areasCtrl.deleteArea);
 
 module.exports = router;
