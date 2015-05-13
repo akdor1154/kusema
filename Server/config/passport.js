@@ -85,7 +85,7 @@ module.exports = function(passport) {
         searchFilter: '(uid={{username}})'
       }
     }
-console.log("here")
+    console.log("here")
     passport.use(new LdapStrategy(OPTS, function(req, user, done) {
         console.log("here")
         done(null, user);

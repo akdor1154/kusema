@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var objectId = mongoose.Schema.Types.ObjectId;
 
 var answerSchema = mongoose.Schema({
+	_questionId: 	{ type: objectId, required: true },
 	author: 		{ type: String }, //TODO add object ID requirement here
 	message: 		{ type: String, required: true },
 	imageUrl: 		{ type: String },

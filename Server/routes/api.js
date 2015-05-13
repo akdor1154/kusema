@@ -18,8 +18,11 @@ function auth(req, res, next) {
 }
 
 // All API routes require auth
-router.use(auth)
+//router.use(auth)
 
+// User Routes
+router.get('/user/:userId', usersCtrl.findUserById);
+router.get('/user/:username', usersCtrl.findUserByUsername);
 
 // Question Routes
 router.get('/questions', questionsCtrl.retrieveAll);
@@ -31,9 +34,12 @@ router.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
 router.put('/questions/upvote/:questionId', questionsCtrl.upVote);
 router.put('/questions/dnvote/:questionId', questionsCtrl.downVote);
 
-// User Routes
-router.get('/user/:userId', usersCtrl.findUserById);
-router.get('/user/:username', usersCtrl.findUserByUsername);
+// Answer Routes
+router.get('/answers/:questionId', answersCtrl.retrieveAnswersByQuestionId);
+router.post('/answers/:questionId', answersCtrl.addAnswerByQuestionId);
+router.delete('/answers/:answerId', answersCtrl.deleteAnswer); //delete a question
+router.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer); //add a comments
+router.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer); //add a comments
 
 // Comment Routes
 router.get('/comments/:questionId', commentsCtrl.retrieveAll);
