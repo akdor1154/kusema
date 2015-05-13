@@ -65,7 +65,7 @@ app.use(express.static('../Client'));
 
 // Add routes
 var account = require('./routes/account')(passport);
-var api = require('./routes/api');
+var api 	= require('./routes/api');
 
 app.use('/account', account);
 app.use('/api', api);
