@@ -3,12 +3,12 @@ var objectId = mongoose.Schema.Types.ObjectId;
 var content  = require('./content');
 
 var questionSchema = mongoose.Schema({
-    title: 	        { type: String, required: true },
+    title:          { type: String, required: true },
     author:         { type: objectId, ref: 'User', required: true },
     anonymous:      { type: Boolean, required: true },
     message:        { type: String, required: true },
     topics:         [{ type: objectId, ref: 'Topic' }],
-    group: 	        { type: objectId, ref: 'Group' },
+    group:          { type: objectId, ref: 'Group' },
     imageUrls:      [{ type: content.imageModel }],
     videoUrls:      [{ type: content.videoModel }],
     code:           [{ type: content.codeModel }],
