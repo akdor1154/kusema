@@ -3,7 +3,9 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var exp = module.exports;
 
+
 exp.findById = function (req, res, next) {
+
   var getGroup = Group.findOne(
     { '_id': new ObjectId(req.params.groupId) }
   ).exec();
@@ -12,62 +14,79 @@ exp.findById = function (req, res, next) {
     if (err) return next(err);
     res.json(group);
   });
+
 };
 
-exp.nextTenGroups = function (req, res, next) {
-  Group.find()
-  .sort({ 'title': 1, 'code': -1 })	// 1 is ascending and -1 is descending
-  .skip(10*req.params.requestNumber)
-  .limit(10)
-  .exec( function (err, groups) {
-    if(err) return next(err);
-    res.json(groups)
-  });
-};
 
-exp.retrieveAll = function (req, res, next) {
+exp.findAll = function (req, res, next) {
+
   var getGroups = Group.find().exec();
 
   getGroups.addBack( function (err, groups) {
     if (err) return next(err);
     res.json(groups);
   })
+
 };
 
+
 exp.addGroup = function (req, res, next) {
+
+  // TODO check if group exists and un-delete it
+
   var group = new Group();
   
-  group.name     = req.body.title;
-  group.topics.  push(req.body.topics);
+  group.name = req.body.name;
 
+  var topics = req.body.topics;
+
+  for(i in topics) {
+    group.topics.push(ObjectId(topics[i]))
+  }
+  
   group.save( function (err, group) {
     if (err) return next(err);
     res.json(group)
   });
+
 };
 
-exp.updateGroup = function (req, res, next) {
-// TODO add auth info ensure only user and admin can update
-	console.log(req.body);
-  var updateGroup = Group.update(
-    { '_id': new ObjectId(req.params.groupId) },
-    { $set: { 'title': req.body.title, 'code': req.body.code, 'dateModified': new Date() }}
+
+exp.updateTopics = function (req, res, next) {
+  
+  // TODO add auth info ensure only mods and admin can update
+
+  var updateTopics = Group.findOne(
+    { '_id': req.params.groupId }
   ).exec();
 
-  updateGroup.addBack( function (err, updated, raw) {
+  updateGroup.addBack( function (err, group) {
+    if (err) return next(err);
+
+    var group = group;
+
+    group.topics.push();
+
+    group.save();
+
+    res.json(group);
+  });
+  
+};
+
+
+exp.deleteGroup = function (req, res, next) {
+  
+  // TODO add auth info ensure only mods and admin can delete
+
+  var deleteGroup = Group.update(
+    { '_id': req.params.groupId },
+    { $set: { 'deleted': true } }
+  ).exec();
+
+  deleteGroup.addBack( function (err, updated, raw) {
     if (err) return next(err);
     res.json(raw);
   });
-};
 
-exp.deleteGroup = function (req, res, next) {
-// TODO add auth info ensure only user and admin can delete
-  var deleteGroup = Group.find(
-    { '_id': new ObjectId(req.params.groupId) }
-  ).remove().exec();
-
-  deleteGroup.addBack( function (err, deleted) {
-    if (err) return next(err);
-    res.json(deleted);
-  })
 };

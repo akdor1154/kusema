@@ -48,11 +48,10 @@ router.put('/comments/upvote/:commentId', commentsCtrl.upVote); //add a comments
 router.put('/comments/downvote/:commentId', commentsCtrl.downVote); //add a comments
 
 // Group Routes
-router.get('/groups', groupsCtrl.retrieveAll);
+router.get('/groups', groupsCtrl.findAll);
 router.post('/groups', groupsCtrl.addGroup);
-router.get('/groups/tenMore/:requestNumber', groupsCtrl.nextTenGroups);
 router.get('/groups/:groupId', groupsCtrl.findById);
-router.put('/groups/:groupId', groupsCtrl.updateGroup);
+router.put('/groups/:groupId', groupsCtrl.updateTopics);
 router.delete('/groups/:groupId', groupsCtrl.deleteGroup);
 
 // Topic Routes

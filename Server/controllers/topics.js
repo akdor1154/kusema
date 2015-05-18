@@ -54,6 +54,8 @@ exp.addTopic = function (req, res, next) {
 
 exp.deleteTopic = function (req, res, next) {
   
+  // TODO check if user is admin
+
   var deleteTopic = Topic.update(
     { '_id': req.params.topicId },
     { $set: { 'deleted': true } }
