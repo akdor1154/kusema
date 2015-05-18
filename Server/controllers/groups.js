@@ -40,7 +40,7 @@ exp.addGroup = function (req, res, next) {
 
   var topics = req.body.topics;
 
-  for(i in topics) {
+  for(var i in topics) {
     group.topics.push(ObjectId(topics[i]))
   }
   
@@ -56,22 +56,29 @@ exp.updateTopics = function (req, res, next) {
   
   // TODO add auth info ensure only mods and admin can update
 
+  var topics = req.body.topics;
+
   var updateTopics = Group.findOne(
     { '_id': req.params.groupId }
   ).exec();
 
-  updateGroup.addBack( function (err, group) {
+  updateTopics.addBack( function (err, group) {
     if (err) return next(err);
 
-    var group = group;
+    if (group) { 
+      
+      for (var i in topics) {
+        if (group.topics.indexOf(topics[i]) === -1) {
+          group.topics.push(ObjectId(topics[i]));
+        }  
+      }
 
-    group.topics.push();
-
-    group.save();
+      group.save();
+    }
 
     res.json(group);
   });
-  
+
 };
 
 
