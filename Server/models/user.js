@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var objectId = mongoose.Schema.Types.ObjectId;
 var bcrypt   = require('bcrypt');
 
+// Schema definition
 var userSchema = mongoose.Schema({
     local: {
         username:   String,
@@ -17,7 +18,10 @@ var userSchema = mongoose.Schema({
     enrollments:    [{ type: objectId, active: Boolean }]
 })
 
-//TODO Make this asynch
+// Indexes
+userSchema.index({ subscriptions: 1 });
+
+//TODO Make the following methods asynch
 // generating a hash
 userSchema.methods.generateHash = function(password) {
     var salt = bcrypt.genSaltSync(10);
