@@ -26,26 +26,26 @@ router.get('/user/:username', usersCtrl.findUserByUsername);
 
 // Question Routes
 router.post('/questions', questionsCtrl.addQuestion);
-router.get('/questions/tenMore/:requestNumber', questionsCtrl.nextTenQuestions);
-router.get('/questions/:questionId', questionsCtrl.findById);
+router.get('/questions/tenMore/:requestNumber', questionsCtrl.nextTenQuestions); // TODO Replace this with feed
+router.get('/questions/:questionId', questionsCtrl.findByQuestionId);
 router.put('/questions/:questionId', questionsCtrl.updateQuestion);
 router.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
-router.put('/questions/upvote/:questionId', questionsCtrl.upVote);
-router.put('/questions/dnvote/:questionId', questionsCtrl.downVote);
+router.put('/questions/upvote/:questionId', questionsCtrl.upVoteQuestion);
+router.put('/questions/dnvote/:questionId', questionsCtrl.downVoteQuestion);
 
 // Answer Routes
-router.get('/answers/:questionId', answersCtrl.retrieveAnswersByQuestionId);
-router.post('/answers/:questionId', answersCtrl.addAnswerByQuestionId);
-router.delete('/answers/:answerId', answersCtrl.deleteAnswer); //delete a question
-router.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer); //add a comments
-router.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer); //add a comments
+router.get('/answers/:questionId', answersCtrl.findByQuestionId);
+router.post('/answers/:questionId', answersCtrl.addByQuestionId);
+router.delete('/answers/:answerId', answersCtrl.deleteAnswer);
+router.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer);
+router.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer);
 
 // Comment Routes
-router.get('/comments/:questionId', commentsCtrl.retrieveAll);
-router.post('/comments/:questionId', commentsCtrl.addComment);
-router.delete('/comments/:commentId', commentsCtrl.deleteComment); //delete a question
-router.put('/comments/upvote/:commentId', commentsCtrl.upVote); //add a comments
-router.put('/comments/downvote/:commentId', commentsCtrl.downVote); //add a comments
+router.get('/comments/:questionId', commentsCtrl.findByQuestionId);
+router.post('/comments/:questionId', commentsCtrl.addByParentId);
+router.delete('/comments/:commentId', commentsCtrl.deleteComment);
+router.put('/comments/upvote/:commentId', commentsCtrl.upVoteComment);
+router.put('/comments/downvote/:commentId', commentsCtrl.downVoteComment);
 
 // Group Routes
 router.get('/groups', groupsCtrl.findAll);
