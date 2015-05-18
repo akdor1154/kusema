@@ -1,71 +1,71 @@
-var Unit = require('../models/unit');
+var Group = require('../models/group');
 var ObjectId = require('mongoose').Types.ObjectId;
 
 var exp = module.exports;
 
 exp.findById = function (req, res, next) {
-  var getUnit = Unit.findOne(
-    { '_id': new ObjectId(req.params.unitId) }
+  var getGroup = Group.findOne(
+    { '_id': new ObjectId(req.params.groupId) }
   ).exec();
 
-  getUnit.addBack( function (err, unit) {
+  getGroup.addBack( function (err, group) {
     if (err) return next(err);
-    res.json(unit);
+    res.json(group);
   });
 };
 
-exp.nextTenUnits = function (req, res, next) {
-  Unit.find()
+exp.nextTenGroups = function (req, res, next) {
+  Group.find()
   .sort({ 'title': 1, 'code': -1 })	// 1 is ascending and -1 is descending
   .skip(10*req.params.requestNumber)
   .limit(10)
-  .exec( function (err, units) {
+  .exec( function (err, groups) {
     if(err) return next(err);
-    res.json(units)
+    res.json(groups)
   });
 };
 
 exp.retrieveAll = function (req, res, next) {
-  var getUnits = Unit.find().exec();
+  var getGroups = Group.find().exec();
 
-  getUnits.addBack( function (err, units) {
+  getGroups.addBack( function (err, groups) {
     if (err) return next(err);
-    res.json(units);
+    res.json(groups);
   })
 };
 
-exp.addUnit = function (req, res, next) {
-  var unit = new Unit();
-  unit.title    = req.body.title;
-  unit.code  = req.body.code;
+exp.addGroup = function (req, res, next) {
+  var group = new Group();
+  group.title    = req.body.title;
+  group.code  = req.body.code;
 
-  unit.save( function (err, unit) {
+  group.save( function (err, group) {
     if (err) return next(err);
-    res.json(unit)
+    res.json(group)
   });
 };
 
-exp.updateUnit = function (req, res, next) {
+exp.updateGroup = function (req, res, next) {
 // TODO add auth info ensure only user and admin can update
 	console.log(req.body);
-  var updateUnit = Unit.update(
-    { '_id': new ObjectId(req.params.unitId) },
+  var updateGroup = Group.update(
+    { '_id': new ObjectId(req.params.groupId) },
     { $set: { 'title': req.body.title, 'code': req.body.code, 'dateModified': new Date() }}
   ).exec();
 
-  updateUnit.addBack( function (err, updated, raw) {
+  updateGroup.addBack( function (err, updated, raw) {
     if (err) return next(err);
     res.json(raw);
   });
 };
 
-exp.deleteUnit = function (req, res, next) {
+exp.deleteGroup = function (req, res, next) {
 // TODO add auth info ensure only user and admin can delete
-  var deleteUnit = Unit.find(
-    { '_id': new ObjectId(req.params.unitId) }
+  var deleteGroup = Group.find(
+    { '_id': new ObjectId(req.params.groupId) }
   ).remove().exec();
 
-  deleteUnit.addBack( function (err, deleted) {
+  deleteGroup.addBack( function (err, deleted) {
     if (err) return next(err);
     res.json(deleted);
   })

@@ -6,8 +6,8 @@ var usersCtrl      	= require('../controllers/users');
 var questionsCtrl  	= require('../controllers/questions');
 var answersCtrl  	= require('../controllers/answers');
 var commentsCtrl   	= require('../controllers/comments');
-var unitsCtrl	   	= require('../controllers/units');
-var areasCtrl	   	= require('../controllers/areas');
+var groupsCtrl	   	= require('../controllers/groups');
+var topicsCtrl	   	= require('../controllers/topics');
 
 // Auth middleware
 function auth(req, res, next) {
@@ -48,20 +48,21 @@ router.delete('/comments/:commentId', commentsCtrl.deleteComment); //delete a qu
 router.put('/comments/upvote/:commentId', commentsCtrl.upVote); //add a comments
 router.put('/comments/downvote/:commentId', commentsCtrl.downVote); //add a comments
 
-// Unit Routes
-router.get('/units', unitsCtrl.retrieveAll);
-router.post('/units/new/', unitsCtrl.addUnit);
-router.get('/units/tenMore/:requestNumber', unitsCtrl.nextTenUnits);
-router.get('/units/:unitId', unitsCtrl.findById);
-router.put('/units/:unitId', unitsCtrl.updateUnit);
-router.delete('/units/:unitId', unitsCtrl.deleteUnit);
+// Group Routes
+router.get('/groups', groupsCtrl.retrieveAll);
+router.post('/groups/new/', groupsCtrl.addGroup);
+router.get('/groups/tenMore/:requestNumber', groupsCtrl.nextTenGroups);
+router.get('/groups/:groupId', groupsCtrl.findById);
+router.put('/groups/:groupId', groupsCtrl.updateGroup);
+router.delete('/groups/:groupId', groupsCtrl.deleteGroup);
 
-// Area Routes
-router.get('/areas', areasCtrl.retrieveAll);
-router.post('/areas/new/', areasCtrl.addArea);
-router.get('/areas/tenMore/:requestNumber', areasCtrl.nextTenAreas);
-router.get('/areas/:areaId', areasCtrl.findById);
-router.put('/areas/:areaId', areasCtrl.updateArea);
-router.delete('/areas/:areaId', areasCtrl.deleteArea);
+// Topic Routes
+router.get('/topics', topicsCtrl.retrieveAll);
+router.post('/topics/new/', topicsCtrl.addTopic);
+router.get('/topics/tenMore/:requestNumber', topicsCtrl.nextTenTopics);
+router.get('/topics/:topicId', topicsCtrl.findById);
+router.put('/topics/:topicId', topicsCtrl.updateTopic);
+router.delete('/topics/:topicId', topicsCtrl.deleteTopic);
+
 
 module.exports = router;

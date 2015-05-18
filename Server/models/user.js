@@ -20,6 +20,8 @@ var userSchema = mongoose.Schema({
 
 // Indexes
 userSchema.index({ subscriptions: 1 });
+userSchema.path('local.username').index({text : true});
+userSchema.path('monash.authcate').index({text : true});
 
 //TODO Make the following methods asynch
 // generating a hash
