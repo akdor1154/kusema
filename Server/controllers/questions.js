@@ -1,11 +1,10 @@
 var Question = require('../models/question');
-var ObjectId = require('mongoose').Types.ObjectId;
 
 var exp = module.exports;
 
 exp.findById = function (req, res, next) {
   var getQuestion = Question.findOne(
-    { '_id': new ObjectId(req.params.questionId) }
+    { '_id': req.params.questionId }
   ).exec();
 
   getQuestion.addBack( function (err, question) {
@@ -25,26 +24,25 @@ exp.nextTenQuestions = function (req, res, next) {
   });
 };
 
-exp.retrieveAll = function (req, res, next) {
-  var getQuestions = Question.find().exec();
-
-  getQuestions.addBack( function (err, questions) {
-    if (err) return next(err);
-    res.json(questions);
-  })
-};
-
 exp.addQuestion = function (req, res, next) {
+  
   var question = new Question();
-  question.author   = req.body.author;//TODO Add real users
-  question.title    = req.body.title;
-  question.message  = req.body.message;
-  question.imageUrl = req.body.imageUrl;
-  question.videoUrl = req.body.videoUrl;
+
+  question.title        = req.body.title;
+  question.author       = req.body.author;
+  question.anonymous    = req.body.anonymous;
+  question.message      = req.body.message;
+  question.topics.      push(req.body.topics)
+  question.group        = req.body.group;
+  //question.images.      push(req.body.imageUrl);
+  //question.videos.      push(req.body.videoUrl);
+  //question.code.        push(req.body.code);
+  question.upvotes.     push(req.user._id);
 
   question.save( function (err, question) {
     if (err) return next(err);
-    res.json(question)
+    res.json(question);
+    console.log(question);
   });
 };
 

@@ -26,7 +26,7 @@ module.exports = function (passport) {
 		function (req, res) {
 		res.json({
 			userId: req.user.id,
-			username: req.user.local.username
+			username: req.user.monash.username
 		});
 	});
 

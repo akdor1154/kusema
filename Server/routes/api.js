@@ -25,7 +25,6 @@ router.get('/user/:userId', usersCtrl.findUserById);
 router.get('/user/:username', usersCtrl.findUserByUsername);
 
 // Question Routes
-router.get('/questions', questionsCtrl.retrieveAll);
 router.post('/questions', questionsCtrl.addQuestion);
 router.get('/questions/tenMore/:requestNumber', questionsCtrl.nextTenQuestions);
 router.get('/questions/:questionId', questionsCtrl.findById);
@@ -50,18 +49,17 @@ router.put('/comments/downvote/:commentId', commentsCtrl.downVote); //add a comm
 
 // Group Routes
 router.get('/groups', groupsCtrl.retrieveAll);
-router.post('/groups/new/', groupsCtrl.addGroup);
+router.post('/groups', groupsCtrl.addGroup);
 router.get('/groups/tenMore/:requestNumber', groupsCtrl.nextTenGroups);
 router.get('/groups/:groupId', groupsCtrl.findById);
 router.put('/groups/:groupId', groupsCtrl.updateGroup);
 router.delete('/groups/:groupId', groupsCtrl.deleteGroup);
 
 // Topic Routes
-router.get('/topics', topicsCtrl.retrieveAll);
-router.post('/topics/new/', topicsCtrl.addTopic);
-router.get('/topics/tenMore/:requestNumber', topicsCtrl.nextTenTopics);
+router.get('/topics', topicsCtrl.findAll);
+router.post('/topics', topicsCtrl.addTopic);
 router.get('/topics/:topicId', topicsCtrl.findById);
-router.put('/topics/:topicId', topicsCtrl.updateTopic);
+router.get('/topics/name/:topicName', topicsCtrl.findByName);
 router.delete('/topics/:topicId', topicsCtrl.deleteTopic);
 
 

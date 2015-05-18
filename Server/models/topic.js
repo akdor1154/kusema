@@ -5,7 +5,8 @@ var objectId = mongoose.Schema.Types.ObjectId;
 var topicSchema = mongoose.Schema({
     name:           { type: String, required: true },
     dateCreated:    { type: Date, default: Date.now },
-    dateModified:   { type: Date, default: null }
+    dateModified:   { type: Date, default: null },
+    deleted: 		{ type: Boolean, default: false }
 })
 
 // Indexes

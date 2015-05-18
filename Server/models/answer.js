@@ -21,6 +21,8 @@ var answerSchema = mongoose.Schema({
 // Indexes
 answerSchema.index({ questionId: 1, dateCreated: -1 });
 answerSchema.index({ author: 1, dateCreated: -1 });
+answerSchema.index({ upVotes: 1 });
+answerSchema.index({ downVotes: 1 });
 answerSchema.path('message').index({text : true});
 
 

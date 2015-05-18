@@ -15,7 +15,9 @@ var userSchema = mongoose.Schema({
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
     subscriptions:  [{ type: objectId, active: Boolean }],
-    enrollments:    [{ type: objectId, active: Boolean }]
+    enrollments:    [{ type: objectId, active: Boolean }],
+    isAdmin:        { type: Boolean, default: false },
+    moderatorOf:    [{ type: objectId, ref: 'Group' }]
 })
 
 // Indexes

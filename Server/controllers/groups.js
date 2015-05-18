@@ -36,8 +36,9 @@ exp.retrieveAll = function (req, res, next) {
 
 exp.addGroup = function (req, res, next) {
   var group = new Group();
-  group.title    = req.body.title;
-  group.code  = req.body.code;
+  
+  group.name     = req.body.title;
+  group.topics.  push(req.body.topics);
 
   group.save( function (err, group) {
     if (err) return next(err);

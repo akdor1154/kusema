@@ -20,6 +20,8 @@ var commentSchema = mongoose.Schema({
 commentSchema.index({ questionId: 1, dateCreated: -1 });
 commentSchema.index({ answerId: 1, dateCreated: -1 });
 commentSchema.index({ author: 1, dateCreated: -1 });
+commentSchema.index({ upVotes: 1 });
+commentSchema.index({ downVotes: 1 });
 commentSchema.path('message').index({text : true});
 
 

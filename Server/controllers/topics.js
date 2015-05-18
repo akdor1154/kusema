@@ -4,68 +4,64 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var exp = module.exports;
 
 exp.findById = function (req, res, next) {
+
   var getTopic = Topic.findOne(
-    { '_id': new ObjectId(req.params.areaId) }
+    { '_id': new ObjectId(req.params.topicId) }
   ).exec();
 
-  getTopic.addBack( function (err, area) {
+  getTopic.addBack( function (err, topic) {
     if (err) return next(err);
-    res.json(area);
+    res.json(topic);
   });
+
 };
 
-exp.nextTenTopics = function (req, res, next) {
-  Topic.find()
-  .sort({ 'title': 1})	// 1 is ascending and -1 is descending
-  .skip(10*req.params.requestNumber)
-  .limit(10)
-  .exec( function (err, areas) {
-    if(err) return next(err);
-    res.json(areas)
-  });
+
+exp.findByName = function (req, res, next) {
+
+  // TODO
+
 };
 
-exp.retrieveAll = function (req, res, next) {
+
+exp.findAll = function (req, res, next) {
+
   var getTopics = Topic.find().exec();
 
-  getTopics.addBack( function (err, areas) {
+  getTopics.addBack( function (err, topics) {
     if (err) return next(err);
-    res.json(areas);
+    res.json(topics);
   })
+
 };
+
 
 exp.addTopic = function (req, res, next) {
-  var area = new Topic();
-  area.title    = req.body.title;
 
-  area.save( function (err, area) {
+  var topic = new Topic();
+
+  // TODO check if topic exists and un-delete it
+  // TODO set case of topic (all lower?)
+  topic.name = req.body.name;
+
+  topic.save( function (err, topic) {
     if (err) return next(err);
-    res.json(area)
+    res.json(topic)
   });
+
 };
 
-exp.updateTopic = function (req, res, next) {
-// TODO add auth info ensure only user and admin can update
-	console.log(req.body);
-  var updateTopic = Topic.update(
-    { '_id': new ObjectId(req.params.areaId) },
-    { $set: { 'title': req.body.title, 'dateModified': new Date() }}
+
+exp.deleteTopic = function (req, res, next) {
+  
+  var deleteTopic = Topic.update(
+    { '_id': req.params.topicId },
+    { $set: { 'deleted': true } }
   ).exec();
 
-  updateTopic.addBack( function (err, updated, raw) {
+  deleteTopic.addBack( function (err, updated, raw) {
     if (err) return next(err);
     res.json(raw);
   });
-};
 
-exp.deleteTopic = function (req, res, next) {
-// TODO add auth info ensure only user and admin can delete
-  var deleteTopic = Topic.find(
-    { '_id': new ObjectId(req.params.areaId) }
-  ).remove().exec();
-
-  deleteTopic.addBack( function (err, deleted) {
-    if (err) return next(err);
-    res.json(deleted);
-  })
 };
