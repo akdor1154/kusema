@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
-var objectId = mongoose.Schema.Types.ObjectId;
-var content  = require('./content');
+var mongoose        = require('mongoose');
+var objectId        = mongoose.Schema.Types.ObjectId;
+var media           = require('./common/media');
+var contentMethods  = require('./common/contentMethods');
 
 // Schema definition
 var questionSchema = mongoose.Schema({
@@ -10,9 +11,9 @@ var questionSchema = mongoose.Schema({
     message:        { type: String, required: true },
     topics:         [{ type: objectId, ref: 'Topic' }],
     group:          { type: objectId, ref: 'Group', required: true },
-    images:         [{ type: content.imageModel }],
-    videos:         [{ type: content.videoModel }],
-    code:           [{ type: content.codeModel }],
+    images:         [{ type: media.imageModel }],
+    videos:         [{ type: media.videoModel }],
+    code:           [{ type: media.codeModel }],
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
     upVotes:        [{ type: objectId, ref: 'User' }],
@@ -28,6 +29,11 @@ questionSchema.index({ upVotes: 1 });
 questionSchema.index({ downVotes: 1 });
 questionSchema.path('title').index({text : true});
 questionSchema.path('message').index({text : true});
+
+// Static Methods
+questionSchema.statics.upVote = contentMethods.upVote;
+questionSchema.statics.downVote = contentMethods.downVote;
+questionSchema.statics.delete = contentMethods.delete;
 
 
 module.exports = mongoose.model('Question', questionSchema);

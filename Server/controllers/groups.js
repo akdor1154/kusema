@@ -39,7 +39,7 @@ exp.addGroup = function (req, res, next) {
   group.name = req.body.name;
 
   var topics = req.body.topics;
-
+  
   for(var i in topics) {
     group.topics.push(ObjectId(topics[i]))
   }

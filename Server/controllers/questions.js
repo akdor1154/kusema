@@ -14,6 +14,7 @@ exp.findByQuestionId = function (req, res, next) {
 };
 
 exp.nextTenQuestions = function (req, res, next) {
+  // TODO This will be replaced with the feed soon...
   Question.find()
   .sort({ 'upVotes': 1, 'downVotes': -1 })
   .skip(10*req.params.requestNumber)
@@ -37,7 +38,8 @@ exp.addQuestion = function (req, res, next) {
   //question.images.      push(req.body.imageUrl);
   //question.videos.      push(req.body.videoUrl);
   //question.code.        push(req.body.code);
-  question.upvotes.     push(req.user._id);
+  question.upVotes.     push(req.user._id);
+
 
   question.save( function (err, question) {
     if (err) return next(err);
@@ -60,44 +62,33 @@ exp.updateQuestion = function (req, res, next) {
   });
 };
 
-exp.deleteQuestion = function (req, res, next) {
-// TODO add auth info ensure only user and admin can delete
-  var deleteQuestion = Question.find(
-    { '_id': new ObjectId(req.params.questionId) }
-  ).remove().exec();
+exp.deleteQuestion = function(req, res, next) {
+  
+    // TODO add auth info ensure only creator, mods and admin can delete
+    var done = function (err, deleted) {
+        if(err) return next(err);
+        res.json(deleted);
+    }
 
-  deleteQuestion.addBack( function (err, deleted) {
-    if (err) return next(err);
-    res.json(deleted);
-  })
+    Question.setAsDeleted(req.params.questionId, req.user._id, done)
 };
 
 exp.upVoteQuestion = function(req, res, next) {
-// TODO add auth info ensure 1 vote per person
 
-  var upVote = Question.update(
-    { '_id': new ObjectId(req.params.questionId) },
-    { $inc: { 'upVotes': 1 }}
-  ).exec();
+    var done = function (err, upVoted) {
+        if(err) return next(err);
+        res.json(upVoted);
+    }
 
-  upVote.addBack( function (err, upVoted) {
-    if(err) return next(err);
-    res.json(upVoted);
-  })
-
+    Question.upVote(req.params.questionId, req.user._id, done)
 };
 
 exp.downVoteQuestion = function(req, res, next) {
-// TODO add auth info ensure 1 vote per person
 
-  var downVote = Question.update(
-    { '_id': new ObjectId(req.params.questionId) },
-    { $inc: { 'downVotes': 1 }}
-  ).exec();
+    var done = function (err, downVoted) {
+        if(err) return next(err);
+        res.json(downVoted);
+    }
 
-  downVote.addBack( function (err, downVoted) {
-    if(err) return next(err);
-    res.json(downVoted);
-  })
-
+    Question.downVote(req.params.questionId, req.user._id, done)
 };

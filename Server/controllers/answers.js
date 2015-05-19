@@ -4,67 +4,60 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var exp = module.exports;
 
 exp.findByQuestionId = function(req, res, next) {
-console.log("retrieveAnswersByQuestionId")
-	var getAnswers = Answer.find(
-		{ '_questionId': new ObjectId(req.params.questionId) }
-	).exec();
 
-	getAnswers.addBack(function (err, answers) {
-		if (err) return next(err);
-		res.json(answers);
-	})
+    var getAnswers = Answer.find(
+        { 'questionId': new ObjectId(req.params.questionId) }
+    ).exec();
+
+    getAnswers.addBack(function (err, answers) {
+        if (err) return next(err);
+        res.json(answers);
+    })
 };
 
 exp.addByQuestionId = function(req, res, next) {
-	var answer = new Answer();
-	console.log(req.body)
-	//answer.author = "example user";//TODO Add real users
-	answer.message = req.body.message;
-	answer._questionId = new ObjectId(req.params.questionId);
 
-	answer.save( function (err, answer) {
-		if (err) return next(err);
-		res.json(answer)
-	});
+    var answer = new Answer();
+    
+    answer.author       = new ObjectId(req.user._id);
+    answer.anonymous    = req.body.anonymous;
+    answer.message      = req.body.message;
+    answer.questionId   = new ObjectId(req.params.questionId);
+    answer.upVotes.     push(req.user._id);
+
+    answer.save( function (err, answer) {
+        if (err) return next(err);
+        res.json(answer)
+    });
 };
 
 exp.deleteAnswer = function(req, res, next) {
-	var deleteAnswer = Answer.find(
-		{ '_id': new ObjectId(req.params.answerId) }
-	).remove().exec();
+  
+    // TODO add auth info ensure only creator, mods and admin can delete
+    var done = function (err, deleted) {
+        if(err) return next(err);
+        res.json(deleted);
+    }
 
-	deleteAnswer.addBack( function (err, deleted) {
-		if (err) return next(err);
-		res.json(deleted);
-	})
+    Answer.setAsDeleted(req.params.answerId, req.user._id, done)
 };
 
 exp.upVoteAnswer = function(req, res, next) {
-	// TODO add auth info ensure 1 vote per person
 
-	var upVote = Answer.update(
-		{ '_id': new ObjectId(req.params.answerId) },
-		{ $inc: { 'upVotes': 1 }}
-	).exec();
+    var done = function (err, upVoted) {
+        if(err) return next(err);
+        res.json(upVoted);
+    }
 
-	upVote.addBack( function (err, upVoted) {
-		if(err) return next(err);
-		res.json(upVoted);
-	})
-
+    Answer.upVote(req.params.answerId, req.user._id, done)
 };
 
 exp.downVoteAnswer = function(req, res, next) {
-	// TODO add auth info ensure 1 vote per person
 
-	var downVote = Answer.update(
-		{ '_id': new ObjectId(req.params.answerId) },
-		{ $inc: { 'downVotes': 1 }}
-	).exec();
+    var done = function (err, downVoted) {
+        if(err) return next(err);
+        res.json(downVoted);
+    }
 
-	downVote.addBack( function (err, downVoted) {
-		if(err) return next(err);
-		res.json(downVoted);
-	})
-
+    Answer.downVote(req.params.answerId, req.user._id, done)
 };

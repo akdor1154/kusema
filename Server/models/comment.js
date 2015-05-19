@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var objectId = mongoose.Schema.Types.ObjectId;
-var content  = require('./content');
+var mongoose        = require('mongoose');
+var objectId        = mongoose.Schema.Types.ObjectId;
+var contentMethods  = require('./common/contentMethods');
 
 // Schema definition
 var commentSchema = mongoose.Schema({
@@ -23,6 +23,11 @@ commentSchema.index({ author: 1, dateCreated: -1 });
 commentSchema.index({ upVotes: 1 });
 commentSchema.index({ downVotes: 1 });
 commentSchema.path('message').index({text : true});
+
+// Static Methods
+commentSchema.statics.upVote = contentMethods.upVote;
+commentSchema.statics.downVote = contentMethods.downVote;
+commentSchema.statics.setAsDeleted = contentMethods.setAsDeleted;
 
 
 module.exports = mongoose.model('Comment', commentSchema);
