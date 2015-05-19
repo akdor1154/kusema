@@ -2,7 +2,7 @@ var Question = require('../models/question');
 
 var exp = module.exports;
 
-exp.findById = function (req, res, next) {
+exp.findByQuestionId = function (req, res, next) {
   var getQuestion = Question.findOne(
     { '_id': req.params.questionId }
   ).exec();
@@ -72,7 +72,7 @@ exp.deleteQuestion = function (req, res, next) {
   })
 };
 
-exp.upVote = function(req, res, next) {
+exp.upVoteQuestion = function(req, res, next) {
 // TODO add auth info ensure 1 vote per person
 
   var upVote = Question.update(
@@ -87,7 +87,7 @@ exp.upVote = function(req, res, next) {
 
 };
 
-exp.downVote = function(req, res, next) {
+exp.downVoteQuestion = function(req, res, next) {
 // TODO add auth info ensure 1 vote per person
 
   var downVote = Question.update(

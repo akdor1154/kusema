@@ -3,8 +3,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var exp = module.exports;
 
-exp.retrieveAll = function(req, res, next) {
-console.log("ejflsdkf")
+exp.findByQuestionId = function(req, res, next) {
 	var getComments = Comment.find(
 		{ '_questionId': new ObjectId(req.params.questionId) }
 	).exec();
@@ -15,9 +14,9 @@ console.log("ejflsdkf")
 	})
 };
 
-exp.addComment = function(req, res, next) {
+exp.addByParentId = function(req, res, next) {
 	var comment = new Comment();
-	console.log(req.body)
+
 	//comment.author = "example user";//TODO Add real users
 	comment.message = req.body.message;
 	comment._questionId = new ObjectId(req.params.questionId);
@@ -39,7 +38,7 @@ exp.deleteComment = function(req, res, next) {
 	})
 };
 
-exp.upVote = function(req, res, next) {
+exp.upVoteComment = function(req, res, next) {
 	// TODO add auth info ensure 1 vote per person
 
 	var upVote = Comment.update(
@@ -54,7 +53,7 @@ exp.upVote = function(req, res, next) {
 
 };
 
-exp.downVote = function(req, res, next) {
+exp.downVoteComment = function(req, res, next) {
 	// TODO add auth info ensure 1 vote per person
 
 	var downVote = Comment.update(

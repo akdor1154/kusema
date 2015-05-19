@@ -3,7 +3,7 @@ var ObjectId = require('mongoose').Types.ObjectId;
 
 var exp = module.exports;
 
-exp.retrieveAnswersByQuestionId = function(req, res, next) {
+exp.findByQuestionId = function(req, res, next) {
 console.log("retrieveAnswersByQuestionId")
 	var getAnswers = Answer.find(
 		{ '_questionId': new ObjectId(req.params.questionId) }
@@ -15,7 +15,7 @@ console.log("retrieveAnswersByQuestionId")
 	})
 };
 
-exp.addAnswerByQuestionId = function(req, res, next) {
+exp.addByQuestionId = function(req, res, next) {
 	var answer = new Answer();
 	console.log(req.body)
 	//answer.author = "example user";//TODO Add real users
