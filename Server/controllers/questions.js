@@ -5,7 +5,8 @@ var exp = module.exports;
 exp.findByQuestionId = function (req, res, next) {
   var getQuestion = Question.findOne(
     { '_id': req.params.questionId }
-  ).exec();
+  )
+  .exec();
 
   getQuestion.addBack( function (err, question) {
     if (err) return next(err);
@@ -16,6 +17,7 @@ exp.findByQuestionId = function (req, res, next) {
 exp.nextTenQuestions = function (req, res, next) {
   // TODO This will be replaced with the feed soon...
   Question.find()
+  .populate('author', 'local.username')
   .exec( function (err, questions) {
     if(err) return next(err);
     res.json(questions)
@@ -37,7 +39,7 @@ exp.addQuestion = function (req, res, next) {
   question.upVotes.     push(req.user._id);
 
   var topics = req.body.topics;
-console.log(topics)
+
   for (var i in topics) {
   	question.topics.push(topics[i])
   }
