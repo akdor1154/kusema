@@ -30,13 +30,17 @@ exp.addQuestion = function (req, res, next) {
   question.author       = req.body.author;
   question.anonymous    = req.body.anonymous;
   question.message      = req.body.message;
-  question.topics.      push(req.body.topics)
   question.group        = req.body.group;
   //question.images.      push(req.body.imageUrl);
   //question.videos.      push(req.body.videoUrl);
   //question.code.        push(req.body.code);
   question.upVotes.     push(req.user._id);
 
+  var topics = req.body.topics;
+console.log(topics)
+  for (var i in topics) {
+  	question.topics.push(topics[i])
+  }
 
   question.save( function (err, question) {
     if (err) return next(err);
