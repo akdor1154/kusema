@@ -16,8 +16,6 @@ exp.findByQuestionId = function (req, res, next) {
 exp.nextTenQuestions = function (req, res, next) {
   // TODO This will be replaced with the feed soon...
   Question.find()
-  .sort({ 'upVotes': 1, 'downVotes': -1 })
-  .skip(10*req.params.requestNumber)
   .limit(10)
   .exec( function (err, questions) {
     if(err) return next(err);
