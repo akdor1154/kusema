@@ -16,7 +16,6 @@ exp.findByQuestionId = function (req, res, next) {
 exp.nextTenQuestions = function (req, res, next) {
   // TODO This will be replaced with the feed soon...
   Question.find()
-  .limit(10)
   .exec( function (err, questions) {
     if(err) return next(err);
     res.json(questions)
