@@ -7,7 +7,7 @@ var commentSchema = mongoose.Schema({
     questionId:     { type: objectId, ref: 'Question', required: true },
     answerId:       { type: objectId, ref: 'Answer', default: null },
     author:         { type: objectId, ref: 'User', required: true },
-    anonymous:      { type: Boolean, required: true },
+    anonymous:      { type: Boolean, required: true, default: false },
     message:        { type: String, required: true },
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
