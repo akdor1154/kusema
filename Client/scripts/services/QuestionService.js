@@ -66,8 +66,8 @@ kusema.factory('questionFactory', ['$http' , '$routeParams', 'kusemaConfig', fun
         return $http.post(urlBase, JSON.stringify(question));
     };
 
-    questionFactory.updateQuestion = function (editedQuestion) {
-        return $http.put(urlBase + '/' + $routeParams.id, editedQuestion);
+    questionFactory.updateQuestion = function (id, editedQuestion) {
+        return $http.put(urlBase + '/' + id, editedQuestion);
     };
 
     questionFactory.upVoteQuestion = function (id) {

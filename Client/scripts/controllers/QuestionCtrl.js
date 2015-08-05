@@ -1,4 +1,86 @@
 'use strict';
+
+var QuestionController = function($routeParams, questionFactory, commentFactory) {
+
+		this.id = $routeParams.id;
+		this.question = null;
+		this.editingQuestion;
+		this.questionFactory = questionFactory;
+		this.commentFactory = commentFactory;
+
+		this.questionEditorOpen = false;
+		this.questionEditorSubmitted = false;
+
+		this.questionFactory.getQuestionById(this.id)
+			.success(function(data) {
+					this.question = questionFactory.createQuestion(data);
+					this.initializeEditQuestionForm();
+			}.bind(this));
+	}
+	QuestionController.prototype.initializeEditQuestionForm = function() {
+		this.editingQuestion = {
+			'title': this.question.title,
+			'message': this.question.message
+		};
+	}
+	QuestionController.prototype.editQuestion = function() {
+		this.questionEditorSubmitted = true;
+		this.questionFactory.updateQuestion(this.id, this.editingQuestion)
+			.success(function(data) {
+				this.questionEditorOpen = false;
+				this.questionEditorSubmitted = false;
+				//TODO: get a push message from server that this question has been updated
+				this.questionFactory.getQuestionById(this.id)
+					.success( function(data) {
+							this.question = this.questionFactory.createQuestion(data);
+							this.initializeEditQuestionForm();
+					}.bind(this));
+			}.bind(this));
+
+	}
+	QuestionController.prototype.toggleEditor = function() {
+		this.questionEditorOpen = !this.questionEditorOpen;
+	}
+
+//} QuestionController
+kusema.controller('QuestionController', ['$routeParams', 'questionFactory', 'commentFactory', QuestionController]);
+
+var CommentController = function($routeParams, loginService, commentFactory) {
+
+		this.loginService = loginService;
+		this.commentFactory = commentFactory;
+		this.questionId = $routeParams.id
+		this.comments = []
+		this.commentFormOpen = false;
+		this.newComment = null;
+		commentFactory.getComments(this.questionId)
+			.success(function(comments) {
+				//TODO: this logic should be in commentFactory, but it's complicated to handle promises
+				this.comments = comments.map(function(c) {return commentFactory.createComment(c);});
+			}.bind(this));
+		this.initializeNewCommentForm();
+
+	}
+	CommentController.prototype.initializeNewCommentForm = function() {
+		this.newComment = {
+			'question_id': this.id,
+			'author': this.loginService.username,
+			'message': ''
+		};
+	}
+	CommentController.prototype.addComment = function() {
+		this.commentFactory.addComment(this.questionId, this.newComment);
+		this.comments.concat(this.newComment); //TODO: push message from server
+		this.initializeNewCommentForm();
+	}
+	CommentController.prototype.toggleWriter = function() {
+		this.commentFormOpen = !this.commentFormOpen;
+	}
+kusema.controller('CommentController', ['$routeParams', 'loginService', 'commentFactory', CommentController]);
+
+
+/*
+
 kusema
 
 .controller(
@@ -106,3 +188,4 @@ kusema
 			      };
 } ])
 ;
+*/
