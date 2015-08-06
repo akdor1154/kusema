@@ -21,9 +21,12 @@ var expressSession = require('express-session');
 var app            = express();
 var server         = require('http').createServer(app);
 
+var here = function(pathToJoin) {
+  return path.join(__dirname, pathToJoin)
+}
 
 // Configure database
-var dbConfig = require('./config/database.js');
+var dbConfig = require(here('config/database.js'));
 mongoose.connect(dbConfig.url);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -32,7 +35,7 @@ db.once('open', function (callback) {
 });
 
 // View engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', here('views'));
 app.set('view engine', 'jade');
 
 var corsOptions = {
@@ -44,7 +47,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // Configure Passport
-require('./config/passport')(passport);
+require(here('config/passport'))(passport);
 app.use(expressSession({ // TODO add a data store to this
 	secret: 'mySecretKey',
 	resave: false,
@@ -54,12 +57,12 @@ app.use(passport.initialize());
 app.use(passport.session());  
 
 // Configure middleware
-app.use(favicon('../Client/favicon.ico'));
+app.use(favicon(here('../Client/favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
-app.use(express.static('../Client'));
+app.use(express.static(here('../Client')));
 
 
 
@@ -79,7 +82,7 @@ app.use(function(req, res, next) {
 
 
 // Configure Socket IO
-require('./config/socketio')(server);
+require(here('/config/socketio'))(server);
 
 
 /// Error handlers
