@@ -35,7 +35,7 @@ kusema.config(function($routeProvider, $httpProvider) {
   })
   .when('/newarea/', {
 	  templateUrl: 'views/newArea.html',
-  })
-  ;    
+  });
+  
 });
 

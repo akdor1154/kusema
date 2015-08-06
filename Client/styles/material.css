@@ -5,15 +5,6 @@
   margin: 16px 0 0 16px;
   width: 36px;
 } 
-md-toolbar h1 {
-  font-weight: normal;
-}
-md-list .md-button {
-  color: inherit;
-  font-weight: 500;
-  text-align: left;
-  width: 100%;
-}
 
 md-card {
   max-width: 660px;
