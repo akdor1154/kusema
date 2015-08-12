@@ -4,6 +4,7 @@ var QuestionDataPrototype = Object.create(Object.prototype, {
     _id: {writable: true, value: 0, enumerable: true},
     title: { writable: true, value: "", enumerable: true },
     author: { writable: true, value: 0, enumerable: true }, //TODO add object ID requirement here
+    authorName: { writable: true, value: "", enumerable: true},
     message: { writable: true, value: 0, enumerable: true },
     dateCreated: { writable: true, value: 0, enumerable: true },
     dateModified: { writable: true, value: 0, enumerable: true },
@@ -11,6 +12,7 @@ var QuestionDataPrototype = Object.create(Object.prototype, {
     downVotes: { writable: true, value: 0, enumerable: true},
     videoUrl: { writable: true, value: 0, enumerable: true},
     imageUrl: { writable: true, value: 0, enumerable: true},
+    comments: { writable: true, value: [], enumerable: true}
 })
 
 var Question = function(questionJSON, questionFactory) {

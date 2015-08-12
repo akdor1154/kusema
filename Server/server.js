@@ -61,7 +61,18 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static('../Client'));
 
+// add convenience function to autoJSON a mongoose object, probably better places to do it
 
+app.use(function(req, res, next) {
+  res.mjson = function(mongooseDocument) {
+    if (mongooseDocument.toJSON) {
+      res.json(mongooseDocument.toJSON());
+    } else {
+      res.json(mongooseDocument.map(function(realDoc) { return realDoc.toJSON();}));
+    }
+  };
+  next();
+});
 
 // Add routes
 var account = require('./routes/account')(passport);

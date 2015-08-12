@@ -10,10 +10,11 @@ exp.findByQAId = function(req, res, next) {
 	propertiesToFind ['questionId', 'answerId'];
 	propertiesToFind.foreach(function(property) {
 		var valueToPush;
-		if (req.params[property]) {
-			valueToPush = objectIdOrNull(req.params[property]);
+		if (req.query[property]) {
+			valueToPush = objectIdOrNull(req.query[property]);
 		}
-		findQuery.push({'_'+property: valueToPush});
+		var underscoreProperty = '_'+property;
+		findQuery.push({underscoreProperty: valueToPush});
 	});
 
 	var getComments = Comment.find({$and: findQuery}).exec();
@@ -29,14 +30,22 @@ exp.addByQAId = function(req, res, next) {
 
 	comment.author = ref.user._id;
 	comment.message = req.body.message;
-	comment._questionId = new objectId(req.params.questionId);
-	comment._answerId = objectIdOrNull(req.params.questionId);
+	comment._questionId = new objectId(req.body.questionId);
+	comment._answerId = objectIdOrNull(req.body.answerId);
 
 	comment.save( function (err, comment) {
 		if (err) return next(err);
 		res.json(comment)
 	});
 };
+
+exp.findByCommentId = function(req, res, next) {
+	var getComment = Comment.findById(req.params.commentId).exec();
+	getComment.addBack(function (err, comment) {
+		if (err) return next(err);
+		res.json(comment);
+	});
+}
 
 exp.deleteComment = function(req, res, next) {
   
