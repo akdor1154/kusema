@@ -1,12 +1,23 @@
 var Comment = require('../models/comment');
 var ObjectId = require('mongoose').Types.ObjectId;
+var objectIdOrNull = require('../controllers/handyStuff.js')
+
 
 var exp = module.exports;
 
-exp.findByQuestionId = function(req, res, next) {
-	var getComments = Comment.find(
-		{ '_questionId': new ObjectId(req.params.questionId) }
-	).exec();
+exp.findByQAId = function(req, res, next) {
+	findQuery = [];
+	propertiesToFind ['questionId', 'answerId'];
+	propertiesToFind.foreach(function(property) {
+		var valueToPush;
+		if (req.query[property]) {
+			valueToPush = objectIdOrNull(req.query[property]);
+		}
+		var underscoreProperty = '_'+property;
+		findQuery.push({underscoreProperty: valueToPush});
+	});
+
+	var getComments = Comment.find({$and: findQuery}).exec();
 
 	getComments.addBack(function (err, comments) {
 		if (err) return next(err);
@@ -14,18 +25,27 @@ exp.findByQuestionId = function(req, res, next) {
 	})
 };
 
-exp.addByParentId = function(req, res, next) {
+exp.addByQAId = function(req, res, next) {
 	var comment = new Comment();
 
-	//comment.author = "example user";//TODO Add real users
+	comment.author = ref.user._id;
 	comment.message = req.body.message;
-	comment._questionId = new ObjectId(req.params.questionId);
+	comment._questionId = new ObjectId(req.body.questionId);
+	comment._answerId = objectIdOrNull(req.body.answerId);
 
 	comment.save( function (err, comment) {
 		if (err) return next(err);
 		res.json(comment)
 	});
 };
+
+exp.findByCommentId = function(req, res, next) {
+	var getComment = Comment.findById(req.params.commentId).exec();
+	getComment.addBack(function (err, comment) {
+		if (err) return next(err);
+		res.json(comment);
+	});
+}
 
 exp.deleteComment = function(req, res, next) {
   

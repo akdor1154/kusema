@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var objectId = mongoose.Schema.Types.ObjectId;
 
 var imageSchema = mongoose.Schema({
     type:       { type: String, required: true },
