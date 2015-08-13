@@ -27,6 +27,12 @@ answerSchema.index({ upVotes: 1 });
 answerSchema.index({ downVotes: 1 });
 answerSchema.path('message').index({text : true});
 
+answerSchema.virtual('comments').get(function() {
+    return Comment.find({answerId: this._id}).exec();
+}.bind(this));
+
+answerSchema.set('toJSON', {virtuals: true});
+
 // Validation
 answerSchema.path('questionId').validate(function (value, respond) {
 

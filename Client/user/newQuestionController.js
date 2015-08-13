@@ -3,7 +3,7 @@
 var newQuestionController = function($scope, questionFactory, $mdSidenav) {
 	$scope.inputData = {
 		title: '',
-		author: '',
+		authorName: '',
 		message: ''
 	};
 	$scope.addQuestion = function(formData) {

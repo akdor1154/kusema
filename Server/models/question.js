@@ -30,6 +30,12 @@ questionSchema.index({ downVotes: 1 });
 questionSchema.path('title').index({text : true});
 questionSchema.path('message').index({text : true});
 
+questionSchema.virtual('comments').get(function() {
+    return Comment.find({$and: [{questionId: this._id}, {answerId: null}]}).exec();
+}.bind(this));
+
+questionSchema.set('toJSON', {virtuals: true});
+
 // Static Methods
 questionSchema.statics.upVote = contentMethods.upVote;
 questionSchema.statics.downVote = contentMethods.downVote;

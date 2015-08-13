@@ -17,7 +17,7 @@ exp.findByQuestionId = function (req, res, next) {
 exp.nextTenQuestions = function (req, res, next) {
   // TODO This will be replaced with the feed soon...
   Question.find()
-  .populate('author', 'local.username')
+  .populate('author', 'username')
   .exec( function (err, questions) {
     if(err) return next(err);
     res.json(questions)
@@ -29,7 +29,8 @@ exp.addQuestion = function (req, res, next) {
   var question = new Question();
 
   question.title        = req.body.title;
-  question.author       = req.body.author;
+  question.author       = req.user._id;
+  question.authorName   = req.body.authorName;
   question.anonymous    = req.body.anonymous;
   question.message      = req.body.message;
   question.group        = req.body.group;
