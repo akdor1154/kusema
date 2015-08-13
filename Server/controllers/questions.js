@@ -10,7 +10,7 @@ exp.findByQuestionId = function (req, res, next) {
 
   getQuestion.addBack( function (err, question) {
     if (err) return next(err);
-    res.json(question);
+    res.mjson(question);
   });
 };
 
@@ -20,7 +20,7 @@ exp.nextTenQuestions = function (req, res, next) {
   .populate('author', 'username')
   .exec( function (err, questions) {
     if(err) return next(err);
-    res.json(questions)
+    res.mjson(questions)
   });
 };
 
@@ -62,7 +62,7 @@ exp.updateQuestion = function (req, res, next) {
 
   updateQuestion.addBack( function (err, updated, raw) {
     if (err) return next(err);
-    res.json(raw);
+    res.mjson(raw);
   });
 };
 
@@ -71,7 +71,7 @@ exp.deleteQuestion = function(req, res, next) {
     // TODO add auth info ensure only creator, mods and admin can delete
     var done = function (err, deleted) {
         if(err) return next(err);
-        res.json(deleted);
+        res.mjson(deleted);
     }
 
     Question.setAsDeleted(req.params.questionId, req.user._id, done)
@@ -81,7 +81,7 @@ exp.upVoteQuestion = function(req, res, next) {
 
     var done = function (err, upVoted) {
         if(err) return next(err);
-        res.json(upVoted);
+        res.mjson(upVoted);
     }
 
     Question.upVote(req.params.questionId, req.user._id, done)
@@ -91,7 +91,7 @@ exp.downVoteQuestion = function(req, res, next) {
 
     var done = function (err, downVoted) {
         if(err) return next(err);
-        res.json(downVoted);
+        res.mjson(downVoted);
     }
 
     Question.downVote(req.params.questionId, req.user._id, done)
