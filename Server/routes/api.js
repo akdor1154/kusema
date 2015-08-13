@@ -41,8 +41,10 @@ router.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer);
 router.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer);
 
 // Comment Routes
-router.get('/comments/:questionId', commentsCtrl.findByQuestionId);
-router.post('/comments/:questionId', commentsCtrl.addByParentId);
+// to be called as comment?questionId=id&answerId=id
+router.get('/comments', commentsCtrl.findByQAId);
+router.get('/comments/:commentId', commentsCtrl.findByCommentId);
+router.post('/comments', commentsCtrl.addByQAId);
 router.delete('/comments/:commentId', commentsCtrl.deleteComment);
 router.put('/comments/upvote/:commentId', commentsCtrl.upVoteComment);
 router.put('/comments/downvote/:commentId', commentsCtrl.downVoteComment);

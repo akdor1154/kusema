@@ -1,25 +1,19 @@
+'use strict';
+
 var mongoose        = require('mongoose');
 var objectId        = mongoose.Schema.Types.ObjectId;
 var media           = require('./common/media');
 var contentMethods  = require('./common/contentMethods');
 
+var Comment         = require('./comment.js');
+
 // Schema definition
-var questionSchema = mongoose.Schema({
+var questionSchema = new contentMethods.BaseContentSchema({
     title:          { type: String, required: true },
-    author:         { type: objectId, ref: 'User', required: true },
-    anonymous:      { type: Boolean, required: true },
-    message:        { type: String, required: true },
     topics:         [{ type: objectId, ref: 'Topic' }],
-    group:          { type: objectId, ref: 'Group', required: true },
-    images:         [{ type: media.imageModel }],
-    videos:         [{ type: media.videoModel }],
-    code:           [{ type: media.codeModel }],
-    dateCreated:    { type: Date, default: Date.now },
-    dateModified:   { type: Date, default: null },
-    upVotes:        [{ type: objectId, ref: 'User' }],
-    downVotes:      [{ type: objectId, ref: 'User' }],
-    deleted:        { type: Boolean, default: false }
+    group:          { type: objectId, ref: 'Group', required: false }, //TODO: SET REQUIRED TO TRUE!!
 })
+
 
 // Indexes
 questionSchema.index({ topics: 1, dateCreated: -1 });
@@ -37,9 +31,7 @@ questionSchema.virtual('comments').get(function() {
 questionSchema.set('toJSON', {virtuals: true});
 
 // Static Methods
-questionSchema.statics.upVote = contentMethods.upVote;
-questionSchema.statics.downVote = contentMethods.downVote;
-questionSchema.statics.delete = contentMethods.delete;
 
 
-module.exports = mongoose.model('Question', questionSchema);
+
+module.exports = contentMethods.BaseContent.discriminator('Question', questionSchema);
