@@ -23,7 +23,7 @@ module.exports = function (passport) {
 	// 		});
 	// });
 
-	router.post('/login_monash', passport.authenticate('monash-login'),
+	router.get('/login_monash', passport.authenticate('monash-login'),
 		function (req, res) {
 			res.json({
 				userId: req.user.id,
