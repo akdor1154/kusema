@@ -34,14 +34,15 @@ module.exports = function(passport) {
                         return done(err);
                     if (user) {
                         return done(null, false, { message: 'That username is already taken.' });
+                    } else {
+                        var newUser            = new User();
+                        newUser.username = username;
+                        newUser.password = newUser.generateHash(password);
+                        newUser.save(function(err) {
+                            if (err) throw err;
+                            return done(null, newUser);
+                        });
                     }
-                    var newUser            = new User();
-                    newUser.local.username = username;
-                    newUser.local.password = newUser.generateHash(password);
-                    newUser.save(function(err) {
-                        if (err) throw err;
-                        return done(null, newUser);
-                    });
                 });    
             });
         }

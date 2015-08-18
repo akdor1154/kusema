@@ -4,35 +4,37 @@ var router   = express.Router();
 module.exports = function (passport) {
 
 	// Account Routes
-	router.post('/register', passport.authenticate('local-register'),
-		function (req, res) {
-			res.json({
-				userId: req.user.id,
-				username: req.user.local.username
-			});
-		}
-	);
+	
+	// These are working but are local logins which will not be used in initial trials
+	// router.post('/register', passport.authenticate('local-register'),
+	// 	function (req, res) {
+	// 		res.json({
+	// 			userId: req.user.id,
+	// 			username: req.user.username
+	// 		});
+	// 	}
+	// );
 
-	router.post('/login', passport.authenticate('local-login'),
-		function (req, res) {
-			res.json({
-				userId: req.user.id,
-				username: req.user.local.username
-			});
-	});
+	// router.post('/login', passport.authenticate('local-login'),
+	// 	function (req, res) {
+	// 		res.json({
+	// 			userId: req.user.id,
+	// 			username: req.user.local.username
+	// 		});
+	// });
 
 	router.post('/login_monash', passport.authenticate('monash-login'),
 		function (req, res) {
 			res.json({
 				userId: req.user.id,
-				username: req.user.monash.username
+				username: req.user.authcate
 			});
 		}
 	);
 
     router.get('/logout',
     	function (req, res) {
-     	   req.logout();
+     	    req.logout();
         	res.json(true);
     	}
     );
