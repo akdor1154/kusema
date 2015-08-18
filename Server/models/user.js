@@ -4,14 +4,10 @@ var bcrypt   = require('bcrypt');
 
 // Schema definition
 var userSchema = mongoose.Schema({
-    local: {
-        username:   String,
-        password:   String
-    },
-    monash: {
-        authcate:   String,
-        email:      String
-    },
+    username:       String,
+    password:       String,
+    authcate:       String,
+    email:          String,
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
     subscriptions:  [{ type: objectId, active: Boolean }],

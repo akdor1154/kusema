@@ -1,5 +1,5 @@
 var LocalStrategy   = require('passport-local').Strategy;
-var LdapStrategy    = require('passport-ldapauth');
+var CasStrategy     = require('passport-cas').Strategy;
 var User            = require('../models/user');
 
 // expose this function to our app using module.exports
@@ -15,7 +15,6 @@ module.exports = function(passport) {
             done(err, user);
         });
     });
-
 
     // Register a local user
     passport.use('local-register', new LocalStrategy(
@@ -35,20 +34,18 @@ module.exports = function(passport) {
                         return done(err);
                     if (user) {
                         return done(null, false, { message: 'That username is already taken.' });
-                    } else {
-                        var newUser            = new User();
-                        newUser.local.username = username;
-                        newUser.local.password = newUser.generateHash(password);
-                        newUser.save(function(err) {
-                            if (err) throw err;
-                            return done(null, newUser);
-                        });
                     }
+                    var newUser            = new User();
+                    newUser.local.username = username;
+                    newUser.local.password = newUser.generateHash(password);
+                    newUser.save(function(err) {
+                        if (err) throw err;
+                        return done(null, newUser);
+                    });
                 });    
             });
         }
     ));
-
 
     // Local user sign in
     passport.use('local-login', new LocalStrategy(
@@ -74,21 +71,36 @@ module.exports = function(passport) {
         }
     ));
 
+    // Monash authcate user sign in (and register if new)
+    passport.use('monash-login', new CasStrategy(
+        {
+          version: 'CAS3.0',
+          ssoBaseURL: 'https://my.monash.edu.au/authentication/cas',
+          serverBaseURL: 'http://melts-dev.eng.monash.edu:8002/',
+          validateURL: '/serviceValidate'
+        },
+        // callback with authcate username from Monash CAS server
+        function(authcate, done) {
 
-
-    var OPTS = {
-      server: {
-        url: 'ldap://directory.monash.edu.au:389',
-        bindDn: '',
-        bindCredentials: '',
-        searchBase: 'ou=Student, o=Monash University, c=AU',
-        searchFilter: '(uid={{username}})'
-      }
-    }
-    console.log("here")
-    passport.use(new LdapStrategy(OPTS, function(req, user, done) {
-        console.log("here")
-        done(null, user);
+            User.findOne({ 'authcate' :  authcate }, function (err, user) {
+                if (err) {
+                    return done(err);
+                }
+                if (!user) {
+                    // return done(null, false, {message: 'Unknown user'});
+                    var newUser = new User();
+                    newUser.authcate = authcate;
+                    newUser.save(function(err) {
+                        if (err) throw err;
+                        return done(null, newUser);
+                    });
+                } else {
+                    // user exists in system
+                    return done(null, user);
+                }
+            });
         }
     ));
+
+
 };
