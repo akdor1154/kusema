@@ -15,9 +15,9 @@ kusema.config(function($stateProvider, $httpProvider, $mdThemingProvider) {
   $httpProvider.defaults.withCredentials = true;
 
   /* Direct unmatched urls */
-  $routeProvider.otherwise({
+  /*$stateProvider.otherwise({
     templateUrl: '404.html',
-  });
+  });*/
 
   /* Direct urls */
   $stateProvider
