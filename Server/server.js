@@ -80,9 +80,11 @@ app.use(function(req, res, next) {
 // Add routes
 var account = require('./routes/account')(passport);
 var api 	= require('./routes/api');
+var mers	= require('mers');
 
 app.use('/account', account);
 app.use('/api', api);
+app.use('/rest',mers({'mongoose':mongoose}).rest());
 
 /// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
