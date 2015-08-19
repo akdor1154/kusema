@@ -42,7 +42,7 @@ var Comment = function(commentJSON, commentFactory) {
     }
 //} Question
 
-kusema.factory('commentFactory', ['$http' , '$routeParams', 'socketFactory', 'kusemaConfig', function($http, $routeParams, socketFactory, kusemaConfig) {
+kusema.factory('commentFactory', ['$http' , 'socketFactory', 'kusemaConfig', function($http, socketFactory, kusemaConfig) {
     var commentFactory = {};
     var urlBase = kusemaConfig.url()+'api/comments';
 

@@ -26,31 +26,52 @@
 
 //kusema.controller('SearchController', SearchController);
 
-var QuestionListController = function($scope, questionFactory, $mdSidenav) {
-	$scope.allowMoreRequests = true;
-	$scope.writerOpen = false;
-	$scope.questions = questionFactory.questions;
-
-	$scope.test = "hello";
-
-	$scope.toggleWriter = function() {
-		$scope.writerOpen = !$scope.writerOpen;
+var QuestionListController = function(questionFactory, $mdDialog) {
+		this.allowMoreRequests = true;
+		this.writerOpen = false;
+		this.questions = questionFactory.questions;
+		this.$mdDialog = $mdDialog;
+		this.test = "hello";
 	}
 
-	$scope.addQuestion = function(formData) {
+	QuestionListController.prototype.toggleWriter = function() {
+		this.writerOpen = !$scope.writerOpen;
+	}
+
+	QuestionListController.prototype.showWriter = function(e) {
+		console.log('asdf');
+		this.$mdDialog.show({
+			controller: 'AddQuestionDialogController',
+			template: document.getElementById('addQuestionDialog').innerHTML,
+			targetEvent: e,
+			clickOutsideToClose: true
+		}).then( function(answer) {
+			console.log('yay');
+		});
+	}
+
+	QuestionListController.prototype.addQuestion = function(formData) {
 		questionFactory.addQuestion(newQuestion)
 		.success(
 			function(response) {
-				$scope.writerOpen = false;
+				this.writerOpen = false;
 				questionFactory.questions.questionsList.push(response);
 			}
 		)
 		.error(
 			function(response) {
-				$scope.status = 'Unable to add question: ' + response.message;
+				this.status = 'Unable to add question: ' + response.message;
 			}
 		);
 	}
-};
 
-kusema.controller( 'QuestionListController', [ '$scope', 'questionFactory', '$mdSidenav', QuestionListController ] );
+kusema.controller( 'QuestionListController', ['questionFactory', '$mdDialog', QuestionListController ] );
+
+
+var AddQuestionDialogController = function($scope) {
+	$scope.$on('EDIT_CONTENT_FORM_SUBMITTED', function (e, message) {
+		console.log('BED TIME!');
+	});
+	return this;
+}
+kusema.controller( 'AddQuestionDialogController', ['$scope', AddQuestionDialogController ] );

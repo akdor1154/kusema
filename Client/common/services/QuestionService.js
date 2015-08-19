@@ -47,7 +47,7 @@ var Question = function(questionJSON, questionFactory) {
 //} Question
 
 
-kusema.factory('questionFactory', ['$http' , '$routeParams', 'kusemaConfig', function($http, $routeParams, kusemaConfig) {
+kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kusemaConfig) {
 
     var questionFactory = {};
     var urlBase = kusemaConfig.url()+'api/questions';
