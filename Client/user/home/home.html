@@ -40,3 +40,13 @@
 </div>
 
 </md-content>
+
+<md-button class="md-fab" aria-label="Ask a Question" style="position: fixed; bottom: 20px; right: 20px;" ng-click="c.showWriter()">
+  <md-icon md-font-set="material-icons">add</md-icon>
+</md-button>
+
+<template id="addQuestionDialog">
+<md-dialog><md-dialog-content>
+<edit-content-form></edit-content-form>
+</md-dialog-content></md-dialog>
+</template>

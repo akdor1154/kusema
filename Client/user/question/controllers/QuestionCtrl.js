@@ -1,9 +1,9 @@
 'use strict';
 
 
-var QuestionController = function($routeParams, questionFactory, commentFactory) {
+var QuestionController = function($stateParams, questionFactory, commentFactory) {
 
-		this.id = $routeParams.id;
+		this.id = $stateParams.id;
 		this.question = null;
 		this.editingQuestion;
 		this.questionFactory = questionFactory;
@@ -44,7 +44,7 @@ var QuestionController = function($routeParams, questionFactory, commentFactory)
 	}
 
 //} QuestionController
-kusema.controller('QuestionController', ['$routeParams', 'questionFactory', 'commentFactory', QuestionController]);
+kusema.controller('QuestionController', ['$stateParams', 'questionFactory', 'commentFactory', QuestionController]);
 
 
 /*
