@@ -14,8 +14,32 @@
 
   <body ng-app="kusema" lang="en" ng-view ng-controller="MainController" layout="column">
 
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+          <md-button class="md-icon-button" aria-label="Settings">
+            <md-icon md-font-library="material-icons">favorite</md-icon>
+          </md-button>
+        <div flex>
+        </div>
+        <div style="margin: 0 auto; width: 100%; max-width: 960px;">
+        <h2>
+          <span>Kusema</span>
+        </h2>
+        </div>
+        <div flex></div>
+          <md-button class="md-icon-button" aria-label="Settings">
+            <md-icon md-font-library="material-icons">account_circle</md-icon>
+          </md-button>
+
+      </div>
+    </md-toolbar>
+
 	<div><ng-include="'checkBrowser.html'"></div>
 
+    <md-content layout="row" style="width: 100%; overflow-y: scroll;">
+    <div ui-view></div>
+    </md-content>
+    
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/json3/lib/json3.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>

@@ -1,5 +1,6 @@
 'use strict';
 
+
 var QuestionController = function($routeParams, questionFactory, commentFactory) {
 
 		this.id = $routeParams.id;
@@ -45,6 +46,8 @@ var QuestionController = function($routeParams, questionFactory, commentFactory)
 //} QuestionController
 kusema.controller('QuestionController', ['$routeParams', 'questionFactory', 'commentFactory', QuestionController]);
 
+
+/*
 var CommentController = function($routeParams, loginService, commentFactory) {
 
 		this.loginService = loginService;
@@ -77,7 +80,7 @@ var CommentController = function($routeParams, loginService, commentFactory) {
 		this.commentFormOpen = !this.commentFormOpen;
 	}
 kusema.controller('CommentController', ['$routeParams', 'loginService', 'commentFactory', CommentController]);
-
+*/
 
 /*
 

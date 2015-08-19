@@ -3,11 +3,11 @@
 var kusema = angular.module('kusema', [
 'ngAnimate',
 'ngMaterial',
-'ngRoute',
+'ui.router',
 'kusema.config'
 ]);
 
-kusema.config(function($routeProvider, $httpProvider, $mdThemingProvider) {
+kusema.config(function($stateProvider, $httpProvider, $mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('deep-purple')
     .accentPalette('pink')
@@ -20,11 +20,20 @@ kusema.config(function($routeProvider, $httpProvider, $mdThemingProvider) {
   });
 
   /* Direct urls */
-  $routeProvider
-  .when('/', {
+  $stateProvider
+  .state('home', {
+    url: '/',
     templateUrl: 'user/home/home.html'
   })
-  .when('/question/:id', {
+  .state('question', {
+    url: '/question/:id',
+    templateUrl: 'user/question/question.html',
+    controller: 'QuestionController'
+  })
+
+
+  /*
+  .state('/question/:id', {
     templateUrl: 'user/question/question.html',
   })
   .when('/group/:id', {
@@ -41,7 +50,7 @@ kusema.config(function($routeProvider, $httpProvider, $mdThemingProvider) {
   })
   .when('/newarea/', {
 	  templateUrl: 'views/newArea.html',
-  });
+  });*/
   
 });
 
