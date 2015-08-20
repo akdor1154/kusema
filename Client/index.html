@@ -14,7 +14,9 @@
 
   <body ng-app="kusema" lang="en" ng-view ng-controller="MainController" layout="column">
 
-	<div><ng-include="'checkBrowser.html'"></div>
+    <div><ng-include="'checkBrowser.html'"></div>
+    
+    <div ui-view></div>
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/json3/lib/json3.js"></script>
@@ -22,19 +24,23 @@
     <script src="bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="bower_components/socket.io-client/socket.io.js"></script>
     <script src="bower_components/angular-material/angular-material.min.js"></script>
-
-    <!-- Angular Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
+    <script src="bower_components/ui-router/release/angular-ui-router.min.js"></script>
 
     <script src="config.js"></script>
     <script src="app.js"></script>
 
+    <script src="user/kusemaUser.js"></script>
     <script src="common/controllers/MainCtrl.js"></script>
     <script src="common/controllers/LoginCtrl.js"></script>
     <script src="common/services/QuestionService.js"></script>
-
+    <script src="common/services/CommentService.js"></script>
+    <script src="common/services/SocketService.js"></script>
     <script src="user/home/controllers/QuestionListCtrl.js"></script>
     <script src="user/question/controllers/QuestionCtrl.js"></script>
+
+
+    <script src="common/EditContentForm/editContentForm.js"></script>
 
 </body>
 

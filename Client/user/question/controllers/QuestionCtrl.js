@@ -1,8 +1,9 @@
 'use strict';
 
-var QuestionController = function($routeParams, questionFactory, commentFactory) {
 
-		this.id = $routeParams.id;
+var QuestionController = function($stateParams, questionFactory, commentFactory) {
+
+		this.id = $stateParams.id;
 		this.question = null;
 		this.editingQuestion;
 		this.questionFactory = questionFactory;
@@ -43,8 +44,10 @@ var QuestionController = function($routeParams, questionFactory, commentFactory)
 	}
 
 //} QuestionController
-kusema.controller('QuestionController', ['$routeParams', 'questionFactory', 'commentFactory', QuestionController]);
+kusema.controller('QuestionController', ['$stateParams', 'questionFactory', 'commentFactory', QuestionController]);
 
+
+/*
 var CommentController = function($routeParams, loginService, commentFactory) {
 
 		this.loginService = loginService;
@@ -77,7 +80,7 @@ var CommentController = function($routeParams, loginService, commentFactory) {
 		this.commentFormOpen = !this.commentFormOpen;
 	}
 kusema.controller('CommentController', ['$routeParams', 'loginService', 'commentFactory', CommentController]);
-
+*/
 
 /*
 

@@ -3,11 +3,12 @@
 var kusema = angular.module('kusema', [
 'ngAnimate',
 'ngMaterial',
-'ngRoute',
-'kusema.config'
+'ui.router',
+'kusema.config',
+'kusema.user'
 ]);
 
-kusema.config(function($routeProvider, $httpProvider, $mdThemingProvider) {
+kusema.config(function($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('deep-purple')
     .accentPalette('pink')
@@ -15,16 +16,24 @@ kusema.config(function($routeProvider, $httpProvider, $mdThemingProvider) {
   $httpProvider.defaults.withCredentials = true;
 
   /* Direct unmatched urls */
-  $routeProvider.otherwise({
+  /*$stateProvider.otherwise({
     templateUrl: '404.html',
-  });
+  });*/
 
   /* Direct urls */
-  $routeProvider
-  .when('/', {
-    templateUrl: 'user/home/home.html'
-  })
-  .when('/question/:id', {
+  $stateProvider
+    .state('user', {
+      template: '<kusema-user></kusema-user>',
+      abstract: true,
+      url: '/kusema'
+    });
+
+  $urlRouterProvider
+    .when('','/kusema')
+    .when('/','/kusema');
+
+  /*
+  .state('/question/:id', {
     templateUrl: 'user/question/question.html',
   })
   .when('/group/:id', {
@@ -41,7 +50,7 @@ kusema.config(function($routeProvider, $httpProvider, $mdThemingProvider) {
   })
   .when('/newarea/', {
 	  templateUrl: 'views/newArea.html',
-  });
+  });*/
   
 });
 

@@ -1,0 +1,13 @@
+<form>
+<md-input-container>
+	<label>Question Subject</label>
+	<input ng-model="c.content.title" />
+</md-input-container>
+<md-input-container>
+	<label>Message</label>
+	<textarea ng-model="c.content.message"></textarea>
+</md-input-container>
+<div class="md-actions" layout="row">
+	<md-button type="button" ng-click="c.save()">{{c.saveText}}</md-button>
+</div>
+</form>
