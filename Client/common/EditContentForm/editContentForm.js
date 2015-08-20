@@ -34,17 +34,15 @@ var editContentFormController = function($scope, questionFactory) {
 
 	editContentFormController.prototype.save = function() {
 		this.saveFunction()
-			.success(
-				function(response) {
+			.then(
+				function (response) {
 					console.log('add succeeded');
 					this.$scope.$emit('EDIT_CONTENT_FORM_SUBMITTED', 'submitted');
-				}
-			)
-			.error(
-				function(response) {
+				}.bind(this),
+				function (error) {
 					console.log('add error');
-					this.status = 'Unable to add question: ' + response.message;
-				}
+					this.status = 'Unable to add question: ' + error.message;
+				}.bind(this)
 			);
 	}
 

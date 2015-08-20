@@ -34,9 +34,6 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 		this.test = "hello";
 	}
 
-	QuestionListController.prototype.toggleWriter = function() {
-		this.writerOpen = !$scope.writerOpen;
-	}
 
 	QuestionListController.prototype.showWriter = function(e) {
 		console.log('asdf');
@@ -50,21 +47,6 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 		}, function(error) {
 			console.log('umm');
 		});
-	}
-
-	QuestionListController.prototype.addQuestion = function(formData) {
-		questionFactory.addQuestion(newQuestion)
-		.success(
-			function(response) {
-				this.writerOpen = false;
-				questionFactory.questions.questionsList.push(response);
-			}
-		)
-		.error(
-			function(response) {
-				this.status = 'Unable to add question: ' + response.message;
-			}
-		);
 	}
 
 kusema.controller( 'QuestionListController', ['questionFactory', '$mdDialog', QuestionListController ] );
