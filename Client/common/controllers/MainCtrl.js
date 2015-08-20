@@ -1,4 +1,6 @@
-var MainController = function($scope, $mdSidenav) {
+var MainController = function($scope, $mdSidenav, $state) {
+
+	$state.go('user');
 
 	$scope.toggleSidenav = function(menuId) {
 		$mdSidenav(menuId).toggle();
@@ -6,4 +8,4 @@ var MainController = function($scope, $mdSidenav) {
 
 };
 
-kusema.controller( 'MainController', [ '$scope', '$mdSidenav', MainController ] );
+kusema.controller( 'MainController', [ '$scope', '$mdSidenav', '$state', MainController ] );

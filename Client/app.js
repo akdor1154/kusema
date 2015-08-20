@@ -4,7 +4,8 @@ var kusema = angular.module('kusema', [
 'ngAnimate',
 'ngMaterial',
 'ui.router',
-'kusema.config'
+'kusema.config',
+'kusema.user'
 ]);
 
 kusema.config(function($stateProvider, $httpProvider, $mdThemingProvider) {
@@ -21,18 +22,9 @@ kusema.config(function($stateProvider, $httpProvider, $mdThemingProvider) {
 
   /* Direct urls */
   $stateProvider
-  .state('home', {
-    url: '/',
-    templateUrl: 'user/home/home.html',
-    controller: 'QuestionListController',
-    controllerAs: 'c'
-  })
-  .state('question', {
-    url: '/question/:id',
-    templateUrl: 'user/question/question.html',
-    controller: 'QuestionController',
-    controllerAs: 'c'
-  })
+    .state('user', {
+      template: '<kusema-user></kusema-user>'
+    });
 
 
   /*
