@@ -17,8 +17,16 @@ function auth(req, res, next) {
 	res.send("Not logged in.")
 }
 
+function authWrite(req, res, next) {
+	if (req.method != 'GET') {
+		return auth(req, res, next);
+	} else {
+		return next();
+	}
+}
+
 // All API routes require auth
-//router.use(auth)
+router.use(authWrite)
 
 // User Routes
 router.get('/user/:userId', usersCtrl.findUserById);

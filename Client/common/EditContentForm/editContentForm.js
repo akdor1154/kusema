@@ -4,16 +4,21 @@ var editContentFormDirective = function() {
 				action: '='
 			},
 			templateUrl: 'common/EditContentForm/editContentFormTemplate.html',
-			replace: true,
 			controller: 'editContentFormController',
 			controllerAs: 'c'
 		};
 	};
 //}
 
-var editContentFormController = function($scope) {
-	this.$scope = $scope;
-	this.saveText = 'asdf'
+var editContentFormController = function($scope, questionFactory) {
+		this.$scope = $scope;
+		this.questionFactory = questionFactory;
+		this.saveText = 'asdf'
+		this.content = {
+			title: '',
+			message: '',
+		};
+
 		if ($scope.action == 'edit') {
 			console.log('you want an edit form');
 		} else {
@@ -27,8 +32,17 @@ var editContentFormController = function($scope) {
 	editContentFormController.prototype.saveFunction = function() {};
 
 	editContentFormController.prototype.save = function() {
-		this.saveFunction();
-		this.$scope.$emit('EDIT_CONTENT_FORM_SUBMITTED', 'submitted');
+		this.saveFunction()
+			.then(
+				function (response) {
+					console.log('add succeeded');
+					this.$scope.$emit('EDIT_CONTENT_FORM_SUBMITTED', 'submitted');
+				}.bind(this),
+				function (error) {
+					console.log('add error');
+					this.status = 'Unable to add question: ' + error.message;
+				}.bind(this)
+			);
 	}
 
 	editContentFormController.prototype.edit = function() {
@@ -36,7 +50,8 @@ var editContentFormController = function($scope) {
 	}
 
 	editContentFormController.prototype.add = function() {
-		console.log('added');
+		console.log('add attempted');
+		return this.questionFactory.addQuestion(this.content)
 	}
 
 

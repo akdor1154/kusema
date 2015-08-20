@@ -1,4 +1,4 @@
-<form>
+<form ng-submit="c.save()">
 <md-input-container>
 	<label>Question Subject</label>
 	<input ng-model="c.content.title" />
@@ -8,6 +8,7 @@
 	<textarea ng-model="c.content.message"></textarea>
 </md-input-container>
 <div class="md-actions" layout="row">
-	<md-button type="button" ng-click="c.save()">{{c.saveText}}</md-button>
+	<md-button type="button">Cancel</md-button>
+	<md-button type="submit">{{c.saveText}}</md-button>
 </div>
 </form>
