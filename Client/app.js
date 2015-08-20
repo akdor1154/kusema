@@ -5,7 +5,8 @@ var kusema = angular.module('kusema', [
 'ngMaterial',
 'ui.router',
 'kusema.config',
-'kusema.user'
+'kusema.user',
+'kusema.userMenu'
 ]);
 
 kusema.config(function($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {

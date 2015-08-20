@@ -1,0 +1,22 @@
+<section>
+<md-menu>
+	<md-button class="md-icon-button" aria-label="Settings" ng-click="c.openMenu($mdOpenMenu, $event)">
+		<md-icon md-font-library="material-icons">account_circle</md-icon>
+	</md-button>
+	<md-menu-content width="4">
+		<md-menu-item><md-button>Login with Authcate</md-button></md-menu-item>
+		<md-menu-divider></md-menu-divider>
+		<form style="padding: 0.5em">
+		<md-input-container>
+			<label>Username</label>
+			<input name="username" />
+		</md-input-container>
+		<md-input-container>
+			<label>Password</label>
+			<input type="password" name="password" />
+		</md-input-container>
+		<md-menu-item><md-button>Register Local</md-button><md-button>Login Local</md-button></md-menu-item>
+		</form>
+	</md-menu-content>
+</md-menu>
+</section>
