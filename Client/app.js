@@ -10,13 +10,20 @@ var kusema = angular.module('kusema', [
 'kusema.questionPreview',
 ]);
 
-kusema.config(function($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {
+kusema.config(function (
+                $stateProvider,
+                $urlRouterProvider,
+                $httpProvider,
+                $mdThemingProvider,
+                $locationProvider
+              ) {
   $mdThemingProvider.theme('default')
     .primaryPalette('deep-purple')
     .accentPalette('pink')
 
   $httpProvider.defaults.withCredentials = true;
 
+  $locationProvider.html5Mode(true);
   /* Direct unmatched urls */
   /*$stateProvider.otherwise({
     templateUrl: '404.html',
