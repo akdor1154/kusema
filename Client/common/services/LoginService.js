@@ -10,7 +10,7 @@ var LoginService = function($http, kusemaConfig) {
 		kusemaConfig: {value: null, writable: true},
 	});
 	LoginService.prototype.register = function(username, password) {
-		var registerRequest = this.$http.post(this.kusemaConfig.url()+'account/register', {'username': username, 'password': password})
+		var registerRequest = this.$http.post(this.kusemaConfig.url()+'account/register_local', {'username': username, 'password': password})
 		registerRequest.success(function(data, status, headers, config) {
 			console.log('register request done');
 		});
@@ -19,7 +19,7 @@ var LoginService = function($http, kusemaConfig) {
 		});
 	};
 	LoginService.prototype.login = function(username, password) {
-		var loginRequest = this.$http.post(this.kusemaConfig.url()+'account/login', {'username': username, 'password': password})
+		var loginRequest = this.$http.post(this.kusemaConfig.url()+'account/login_local', {'username': username, 'password': password})
 		loginRequest.success(function(data, status, headers, config) {
 			console.log('login request done');
 			this.username = username;

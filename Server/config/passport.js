@@ -25,9 +25,10 @@ module.exports = function(passport) {
         },
         function(req, username, password, done) {
             
+            console.log('registering1');
             // User.findOne wont fire unless data is sent back
             process.nextTick(function() {
-
+                console.log('registering2');
                 // Check if user already exits
                 User.findOne({ 'local.username' :  username }, function(err, user) {
                     if (err)
@@ -58,7 +59,7 @@ module.exports = function(passport) {
         // callback with username and password from client side form
         function(req, username, password, done) {
 
-            User.findOne({ 'local.username' :  username }, function(err, user) {
+            User.findOne({ 'username' :  username }, function(err, user) {
                 if (err)
                     return done(err);
                 if (!user)
