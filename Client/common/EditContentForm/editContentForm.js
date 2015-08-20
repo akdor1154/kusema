@@ -4,7 +4,6 @@ var editContentFormDirective = function() {
 				action: '='
 			},
 			templateUrl: 'common/EditContentForm/editContentFormTemplate.html',
-			replace: true,
 			controller: 'editContentFormController',
 			controllerAs: 'c'
 		};
