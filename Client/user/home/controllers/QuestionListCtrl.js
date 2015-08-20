@@ -47,6 +47,8 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 			clickOutsideToClose: true
 		}).then( function(answer) {
 			console.log('yay');
+		}, function(error) {
+			console.log('umm');
 		});
 	}
 

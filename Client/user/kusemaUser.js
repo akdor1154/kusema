@@ -1,13 +1,13 @@
 var KusemaUserConfig = function($stateProvider) {
 	$stateProvider
 		.state('user.home', {
-		    url: '^',
+		    url: '',
 		    templateUrl: 'user/home/home.html',
 		    controller: 'QuestionListController',
 		    controllerAs: 'c'
 		})
 		.state('user.question', {
-			url: '^/question/:id',
+			url: '/question/:id',
 			templateUrl: 'user/question/question.html',
 			controller: 'QuestionController',
 			controllerAs: 'c'

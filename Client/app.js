@@ -8,7 +8,7 @@ var kusema = angular.module('kusema', [
 'kusema.user'
 ]);
 
-kusema.config(function($stateProvider, $httpProvider, $mdThemingProvider) {
+kusema.config(function($stateProvider, $urlRouterProvider, $httpProvider, $mdThemingProvider) {
   $mdThemingProvider.theme('default')
     .primaryPalette('deep-purple')
     .accentPalette('pink')
@@ -23,9 +23,14 @@ kusema.config(function($stateProvider, $httpProvider, $mdThemingProvider) {
   /* Direct urls */
   $stateProvider
     .state('user', {
-      template: '<kusema-user></kusema-user>'
+      template: '<kusema-user></kusema-user>',
+      abstract: true,
+      url: '/kusema'
     });
 
+  $urlRouterProvider
+    .when('','/kusema')
+    .when('/','/kusema');
 
   /*
   .state('/question/:id', {
