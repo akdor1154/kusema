@@ -3,7 +3,7 @@ var questionPreviewDirective = function() {
 			scope: {
 				'question': '='
 			},
-			templateUrl: 'common/QuestionPreview/questionPreviewTemplate.html',
+			templateUrl: 'common/components/QuestionPreview/questionPreviewTemplate.html',
 			controller: 'kusemaQuestionPreviewController',
 			controllerAs: 'c'
 		};

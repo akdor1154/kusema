@@ -2,15 +2,11 @@ var KusemaUserConfig = function($stateProvider) {
 	$stateProvider
 		.state('user.home', {
 		    url: '',
-		    templateUrl: 'user/home/home.html',
-		    controller: 'QuestionListController',
-		    controllerAs: 'c'
+		    template: '<kusema-question-list></kusema-question-list>'
 		})
 		.state('user.question', {
 			url: '/question/:id',
-			templateUrl: 'user/question/question.html',
-			controller: 'QuestionController',
-			controllerAs: 'c'
+			template: '<kusema-question-full></kusema-question-full>'
 		});
 }
 
@@ -31,7 +27,10 @@ var KusemaUserController = function($scope) {
 	return this;
 }
 
-angular.module('kusema.user', [])
+angular.module('kusema.user', [
+			'kusema.user.questionList',
+			'kusema.user.questionFull'
+		])
 	   .config(KusemaUserConfig)
 	   .directive('kusemaUser', KusemaUserDirective)
 	   .controller('kusemaUserController', KusemaUserController);

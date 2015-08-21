@@ -1,7 +1,7 @@
 var userMenuDirective = function() {
 		return {
 			scope: {},
-			templateUrl: 'common/UserMenu/userMenuTemplate.html',
+			templateUrl: 'common/components/UserMenu/userMenuTemplate.html',
 			replace: true,
 			controller: 'kusemaUserMenuController',
 			controllerAs: 'c'

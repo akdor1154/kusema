@@ -1,7 +1,17 @@
 'use strict';
 
+var QuestionFullDirective = function() {
+	return {
+		scope: {
+			'question':'='
+		},
+		templateUrl: 'user/questionFull/questionFullTemplate.html',
+		controller: 'questionFullController',
+		controllerAs: 'c'
+	};
+};
 
-var QuestionController = function($stateParams, questionFactory, commentFactory) {
+var QuestionFullController = function($stateParams, questionFactory, commentFactory) {
 
 		this.id = $stateParams.id;
 		this.question = null;
@@ -18,13 +28,13 @@ var QuestionController = function($stateParams, questionFactory, commentFactory)
 					this.initializeEditQuestionForm();
 			}.bind(this));
 	}
-	QuestionController.prototype.initializeEditQuestionForm = function() {
+	QuestionFullController.prototype.initializeEditQuestionForm = function() {
 		this.editingQuestion = {
 			'title': this.question.title,
 			'message': this.question.message
 		};
 	}
-	QuestionController.prototype.editQuestion = function() {
+	QuestionFullController.prototype.editQuestion = function() {
 		this.questionEditorSubmitted = true;
 		this.questionFactory.updateQuestion(this.id, this.editingQuestion)
 			.success(function(data) {
@@ -39,12 +49,15 @@ var QuestionController = function($stateParams, questionFactory, commentFactory)
 			}.bind(this));
 
 	}
-	QuestionController.prototype.toggleEditor = function() {
+	QuestionFullController.prototype.toggleEditor = function() {
 		this.questionEditorOpen = !this.questionEditorOpen;
 	}
 
 //} QuestionController
-kusema.controller('QuestionController', ['$stateParams', 'questionFactory', 'commentFactory', QuestionController]);
+
+angular.module('kusema.user.questionFull', ['kusema'])
+      .directive('kusemaQuestionFull', QuestionFullDirective)
+	  .controller('questionFullController', ['$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
 
 
 /*

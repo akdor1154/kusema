@@ -3,7 +3,7 @@ var editContentFormDirective = function() {
 			scope: {
 				action: '='
 			},
-			templateUrl: 'common/EditContentForm/editContentFormTemplate.html',
+			templateUrl: 'common/components/EditContentForm/editContentFormTemplate.html',
 			controller: 'editContentFormController',
 			controllerAs: 'c'
 		};
