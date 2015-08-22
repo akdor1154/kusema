@@ -27,10 +27,7 @@ var KusemaUserController = function($scope) {
 	return this;
 }
 
-angular.module('kusema.user', [
-			'kusema.user.questionList',
-			'kusema.user.questionFull'
-		])
+kusema.addModule('kusema.user')
 	   .config(KusemaUserConfig)
 	   .directive('kusemaUser', KusemaUserDirective)
 	   .controller('kusemaUserController', KusemaUserController);

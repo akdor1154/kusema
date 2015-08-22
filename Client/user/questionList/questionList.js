@@ -60,10 +60,6 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 		});
 	}
 
-var module = angular.module('kusema.user.questionList', ['ngMaterial', 'kusema'] )
-	   .directive('kusemaQuestionList', QuestionListDirective)
-	   .controller('questionListController', ['questionFactory', '$mdDialog', QuestionListController]);
-
 
 var AddQuestionDialogController = function($scope) {
 	$scope.$on('EDIT_CONTENT_FORM_SUBMITTED', function (e, message) {
@@ -71,4 +67,8 @@ var AddQuestionDialogController = function($scope) {
 	});
 	return this;
 }
-module.controller( 'AddQuestionDialogController', ['$scope', AddQuestionDialogController ] );
+
+kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
+	  .directive('kusemaQuestionList', QuestionListDirective)
+	  .controller('questionListController', ['questionFactory', '$mdDialog', QuestionListController])
+	  .controller( 'AddQuestionDialogController', ['$scope', AddQuestionDialogController ] );

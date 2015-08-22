@@ -55,7 +55,7 @@ var QuestionFullController = function($stateParams, questionFactory, commentFact
 
 //} QuestionController
 
-angular.module('kusema.user.questionFull', ['kusema'])
+kusema.addModule('kusema.user.questionFull')
       .directive('kusemaQuestionFull', QuestionFullDirective)
 	  .controller('questionFullController', ['$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
 

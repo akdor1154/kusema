@@ -15,6 +15,6 @@ var questionPreviewController = function($scope) {
 		return this;
 	}
 	
-angular.module('kusema.questionPreview', [])
+kusema.addModule('kusema.components.questionPreview')
 		.directive('kusemaQuestionPreview', questionPreviewDirective)
 		.controller('kusemaQuestionPreviewController', questionPreviewController);
