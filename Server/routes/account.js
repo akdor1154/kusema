@@ -32,12 +32,22 @@ module.exports = function (passport) {
 		}
 	);
 
-    router.get('/logout',
+    router.all('/logout',
     	function (req, res) {
      	    req.logout();
         	res.json(true);
     	}
     );
+
+    router.get('/is_logged_in',
+    	function(req, res) {
+    		if (!req.user) {
+    			return res.json(null);
+    		} else {
+    			return res.json(req.user);
+    		}
+    	}
+	);
 
 
 	return router;

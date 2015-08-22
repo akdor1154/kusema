@@ -1,0 +1,16 @@
+<md-menu-item><md-button>Login with Authcate</md-button></md-menu-item>
+<md-menu-divider></md-menu-divider>
+<form style="padding: 0.5em">
+<md-input-container>
+	<label>Username</label>
+	<input name="username" ng-model="c.data.username"/>
+</md-input-container>
+<md-input-container>
+	<label>Password</label>
+	<input type="password" name="password" ng-model="c.data.password"/>
+</md-input-container>
+<div style="display: flex; flex-direction: row;">
+<md-menu-item><md-button type="submit" ng-click="c.login()">Login Local</md-button></md-menu-item>
+<md-menu-item><md-button type="submit" ng-click="c.register()">Register Local</md-button></md-menu-item>
+</div>
+</form>
