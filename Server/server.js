@@ -64,6 +64,11 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(express.static(here('../Client')));
 
+app.all('/kusema(/*)?', function(req, res) {
+  console.log('catchall')
+  res.sendfile(here('../Client/index.html'));
+});
+
 // add convenience function to autoJSON a mongoose object, probably better places to do it
 
 app.use(function(req, res, next) {
