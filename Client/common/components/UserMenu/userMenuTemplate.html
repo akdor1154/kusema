@@ -1,14 +1,21 @@
 <md-menu>
 	<md-button aria-label="Settings" ng-click="c.openMenu($mdOpenMenu, $event)">
-		<ng-switch on="loggedIn">
-			<span ng-switch-when="true">Logged in as {{c.user}}</span>
-			<span ng-switch-default>Not logged in</span>
-		</ng-switch>
+		<span
+			ng-if="c.loginData.loginState == 1"
+			ng-bind="c.loginData.user.username"
+			style="text-transform: none"></span>
+		<span ng-if="c.loginData.loginState == 0">Not logged in</span>
+		<span ng-if="c.loginData.loginState == -1">Logging in...</span>
+		<span ng-if="c.loginData.loginState == -2">Logging out...</span>
 		<md-icon md-font-library="material-icons">account_circle</md-icon>
 	</md-button>
 	<md-menu-content width="4">
-		<ng-switch on="loggedIn">
-			<kusema-user-menu-logged-in ng-switch-when="true"></kusema-user-menu-logged-in>
-			<kusema-user-menu-not-logged-in ng-switch-default></kusema-user-menu-not-logged-in>
+			<kusema-user-menu-logged-in
+				ng-if="c.loginData.loginState == 1"
+			></kusema-user-menu-logged-in>
+			<kusema-user-menu-not-logged-in
+				ng-if="c.loginData.loginState == 0"
+			></kusema-user-menu-not-logged-in>
+			<md-menu-item ng-if="c.loginData.loginState < 0"><md-button>Wait...</md-button></md-menu-item>
 	</md-menu-content>
 </md-menu>
