@@ -1,0 +1,1 @@
+kusema.addModule('kusema.components', [], false);

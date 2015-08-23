@@ -1,7 +1,7 @@
 var userMenuDirective = function() {
 		return {
 			scope: {},
-			templateUrl: 'common/UserMenu/userMenuTemplate.html',
+			templateUrl: 'common/components/UserMenu/userMenuTemplate.html',
 			replace: true,
 			controller: 'kusemaUserMenuController',
 			controllerAs: 'c'
@@ -27,7 +27,6 @@ var userMenuController = function($scope, loginService) {
 		this.loginService.register(this.data.username, this.data.password);
 		this.loginService.login(this.data.username, this.data.password);
 	}
-
-angular.module('kusema.userMenu', [])
+kusema.addModule('kusema.components.userMenu')
 		.directive('kusemaUserMenu', userMenuDirective)
 		.controller('kusemaUserMenuController', ['$scope', 'loginService', userMenuController]);

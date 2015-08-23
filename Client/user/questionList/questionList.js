@@ -26,6 +26,17 @@
 
 //kusema.controller('SearchController', SearchController);
 
+var QuestionListDirective = function() {
+	return {
+		scope: {
+			'group': '='
+		},
+		templateUrl: 'user/questionList/questionListTemplate.html',
+		controller: 'questionListController',
+		controllerAs: 'c'
+	};
+}
+
 var QuestionListController = function(questionFactory, $mdDialog) {
 		this.allowMoreRequests = true;
 		this.writerOpen = false;
@@ -49,8 +60,6 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 		});
 	}
 
-kusema.controller( 'QuestionListController', ['questionFactory', '$mdDialog', QuestionListController ] );
-
 
 var AddQuestionDialogController = function($scope) {
 	$scope.$on('EDIT_CONTENT_FORM_SUBMITTED', function (e, message) {
@@ -58,4 +67,8 @@ var AddQuestionDialogController = function($scope) {
 	});
 	return this;
 }
-kusema.controller( 'AddQuestionDialogController', ['$scope', AddQuestionDialogController ] );
+
+kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
+	  .directive('kusemaQuestionList', QuestionListDirective)
+	  .controller('questionListController', ['questionFactory', '$mdDialog', QuestionListController])
+	  .controller( 'AddQuestionDialogController', ['$scope', AddQuestionDialogController ] );
