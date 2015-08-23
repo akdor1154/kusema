@@ -1,9 +1,12 @@
 'use strict';
 
-var LoginService = function($http, kusemaConfig) {
+var LoginService = function($http, $rootScope, kusemaConfig) {
+		this.$rootScope = $rootScope;
 		this.$http = $http;
 		this.kusemaConfig = kusemaConfig;
 		this.username = null;
+		this.loggedIn = false;
+		this.checkLogin();
 		return this;
 	}
 	LoginService.prototype = Object.create(Object.prototype, {
@@ -23,12 +26,42 @@ var LoginService = function($http, kusemaConfig) {
 		loginRequest.success(function(data, status, headers, config) {
 			console.log('login request done');
 			this.username = username;
+			this.checkLogin();
 			//TODO: signal we have logged in to any controllers that want to know
 		}.bind(this));
 		loginRequest.error(function(data, status, headers, config) {
 			console.log('login error');
 		});
 	};
+	LoginService.prototype.logout = function() {
+		var logoutRequest = this.$http.post(this.kusemaConfig.url()+'account/logout');
+		logoutRequest.then(
+			function(response) {
+				console.log('logout done');
+				this.checkLogin();
+			}.bind(this),
+			function(error) {
+				console.error('logout error'+error.message);
+			}.bind(this)
+		);
+	}
+	LoginService.prototype.isLoggedIn = function() {
+		return this.loggedIn;
+	}
+	LoginService.prototype.checkLogin = function() {
+		var checkRequest = this.$http.get(this.kusemaConfig.url()+'account/is_logged_in');
+		checkRequest.then(function(response) {
+			if (response.data) {
+				this.loggedIn = true;
+				console.log('we\'re in!');
+			} else {
+				this.loggedIn = false;
+				console.log('we\'re out!');
+
+			}
+			this.$rootScope.$broadcast('loginChanged');
+		}.bind(this));
+	}
 //} loginService
 
-kusema.service('loginService', ['$http', 'kusemaConfig', LoginService]);
+kusema.service('loginService', ['$http', '$rootScope', 'kusemaConfig', LoginService]);
