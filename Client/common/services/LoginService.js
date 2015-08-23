@@ -4,8 +4,10 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 		this.$rootScope = $rootScope;
 		this.$http = $http;
 		this.kusemaConfig = kusemaConfig;
-		this.username = null;
-		this.loggedIn = false;
+		this.bindables = {
+			loginState: 0,
+			user: null,
+		};
 		this.checkLogin();
 		return this;
 	}
@@ -23,9 +25,9 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 	};
 	LoginService.prototype.login = function(username, password) {
 		var loginRequest = this.$http.post(this.kusemaConfig.url()+'account/login_local', {'username': username, 'password': password})
+		this.bindables.loginState = -1;
 		loginRequest.success(function(data, status, headers, config) {
 			console.log('login request done');
-			this.username = username;
 			this.checkLogin();
 			//TODO: signal we have logged in to any controllers that want to know
 		}.bind(this));
@@ -35,6 +37,7 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 	};
 	LoginService.prototype.logout = function() {
 		var logoutRequest = this.$http.post(this.kusemaConfig.url()+'account/logout');
+		this.bindables.loginState = -2;
 		logoutRequest.then(
 			function(response) {
 				console.log('logout done');
@@ -52,13 +55,13 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 		var checkRequest = this.$http.get(this.kusemaConfig.url()+'account/is_logged_in');
 		checkRequest.then(function(response) {
 			if (response.data) {
-				this.loggedIn = true;
+				this.bindables.loginState = 1;
 				console.log('we\'re in!');
 			} else {
-				this.loggedIn = false;
+				this.bindables.loginState = 0;
 				console.log('we\'re out!');
-
 			}
+			this.bindables.user = response.data;
 			this.$rootScope.$broadcast('loginChanged');
 		}.bind(this));
 	}

@@ -13,10 +13,7 @@ var userMenuController = function($scope, loginService) {
 		this.$scope = $scope;
 		this.originalEvent = null;
 		this.loginService = loginService;
-		$scope.$on('loginChanged', function(event) {
-			console.log('got login');
-			$scope.loggedIn = loginService.isLoggedIn() ? "true" : "false";
-		});
+		this.loginData = loginService.bindables;
 		return this;
 	}
 	userMenuController.prototype.openMenu = function(openMenuFunction, event) {
