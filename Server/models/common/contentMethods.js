@@ -6,6 +6,7 @@ var mongoose		= require('mongoose');
 var media           = require('./media');
 var ObjectId 		= require('mongoose').Schema.Types.ObjectId;
 
+var autoPopulate 	= require('mongoose-autopopulate');
 module.exports.upVote = function (contentId, userId, cb) {
 	return this.update({'_id': contentId},
 		{
@@ -44,7 +45,7 @@ function BaseContentSchema() {
 	mongoose.Schema.apply(this, arguments);
 
 	this.add({
-	    author:         { type: ObjectId, ref: 'User', required: true },
+	    author:         { type: ObjectId, ref: 'User', required: true, autopopulate: {select: 'username'} },
 	    authorName:     { type: String, required: false }, 
 	    anonymous:      { type: Boolean, default: false },
 	    message:        { type: String, required: true },
