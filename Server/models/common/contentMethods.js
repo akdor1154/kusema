@@ -53,6 +53,7 @@ function BaseContentSchema() {
 		images:         [{ type: media.imageModel }],
 	    videos:         [{ type: media.videoModel }],
 	    code:           [{ type: media.codeModel }],
+	    comments: 		{ type: Array, schema: ObjectId, ref: 'Comment', autopopulate: {select: 'author message'}},
 		
 	    dateCreated:    { type: Date, default: Date.now },
 	    dateModified:   { type: Date, default: null },
@@ -66,6 +67,7 @@ function BaseContentSchema() {
 	this.statics.downVote = module.exports.downVote;
 	this.statics.delete = module.exports.delete;
 
+	this.plugin(autoPopulate);
 }
 util.inherits(BaseContentSchema, mongoose.Schema);
 
