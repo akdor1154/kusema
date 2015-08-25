@@ -10,6 +10,8 @@ var kusema = angular.module('kusema', [
 'kusema.components'
 ]);
 
+kusema.models = {};
+
 kusema.config(function (
                 $stateProvider,
                 $urlRouterProvider,
@@ -40,6 +42,7 @@ kusema.config(function (
   $urlRouterProvider
     .when('','/kusema')
     .when('/','/kusema');
+
 
   /*
   .state('/question/:id', {
