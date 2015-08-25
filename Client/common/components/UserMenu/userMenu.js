@@ -1,8 +1,5 @@
 var userMenuDirective = function() {
 		return {
-			scope: {
-				'loggedIn': '=',
-			},
 			templateUrl: 'common/components/UserMenu/userMenuTemplate.html',
 			controller: 'kusemaUserMenuController',
 			controllerAs: 'c'
