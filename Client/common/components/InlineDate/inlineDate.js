@@ -13,6 +13,7 @@ var inlineDateDirective = function() {
 	};
 //}
 var inlineDateController = function($scope) {
+		this.date = new Date();
 		return this;
 	}
 	inlineDateController.prototype.format = function($scope) {

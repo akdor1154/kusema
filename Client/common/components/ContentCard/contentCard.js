@@ -13,13 +13,41 @@ var contentCardDirective = function() {
 		};
 	};
 //}
-var contentCardController = function($scope, commentFactory, loginService) {
+var contentCardController = function($scope, commentFactory, loginService, socketService) {
 		this.loginData = loginService.bindables;
 		this.commentFactory = commentFactory;
+		this.socketService = socketService;
+		this._content = null;
 		this.writingComment = false;
 		this.submittingComment = false;
 		this.newComment = ""
+		this.subscription = null;
+		$scope.$on('$destroy', this.destroy.bind(this));
+
 		return this;
+	}
+	contentCardController.prototype = Object.create(Object.prototype, {
+		'content': {
+			get: function() {return this._content},
+			set: function(newContent) {
+				if (! (newContent instanceof kusema.models.BaseContent)) {
+					return;
+				}
+				var oldContent = this._content;
+				this._content = newContent;
+				if (this.subscription) this.subscription.cancel();
+				if (this.commentFactory) {
+					this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
+				}
+			}
+		}
+	});
+	contentCardController.prototype.commentsChanged = function(newComments) {
+		console.log(newComments);
+		this.content.comments = newComments;
+	}
+	contentCardController.prototype.destroy = function() {
+		this.socketService.unwatchContent(this.content);
 	}
 	contentCardController.prototype.writeComment = function() {
 		this.writingComment = true;
@@ -37,7 +65,9 @@ var contentCardController = function($scope, commentFactory, loginService) {
 		this.writingComment = false;
 		this.newCommment = "";
 	}
+	contentCardController.prototype.onContentChanged = function(newContent, oldContent) {
+	}
 	
 kusema.addModule('kusema.components.contentCard')
 		.directive('kusemaContentCard', contentCardDirective)
-		.controller('kusemaContentCardController', ['$scope', 'commentFactory', 'loginService', contentCardController]);
+		.controller('kusemaContentCardController', ['$scope', 'commentFactory', 'loginService', 'socketFactory', contentCardController]);
