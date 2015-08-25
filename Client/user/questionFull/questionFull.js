@@ -2,19 +2,20 @@
 
 var QuestionFullDirective = function() {
 	return {
-		scope: {
-			'question':'='
-		},
+		scope: {},
 		templateUrl: 'user/questionFull/questionFullTemplate.html',
 		controller: 'questionFullController',
 		controllerAs: 'c'
 	};
 };
 
-var QuestionFullController = function($stateParams, questionFactory, commentFactory) {
+var QuestionFullController = function($scope, $stateParams, questionFactory, commentFactory) {
+
+		this.$scope = $scope;
 
 		this.id = $stateParams.id;
-		this.question = null;
+		this.question = $scope.question;
+
 		this.editingQuestion;
 		this.questionFactory = questionFactory;
 		this.commentFactory = commentFactory;
@@ -23,8 +24,9 @@ var QuestionFullController = function($stateParams, questionFactory, commentFact
 		this.questionEditorSubmitted = false;
 
 		this.questionFactory.getQuestionById(this.id)
-			.success(function(data) {
-					this.question = questionFactory.createQuestion(data);
+			.then(function(question) {
+					console.log('gotcha');
+					this.question = question;
 					this.initializeEditQuestionForm();
 			}.bind(this));
 	}
@@ -37,12 +39,12 @@ var QuestionFullController = function($stateParams, questionFactory, commentFact
 	QuestionFullController.prototype.editQuestion = function() {
 		this.questionEditorSubmitted = true;
 		this.questionFactory.updateQuestion(this.id, this.editingQuestion)
-			.success(function(data) {
+			.then(function(data) {
 				this.questionEditorOpen = false;
 				this.questionEditorSubmitted = false;
 				//TODO: get a push message from server that this question has been updated
 				this.questionFactory.getQuestionById(this.id)
-					.success( function(data) {
+					.then( function(data) {
 							this.question = this.questionFactory.createQuestion(data);
 							this.initializeEditQuestionForm();
 					}.bind(this));
@@ -57,7 +59,7 @@ var QuestionFullController = function($stateParams, questionFactory, commentFact
 
 kusema.addModule('kusema.user.questionFull')
       .directive('kusemaQuestionFull', QuestionFullDirective)
-	  .controller('questionFullController', ['$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
+	  .controller('questionFullController', ['$scope', '$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
 
 
 /*

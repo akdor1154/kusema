@@ -6,8 +6,8 @@ var QuestionDataPrototype = Object.create(Object.prototype, {
     author: { writable: true, value: 0, enumerable: true }, //TODO add object ID requirement here
     authorName: { writable: true, value: "", enumerable: true},
     message: { writable: true, value: 0, enumerable: true },
-    dateCreated: { writable: true, value: 0, enumerable: true },
-    dateModified: { writable: true, value: 0, enumerable: true },
+    dateCreated: { writable: true, value: null, enumerable: true },
+    dateModified: { writable: true, value: null, enumerable: true },
     upVotes: { writable: true, value: 0, enumerable: true },
     downVotes: { writable: true, value: 0, enumerable: true},
     videoUrl: { writable: true, value: 0, enumerable: true},
@@ -24,6 +24,8 @@ var Question = function(questionJSON, questionFactory) {
                 this[property] = questionJSON[property];
             }
         }
+        this.dateCreated = new Date(this.dateCreated);
+        this.dateModified = new Date(this.dateModified);
         return this;
     }
     Question.prototype = Object.create(QuestionDataPrototype, {
@@ -57,11 +59,21 @@ kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kus
     };
 
     questionFactory.getNextTenQuestions = function (requestNumber) {
-        return $http.get(urlBase + '/tenMore/' + requestNumber);
+        return $http.get(urlBase + '/tenMore/' + requestNumber)
+                    .then(function(response) {
+                        return response.data.map(
+                            function(questionJSON) {
+                                return this.createQuestion(questionJSON)
+                            }.bind(this)
+                        );
+                    }.bind(this));
     };
 
     questionFactory.getQuestionById = function (id) {
-        return $http.get(urlBase + '/' + id);
+        return $http.get(urlBase + '/' + id)
+                    .then(function(response) {
+                        return this.createQuestion(response.data);
+                    }.bind(this));
     };
 
     questionFactory.addQuestion = function (question) {
@@ -95,8 +107,8 @@ kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kus
       add: function(responseJSON) {
         this.questionsList.push(questionFactory.createQuestion(responseJSON));
       },
-      addQuestions: function(responseJSON) {
-        this.questionsList = responseJSON.map(function(questionJSON) { return questionFactory.createQuestion(questionJSON)});
+      addQuestions: function(questions) {
+        this.questionsList = questions;
       },
       delete: function(id) {
         var questionIndex = this.getIndexOf(id);
@@ -116,13 +128,13 @@ kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kus
 
     // Populate the questionList
     questionFactory.getNextTenQuestions(0)
-    .success(function (quest) {
-      questionFactory.questions.addQuestions(quest);
-    })
-    .error(function (error) {
-      console.log('Unable to load questions: ' + error + error.message);
-    });
-
-
+    .then(
+        function (quest) {
+            questionFactory.questions.addQuestions(quest);
+        },
+        function (error) {
+            console.error('Unable to load questions: ' + error + error.message);
+        }
+    );
     return questionFactory;
 }])
