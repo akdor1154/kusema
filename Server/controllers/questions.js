@@ -1,17 +1,19 @@
+'use strict';
+
 var Question = require('../models/question');
 
 var exp = module.exports;
 
 exp.findByQuestionId = function (req, res, next) {
-  var getQuestion = Question.findOne(
-    { '_id': req.params.questionId }
-  )
-  .exec();
-
-  getQuestion.addBack( function (err, question) {
-    if (err) return next(err);
-    res.mjson(question);
-  });
+  Question.findById(req.params.questionId)
+  .then(
+      function(result) {
+        return res.mjson(result);
+      },
+      function(error) {
+        return next(error)
+      }
+  );
 };
 
 exp.nextTenQuestions = function (req, res, next) {
