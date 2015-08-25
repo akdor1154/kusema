@@ -4,6 +4,7 @@ var kusema = angular.module('kusema', [
 'ngAnimate',
 'ngMaterial',
 'ui.router',
+'door3.css',
 'kusema.config',
 'kusema.user',
 'kusema.components'
