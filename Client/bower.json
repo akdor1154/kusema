@@ -9,6 +9,7 @@
     "angular-route": null,
     "angular-animate": null,
     "angular-material": "~0.10.1",
+    "angular-css": null,
     "ui-router": "~0.2.15"
   },
   "devDependencies": {
