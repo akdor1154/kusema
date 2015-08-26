@@ -7,7 +7,7 @@ var needsLoginDirective = function() {
 	};
 	return {
 		bindToController: {
-			needsUserId: '&',
+			needsUserId: '@',
 		},
 		scope: {},
 		restrict: 'A',
