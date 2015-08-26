@@ -23,6 +23,14 @@ kusema-content-card .addCommentContainer {
 
 }
 
+kusema-content-card md-card-footer {
+	display: flex;
+	align-items: center;
+}
+kusema-content-card .footer-contents {
+	flex-grow: 1;
+}
+
 kusema-content-card .commentForm {
 	display: flex;
 	align-items: center;
