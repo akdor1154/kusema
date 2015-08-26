@@ -49,7 +49,6 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 	QuestionListController.prototype.showWriter = function(e) {
 		console.log('asdf');
 		this.$mdDialog.show({
-			controller: 'AddQuestionDialogController',
 			template: document.getElementById('addQuestionDialog').innerHTML,
 			targetEvent: e,
 			clickOutsideToClose: true
@@ -59,16 +58,10 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 			console.log('umm');
 		});
 	}
-
-
-var AddQuestionDialogController = function($scope) {
-	$scope.$on('EDIT_CONTENT_FORM_SUBMITTED', function (e, message) {
-		console.log('BED TIME!');
-	});
-	return this;
-}
+	QuestionListController.prototype.hideWriter = function() {
+		this.$mdDialog.hide();
+	}
 
 kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
 	  .directive('kusemaQuestionList', QuestionListDirective)
 	  .controller('questionListController', ['questionFactory', '$mdDialog', QuestionListController])
-	  .controller( 'AddQuestionDialogController', ['$scope', AddQuestionDialogController ] );

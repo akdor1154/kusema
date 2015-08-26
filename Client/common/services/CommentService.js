@@ -49,27 +49,26 @@ var CommentFactory = function($http, socketFactory, kusemaConfig) {
         return this.$http.get(this.urlBase + '/' + id);
     };
 
-    CommentFactory.prototype.addComment = function (id, comment) {
-        this.socketFactory.emit('message sent', comment.message);
-        return this.$http.post(this.urlBase + '/' + id, comment);
+    CommentFactory.prototype.add = function (comment) {
+        return this.$http.post(this.urlBase + '/' + comment.parent, comment);
     };
 
     // TODO
-    CommentFactory.prototype.updateComment = function (id, editedComment) {
+    CommentFactory.prototype.update = function (id, editedComment) {
         return this.$http.put(this.urlBase + '/' + id, editedComment);
     };
 
     // TODO
-    CommentFactory.prototype.upVoteComment = function (id) {
+    CommentFactory.prototype.upVote = function (id) {
       return this.$http.put(this.urlBase + '/upvote/' + id);
     };
 
     // TODO
-    CommentFactory.prototype.downVoteComment = function (id) {
+    CommentFactory.prototype.downVote = function (id) {
       return this.$http.put(this.urlBase + '/dnvote/' + id);
     };
 
-    CommentFactory.prototype.deleteComment = function (commentId) {
+    CommentFactory.prototype.delete = function (commentId) {
         return this.$http.delete(this.urlBase + '/' + commentId);
     };
 
@@ -77,7 +76,7 @@ var CommentFactory = function($http, socketFactory, kusemaConfig) {
         return responseJSON.map(this.createComment.bind(this));
     }
 
-    CommentFactory.prototype.createComment = function(responseJSON) {
+    CommentFactory.prototype.createClientModel = function(responseJSON) {
         return new Comment(responseJSON, this);
     }
 

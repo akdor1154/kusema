@@ -5,6 +5,7 @@ var editContentFormDirective = function() {
                 onCancel: '&',
                 onSubmit: '&',
                 content: '=',
+                contentType: '@',
             },
             templateUrl: 'common/components/EditContentForm/editContentFormTemplate.html',
             controller: 'editContentFormController',
@@ -13,9 +14,10 @@ var editContentFormDirective = function() {
     };
 //}
 
-var editContentFormController = function($scope, questionFactory) {
+var editContentFormController = function($scope, baseContentService) {
         this.$scope = $scope;
-        this.questionFactory = questionFactory;
+        this.contentType = $scope.contentType || $scope.content;
+        this.contentService = baseContentService.getService(this.contentType);
         this.saveText = 'asdf'
         this.content = {
             title: '',
@@ -40,10 +42,9 @@ var editContentFormController = function($scope, questionFactory) {
     editContentFormController.prototype.save = function() {
         var promise = this.saveFunction()
                         .then(
-                            function (response) {
+                            function (newContent) {
                                 console.log('add succeeded');
                                 if (this.$scope.onSubmit) {
-                                    var newContent = this.$scope.content.factory.createQuestion(response.data);
                                     this.$scope.onSubmit({'newContent': newContent});
                                 }
                             }.bind(this),
@@ -56,12 +57,14 @@ var editContentFormController = function($scope, questionFactory) {
 
     editContentFormController.prototype.edit = function() {
         console.log('edited');
-        return this.questionFactory.updateQuestion(this.content._id, this.content)
+        return this.$scope.content.update(this.content)
     }
 
     editContentFormController.prototype.add = function() {
         console.log('add attempted');
-        return this.questionFactory.addQuestion(this.content)
+        return this.contentService
+                    .add(this.content)
+                    .then(this.contentService.createClientModel(this));
     }
 
 
@@ -69,4 +72,4 @@ var editContentFormController = function($scope, questionFactory) {
 
 kusema.addModule('kusema.components.editContent')
     .directive('kusemaEditContentForm', editContentFormDirective)
-    .controller('editContentFormController', editContentFormController);
+    .controller('editContentFormController', ['$scope', 'baseContentService', editContentFormController]);

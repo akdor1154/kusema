@@ -9,6 +9,10 @@
 
 <template id="addQuestionDialog">
 <md-dialog><md-dialog-content>
-<kusema-edit-content-form></kusema-edit-content-form>
+<kusema-edit-content-form
+	on-cancel="c.hideWriter()"
+	on-submit="c.hideWriter()"
+	content-type="Question"
+></kusema-edit-content-form>
 </md-dialog-content></md-dialog>
 </template>

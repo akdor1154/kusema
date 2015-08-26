@@ -80,7 +80,7 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 	}
 	contentCardController.prototype.editingSubmitted = function(newContent) {
 		this.finishEditingContent();
-		this.content = newContent;
+		//this.content = newContent;
 	}
 
 	
