@@ -3,7 +3,7 @@
 var inlineDateDirective = function() {
 		return {
 			bindToController: {
-				'date': '='
+				'date': '&'
 			},
 			scope: {},
 			templateUrl: 'common/components/InlineDate/inlineDate.html',
@@ -17,7 +17,11 @@ var inlineDateController = function($scope) {
 		return this;
 	}
 	inlineDateController.prototype.format = function($scope) {
-		return this.date.toLocaleString();
+		if (this.date instanceof Date) {
+			return this.date.toLocaleString();
+		} else {
+			return '';
+		}
 	}
 
 	

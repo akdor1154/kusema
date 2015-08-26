@@ -17,6 +17,7 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 		this.loginData = loginService.bindables;
 		this.commentFactory = commentFactory;
 		this.socketService = socketService;
+		this.$scope = $scope;
 		this._content = null;
 		this.writingComment = false;
 		this.submittingComment = false;
@@ -31,6 +32,7 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 			get: function() {return this._content},
 			set: function(newContent) {
 				if (! (newContent instanceof kusema.models.BaseContent)) {
+					console.log('not proper content');
 					return;
 				}
 				var oldContent = this._content;
@@ -44,7 +46,10 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 	});
 	contentCardController.prototype.commentsChanged = function(newComments) {
 		console.log(newComments);
-		this.content.comments = newComments;
+		console.log('got new comments');
+		this.$scope.$apply(function() {
+			this.content.comments = newComments;
+		}.bind(this));
 	}
 	contentCardController.prototype.destroy = function() {
 		this.socketService.unwatchContent(this.content);
