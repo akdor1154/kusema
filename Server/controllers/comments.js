@@ -28,10 +28,9 @@ exp.findByQAId = function(req, res, next) {
 exp.addByQAId = function(req, res, next) {
 	var comment = new Comment();
 
-	comment.author = ref.user._id;
+	comment.author = req.user._id;
 	comment.message = req.body.message;
-	comment._questionId = new ObjectId(req.body.questionId);
-	comment._answerId = objectIdOrNull(req.body.answerId);
+	comment.parent = new ObjectId(req.params.parentId);
 
 	comment.save( function (err, comment) {
 		if (err) return next(err);

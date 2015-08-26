@@ -1,27 +1,35 @@
 'use strict';
 
-kusema.factory('socketFactory', ['$rootScope', 'kusemaConfig', function ($rootScope, kusemaConfig) {
+function contentId(content) {
+  var id = '';
+  if (!content) {
+    id = null;
+  } else if (content._id) {
+    id = content._id;
+  } else {
+    id = content;
+  }
+  return {'contentId': id};
+}
+
+function socketService(kusemaConfig) {
+  this.kusemaConfig = kusemaConfig;
+
   var socket = io.connect(kusemaConfig.url());
-    return {
-    
-    on: function (eventName, callback) {
-      socket.on(eventName, function () {
-        var args = arguments;
-        $rootScope.$apply(function () {
-          callback.apply(socket, args);
-        });
-      });
-    },
-    emit: function (eventName, data, callback) {
-      socket.emit(eventName, data, function () {
-        console.log('args -' + arguments);
-        var args = arguments;
-        $rootScope.$apply(function () {
-          if (callback) {
-            callback.apply(socket, args);
-          }
-        });
-      });
-    }
-  };
-}])
+  console.log('socketService called');
+
+  socket.watchContent = function(content) {
+    console.log('watching');
+    console.log(content);
+    return this.emit('watchContent', contentId(content));
+  }
+  socket.unwatchContent = function(content) {
+    console.log('unwatching');
+    console.log(content);
+    return this.emit('unwatchContent', contentId(content));
+  }
+
+  return socket;
+}
+
+kusema.factory('socketFactory', ['kusemaConfig', socketService]);

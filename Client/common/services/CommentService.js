@@ -1,97 +1,88 @@
 'use strict';
 
-var CommentDataPrototype = Object.create(Object.prototype, {
-    _id: {writable: true, value: 0, enumerable: true},
-    _questionId: {writable: true, value: 0, enumerable: true},
-    author: { writable: true, value: 0, enumerable: true }, //TODO add object ID requirement here
-    message: { writable: true, value: 0, enumerable: true },
-    dateCreated: { writable: true, value: 0, enumerable: true },
-    dateModified: { writable: true, value: 0, enumerable: true },
-    upVotes: { writable: true, value: 0, enumerable: true },
-    downVotes: { writable: true, value: 0, enumerable: true},
-})
+var Comment = kusema.models.Comment;
 
-//TODO: this is almost identical to Question in QuestionService, maybe we could use a mixin?
-var Comment = function(commentJSON, commentFactory) {
-        //we need this to be NON-ENUMERABLE, else we get a circular dependancy when JSON.stringifying. Unfortunately setting non-enumerable on the prototype's property is not enough :(
-        Object.defineProperty(this, 'cf', {writable:true, value:null, enumerable: false});
-        this.cf = commentFactory;
-        for (var property in CommentDataPrototype) {
-            if (commentJSON[property] !== undefined) {
-                this[property] = commentJSON[property];
-            }
-        }
+var CommentSubscription = function(socketFactory, commentFactory, baseContent, callback) {
+    this.callback = callback;
+    this.socketFactory = socketFactory;
+    this.commentFactory = commentFactory;
+    this.socketFactory.watchContent(baseContent);
+    this.socketFactory.on('contentChanged', this.contentChanged.bind(this));
+    return this;
+}
+CommentSubscription.prototype.contentChanged = function(newContent) {
+    console.log('got message');
+    if (newContent.comments) {
+        console.log('calling back');
+        this.callback(this.commentFactory.createComments(newContent.comments));
+    }
+}
+CommentSubscription.prototype.cancel = function() {
+    this.socketFactory.unwatchContent(baseContent);
+}
+
+
+var CommentFactory = function($http, socketFactory, kusemaConfig) {
+        this.urlBase = kusemaConfig.url()+'api/comments';
+        this.socketFactory = socketFactory;
+        this.$http = $http;
+
+        // commentFactory.questions = {
+        //   numberOfRequestsForQuestions: 1,
+        //   questionsList: []
+        // };
+
+        // // Populate the questionList
+        // commentFactory.getNextTenQuestions(0)
+        // .success(function (quest) {
+        //   commentFactory.questions.questionList = quest;
+        // })
+        // .error(function (error) {
+        //   console.log('Unable to load questions: ' + error.message);
+        // });
+
         return this;
     }
-    Comment.prototype = Object.create(CommentDataPrototype, {
-        cf: {writable: true, value: null, enumerable: false},
-        score: {get: function() {
-            return this.upVotes - this.downVotes;
-        }},
-    });
-    Comment.prototype.upVote = function() {
-        this.cf.upVoteComment(this._id);
-        this.upVotes++;       
-    }
-    Comment.prototype.downVote = function() {
-        this.cf.downVoteComment(this._id);
-        this.downVotes++;          
-    }
-    Comment.prototype.delete = function() {
-        this.cf.deleteComment(this._id);   
-    }
-//} Question
 
-kusema.factory('commentFactory', ['$http' , 'socketFactory', 'kusemaConfig', function($http, socketFactory, kusemaConfig) {
-    var commentFactory = {};
-    var urlBase = kusemaConfig.url()+'api/comments';
-
-    commentFactory.getComments = function (id) {
-        return $http.get(urlBase + '/' + id);
+    CommentFactory.prototype.getComments = function (id) {
+        return this.$http.get(this.urlBase + '/' + id);
     };
 
-    commentFactory.addComment = function (id, comment) {
-        socketFactory.emit('message sent', comment.message);
-        return $http.post(urlBase + '/' + id, comment);
+    CommentFactory.prototype.addComment = function (id, comment) {
+        this.socketFactory.emit('message sent', comment.message);
+        return this.$http.post(this.urlBase + '/' + id, comment);
     };
 
     // TODO
-    commentFactory.updateComment = function (id, editedComment) {
-        return $http.put(urlBase + '/' + id, editedComment);
+    CommentFactory.prototype.updateComment = function (id, editedComment) {
+        return this.$http.put(this.urlBase + '/' + id, editedComment);
     };
 
     // TODO
-    commentFactory.upVoteComment = function (id) {
-      return $http.put(urlBase + '/upvote/' + id);
+    CommentFactory.prototype.upVoteComment = function (id) {
+      return this.$http.put(this.urlBase + '/upvote/' + id);
     };
 
     // TODO
-    commentFactory.downVoteComment = function (id) {
-      return $http.put(urlBase + '/dnvote/' + id);
+    CommentFactory.prototype.downVoteComment = function (id) {
+      return this.$http.put(this.urlBase + '/dnvote/' + id);
     };
 
-    commentFactory.deleteComment = function (commentId) {
-        return $http.delete(urlBase + '/' + commentId);
+    CommentFactory.prototype.deleteComment = function (commentId) {
+        return this.$http.delete(this.urlBase + '/' + commentId);
     };
 
-    commentFactory.createComment = function(responseJSON) {
+    CommentFactory.prototype.createComments = function(responseJSON) {
+        return responseJSON.map(this.createComment.bind(this));
+    }
+
+    CommentFactory.prototype.createComment = function(responseJSON) {
         return new Comment(responseJSON, this);
     }
 
-    // commentFactory.questions = {
-    //   numberOfRequestsForQuestions: 1,
-    //   questionsList: []
-    // };
+    CommentFactory.prototype.subscribeTo = function(baseContent, callback) {
+        return new CommentSubscription(this.socketFactory, this, baseContent, callback);
+    }
+//} CommentFactory 
 
-    // // Populate the questionList
-    // commentFactory.getNextTenQuestions(0)
-    // .success(function (quest) {
-    //   commentFactory.questions.questionList = quest;
-    // })
-    // .error(function (error) {
-    //   console.log('Unable to load questions: ' + error.message);
-    // });
-
-
-    return commentFactory;
-}])
+kusema.service('commentFactory', ['$http' , 'socketFactory', 'kusemaConfig', CommentFactory]);

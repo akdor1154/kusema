@@ -4,10 +4,13 @@ var kusema = angular.module('kusema', [
 'ngAnimate',
 'ngMaterial',
 'ui.router',
+'door3.css',
 'kusema.config',
 'kusema.user',
 'kusema.components'
 ]);
+
+kusema.models = {};
 
 kusema.config(function (
                 $stateProvider,
@@ -39,6 +42,7 @@ kusema.config(function (
   $urlRouterProvider
     .when('','/kusema')
     .when('/','/kusema');
+
 
   /*
   .state('/question/:id', {

@@ -1,0 +1,33 @@
+kusema-content-card .comments-container {
+	margin: -10px 8px 8px 48px;
+	padding: 8px 2px 2px 2px;
+	border-radius: 0px 0px 2px 2px;
+	z-index: 5;
+	background-color: #fafafa;
+}
+
+kusema-content-card .comment {
+	margin: 4px;
+}
+
+kusema-content-card .username {
+	font-weight: bold;
+}
+
+kusema-content-card md-card {
+	position: relative; /* so z-index works on the shadow */
+	z-index: 10;
+}
+
+kusema-content-card .addCommentContainer {
+
+}
+
+kusema-content-card .commentForm {
+	display: flex;
+	align-items: center;
+}
+
+kusema-content-card .commentForm md-input-container {
+	flex-grow: 1;
+}

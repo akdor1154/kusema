@@ -17,11 +17,12 @@ answerSchema.index({ upVotes: 1 });
 answerSchema.index({ downVotes: 1 });
 answerSchema.path('message').index({text : true});
 
-answerSchema.virtual('comments').get(function() {
-    return Comment.find({answerId: this._id}).exec();
-}.bind(this));
-
-answerSchema.set('toJSON', {virtuals: true});
+answerSchema.pre('save', function(next) {
+    Question.update({_id: this.questionId},{$push:{'answers': this._id}}, next);
+})
+answerSchema.pre('remove', function(next) {
+    Question.update({_id: this.questionId},{$pull:{'answers': this._id}}, next);
+})
 
 // Validation
 answerSchema.path('questionId').validate(function (value, respond) {

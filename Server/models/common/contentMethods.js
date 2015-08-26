@@ -6,7 +6,9 @@ var mongoose		= require('mongoose');
 var media           = require('./media');
 var ObjectId 		= require('mongoose').Schema.Types.ObjectId;
 
-module.exports.upVote = function (contentId, userId, cb) {
+var autoPopulate 	= require('mongoose-autopopulate');
+
+var upVote = function (contentId, userId, cb) {
 	return this.update({'_id': contentId},
 		{
 			$pull: {'downVotes': userId},
@@ -14,7 +16,7 @@ module.exports.upVote = function (contentId, userId, cb) {
 		}).exec(cb);
 }
 
-module.exports.downVote = function (contentId, userId, cb) {
+var downVote = function (contentId, userId, cb) {
 	return this.update({'_id': contentId},
 		{	
 			$pull: {'upVotes': userId},
@@ -22,36 +24,29 @@ module.exports.downVote = function (contentId, userId, cb) {
 		}).exec(cb);
 }
 
-module.exports.removeVotes = function (contentId, userId, cb) {
+var removeVotes = function (contentId, userId, cb) {
 	return this.update({'_id': contentId},
 		{$pull: {'upVotes': userId, 'downVotes': userId}})
 	.exec(cb);
 }
 
-module.exports.setAsDeleted = function (contentId, userId, cb) {
+var setAsDeleted = function (contentId, userId, cb) {
 	// check if user has permission to delete
 	return this.update({'_id': contentId},
 		{$set: {deleted: true}})
 	.exec(cb);
 }
 
-
-module.exports.BaseContentSchema = BaseContentSchema;
-
-
-function BaseContentSchema() {
+var BaseContentSchema = function() {
 
 	mongoose.Schema.apply(this, arguments);
 
 	this.add({
-	    author:         { type: ObjectId, ref: 'User', required: true },
+	    author:         { type: ObjectId, ref: 'User', required: true, autopopulate: {select: 'username'} },
 	    authorName:     { type: String, required: false }, 
 	    anonymous:      { type: Boolean, default: false },
 	    message:        { type: String, required: true },
-
-		images:         [{ type: media.imageModel }],
-	    videos:         [{ type: media.videoModel }],
-	    code:           [{ type: media.codeModel }],
+	    comments: 		{ type: Array, schema: ObjectId, ref: 'Comment', autopopulate: {select: 'author message'}},
 		
 	    dateCreated:    { type: Date, default: Date.now },
 	    dateModified:   { type: Date, default: null },
@@ -61,12 +56,12 @@ function BaseContentSchema() {
 	})
 
 
-	this.statics.upVote = module.exports.upVote;
-	this.statics.downVote = module.exports.downVote;
-	this.statics.delete = module.exports.delete;
-
+	this.statics.upVote = upVote;
+	this.statics.downVote = downVote;
+	this.statics.delete = setAsDeleted;
+	this.plugin(autoPopulate);
 }
 util.inherits(BaseContentSchema, mongoose.Schema);
 
-
+module.exports.BaseContentSchema = BaseContentSchema;
 module.exports.BaseContent = mongoose.model('BaseContent', new module.exports.BaseContentSchema());

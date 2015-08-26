@@ -1,35 +1,34 @@
-module.exports = function (server) {
 
-	var io = require('socket.io')(server);
+var io = null;
 
-	// Socket IO events
-	io.on('connection', function (socket) {
-	  console.log('new connection');
+function initializeSocketIo(app) {
+    var io = require('socket.io')(app);
 
-	  // Add users to discussion rooms
-	  socket.on('enter discussion', function (data) {
+    // Socket IO events
+    io.on('connection', function (socket) {
+        console.log('new connection');
 
-	    // Check if user already joined
-	    if (socket.rooms.indexOf(data.question_id) === -1) {
-	      socket.join(data.question_id);
-	      // console.log(socket.rooms);
-	    }
-	  });
+        socket.on('watchContent', function(data) {
+            if (socket.rooms.indexOf(data.contentId) === -1) {
+                console.log('thinger watching thingy'+data.contentId);
+                socket.join(data.contentId);
+            }
+        });
 
-	  // Wait for new messages then boadcast to room
-	  socket.on('message sent', function (data) {
+        socket.on('unwatchContent', function (data) {
+            socket.leave(data.contentId);
+            console.log(data.username + ' left question: ' + data.contentId)
+        });
+    });
 
-	    // Broadcast to everyone in the room/everyone viewing the question
-	    socket.broadcast.to(data.question_id).emit('new message', data);
-	  });
+    return io;
+
+}
 
 
-	  // Remove users from discussion rooms
-	  socket.on('leave discussion', function (data) {
-	    socket.leave(data.question_id);
-	    console.log(data.username + ' left question: ' + data.question_id)
-	  });
-
-	});
-
+module.exports = function init(app) {
+    if ((!module.exports.io) && app) {
+        module.exports.io = initializeSocketIo(app);
+    }
+    return module.exports;
 }
