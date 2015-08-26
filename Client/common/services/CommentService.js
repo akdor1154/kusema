@@ -6,7 +6,8 @@ var CommentSubscription = function(socketFactory, commentFactory, baseContent, c
     this.callback = callback;
     this.socketFactory = socketFactory;
     this.commentFactory = commentFactory;
-    this.socketFactory.watchContent(baseContent);
+    this.baseContent = baseContent;
+    this.socketFactory.watchContent(this.baseContent);
     this.socketFactory.on('contentChanged', this.contentChanged.bind(this));
     return this;
 }
@@ -18,7 +19,7 @@ CommentSubscription.prototype.contentChanged = function(newContent) {
     }
 }
 CommentSubscription.prototype.cancel = function() {
-    this.socketFactory.unwatchContent(baseContent);
+    this.socketFactory.unwatchContent(this.baseContent);
 }
 
 

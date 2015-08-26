@@ -8,7 +8,7 @@
 	<textarea ng-model="c.content.message"></textarea>
 </md-input-container>
 <div class="md-actions" layout="row">
-	<md-button type="button">Cancel</md-button>
+	<md-button type="button" ng-click="onCancel()">Cancel</md-button>
 	<md-button type="submit">{{c.saveText}}</md-button>
 </div>
 </form>
