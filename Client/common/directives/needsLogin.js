@@ -7,7 +7,7 @@ var needsLoginDirective = function() {
 	};
 	return {
 		bindToController: {
-			needsUserId: '@',
+			needsUser: '=',
 		},
 		scope: {},
 		restrict: 'A',
@@ -27,19 +27,17 @@ var needsLoginController = function($scope, loginService) {
 	needsLoginController.prototype = Object.create(Object.prototype, {
 		'element': {writable: true, enumerable: false, value: null},
 		'needsLogin': {writable: true, enumerable: false, value: true},
-		'needsUserId': {
+		'needsUser': {
 			get: function() {
 				return this._needsUser;
 			},
 			set: function(newUser) {
-				if (newUser && newUser._id) {
-					this._needsUser = newUser._id;
-				} else {
-					this._needsUser = newUser;
-				}
+				this._needsUser = newUser;
+				this.needsUserId = (newUser && newUser._id) ? newUser._id : newUser;
 				this.check();
 			}
-		}
+		},
+		'needsUserId': {writable: true, enumerable: false, value: null}
 	});
 	needsLoginController.prototype.check = function() {
 		console.log('checking');
