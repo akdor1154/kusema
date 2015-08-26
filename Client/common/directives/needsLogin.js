@@ -4,6 +4,7 @@ var needsLoginDirective = function() {
 	var linkFunction = function(scope, element, attributes) {
 		scope.c.needsLogin = !(attributes['kusemaNeedsLogin']=="false");
 		scope.c.element = element;
+		scope.c.check();
 	};
 	return {
 		bindToController: {
@@ -40,7 +41,6 @@ var needsLoginController = function($scope, loginService) {
 		'needsUserId': {writable: true, enumerable: false, value: null}
 	});
 	needsLoginController.prototype.check = function() {
-		console.log('checking');
 		if (!this.element) {
 			return;
 		}
