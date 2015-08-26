@@ -57,15 +57,20 @@ exp.addQuestion = function (req, res, next) {
 exp.updateQuestion = function (req, res, next) {
 // TODO add auth info ensure only user and admin can update
 	console.log(req.body);
-  var updateQuestion = Question.update(
-    { '_id': new ObjectId(req.params.questionId) },
-    { $set: { 'message': req.body.message, 'title': req.body.title, 'dateModified': new Date() }}
-  ).exec();
-
-  updateQuestion.addBack( function (err, updated, raw) {
-    if (err) return next(err);
-    res.mjson(raw);
-  });
+  Question.findById(req.params.questionId)
+  .then(function(question) {
+    question.message = req.body.message;
+    question.title = req.body.title;
+    question.dateModified = new Date();
+    return question.save();
+  }).then(
+    function(updatedQuestion) {
+      res.mjson(updatedQuestion);
+    },
+    function(error) {
+      return next(error);
+    }
+  );
 };
 
 exp.deleteQuestion = function(req, res, next) {

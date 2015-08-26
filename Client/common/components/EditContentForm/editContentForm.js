@@ -1,7 +1,11 @@
 var editContentFormDirective = function() {
         return {
             scope: {
-                action: '='
+                action: '@',
+                onCancel: '&',
+                onSubmit: '&',
+                content: '=',
+                contentType: '@',
             },
             templateUrl: 'common/components/EditContentForm/editContentFormTemplate.html',
             controller: 'editContentFormController',
@@ -10,9 +14,10 @@ var editContentFormDirective = function() {
     };
 //}
 
-var editContentFormController = function($scope, questionFactory) {
+var editContentFormController = function($scope, baseContentService) {
         this.$scope = $scope;
-        this.questionFactory = questionFactory;
+        this.contentType = $scope.contentType || $scope.content;
+        this.contentService = baseContentService.getService(this.contentType);
         this.saveText = 'asdf'
         this.content = {
             title: '',
@@ -20,9 +25,12 @@ var editContentFormController = function($scope, questionFactory) {
         };
 
         if ($scope.action == 'edit') {
-            console.log('you want an edit form');
+            this.content.title = $scope.content.title;
+            this.content.message = $scope.content.message;
+            this.content._id = $scope.content._id;
+            this.saveFunction = this.edit;
+            this.saveText = "Edit Question";
         } else {
-            console.log('you want a create form');
             this.saveFunction = this.add;
             this.saveText = "Post Question";
         }
@@ -32,31 +40,36 @@ var editContentFormController = function($scope, questionFactory) {
     editContentFormController.prototype.saveFunction = function() {};
 
     editContentFormController.prototype.save = function() {
-        this.saveFunction()
-            .then(
-                function (response) {
-                    console.log('add succeeded');
-                    this.$scope.$emit('EDIT_CONTENT_FORM_SUBMITTED', 'submitted');
-                }.bind(this),
-                function (error) {
-                    console.log('add error');
-                    this.status = 'Unable to add question: ' + error.message;
-                }.bind(this)
-            );
+        var promise = this.saveFunction()
+                        .then(
+                            function (newContent) {
+                                console.log('add succeeded');
+                                if (this.$scope.onSubmit) {
+                                    this.$scope.onSubmit({'newContent': newContent});
+                                }
+                            }.bind(this),
+                            function (error) {
+                                console.log('add error');
+                                this.status = 'Unable to add question: ' + error.message;
+                            }.bind(this)
+                        );
     }
 
     editContentFormController.prototype.edit = function() {
         console.log('edited');
+        return this.$scope.content.update(this.content)
     }
 
     editContentFormController.prototype.add = function() {
         console.log('add attempted');
-        return this.questionFactory.addQuestion(this.content)
+        return this.contentService
+                    .add(this.content)
+                    .then(this.contentService.createClientModel(this));
     }
 
 
 //}
 
 kusema.addModule('kusema.components.editContent')
-    .directive('editContentForm', editContentFormDirective)
-    .controller('editContentFormController', editContentFormController);
+    .directive('kusemaEditContentForm', editContentFormDirective)
+    .controller('editContentFormController', ['$scope', 'baseContentService', editContentFormController]);

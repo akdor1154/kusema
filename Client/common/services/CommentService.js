@@ -6,7 +6,8 @@ var CommentSubscription = function(socketFactory, commentFactory, baseContent, c
     this.callback = callback;
     this.socketFactory = socketFactory;
     this.commentFactory = commentFactory;
-    this.socketFactory.watchContent(baseContent);
+    this.baseContent = baseContent;
+    this.socketFactory.watchContent(this.baseContent);
     this.socketFactory.on('contentChanged', this.contentChanged.bind(this));
     return this;
 }
@@ -18,7 +19,7 @@ CommentSubscription.prototype.contentChanged = function(newContent) {
     }
 }
 CommentSubscription.prototype.cancel = function() {
-    this.socketFactory.unwatchContent(baseContent);
+    this.socketFactory.unwatchContent(this.baseContent);
 }
 
 
@@ -48,35 +49,34 @@ var CommentFactory = function($http, socketFactory, kusemaConfig) {
         return this.$http.get(this.urlBase + '/' + id);
     };
 
-    CommentFactory.prototype.addComment = function (id, comment) {
-        this.socketFactory.emit('message sent', comment.message);
-        return this.$http.post(this.urlBase + '/' + id, comment);
+    CommentFactory.prototype.add = function (comment) {
+        return this.$http.post(this.urlBase + '/' + comment.parent, comment);
     };
 
     // TODO
-    CommentFactory.prototype.updateComment = function (id, editedComment) {
+    CommentFactory.prototype.update = function (id, editedComment) {
         return this.$http.put(this.urlBase + '/' + id, editedComment);
     };
 
     // TODO
-    CommentFactory.prototype.upVoteComment = function (id) {
+    CommentFactory.prototype.upVote = function (id) {
       return this.$http.put(this.urlBase + '/upvote/' + id);
     };
 
     // TODO
-    CommentFactory.prototype.downVoteComment = function (id) {
+    CommentFactory.prototype.downVote = function (id) {
       return this.$http.put(this.urlBase + '/dnvote/' + id);
     };
 
-    CommentFactory.prototype.deleteComment = function (commentId) {
+    CommentFactory.prototype.delete = function (commentId) {
         return this.$http.delete(this.urlBase + '/' + commentId);
     };
 
     CommentFactory.prototype.createComments = function(responseJSON) {
-        return responseJSON.map(this.createComment.bind(this));
+        return responseJSON.map(this.createClientModel.bind(this));
     }
 
-    CommentFactory.prototype.createComment = function(responseJSON) {
+    CommentFactory.prototype.createClientModel = function(responseJSON) {
         return new Comment(responseJSON, this);
     }
 

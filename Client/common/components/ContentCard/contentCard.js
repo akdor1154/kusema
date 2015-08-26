@@ -13,15 +13,18 @@ var contentCardDirective = function() {
 		};
 	};
 //}
-var contentCardController = function($scope, commentFactory, loginService, socketService) {
+var contentCardController = function($scope, $timeout, commentFactory, loginService, socketService) {
 		this.loginData = loginService.bindables;
 		this.commentFactory = commentFactory;
 		this.socketService = socketService;
+		this.$timeout = $timeout;
+		this.$scope = $scope;
 		this._content = null;
 		this.writingComment = false;
 		this.submittingComment = false;
 		this.newComment = ""
 		this.subscription = null;
+		this.editing = false;
 		$scope.$on('$destroy', this.destroy.bind(this));
 
 		return this;
@@ -31,6 +34,7 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 			get: function() {return this._content},
 			set: function(newContent) {
 				if (! (newContent instanceof kusema.models.BaseContent)) {
+					console.log('not proper content');
 					return;
 				}
 				var oldContent = this._content;
@@ -44,7 +48,10 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 	});
 	contentCardController.prototype.commentsChanged = function(newComments) {
 		console.log(newComments);
-		this.content.comments = newComments;
+		console.log('got new comments');
+		this.$scope.$apply(function() {
+			this.content.comments = newComments;
+		}.bind(this));
 	}
 	contentCardController.prototype.destroy = function() {
 		this.socketService.unwatchContent(this.content);
@@ -54,7 +61,7 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 	}
 	contentCardController.prototype.postComment = function() {
 		this.submittingComment = true;
-		this.commentFactory.addComment(this.content._id, {message: this.newComment}).then(
+		this.commentFactory.add({parent: this.content._id, message: this.newComment}).then(
 			function(response) {
 				this.submittingComment = false;
 				this.closeComment();
@@ -65,9 +72,18 @@ var contentCardController = function($scope, commentFactory, loginService, socke
 		this.writingComment = false;
 		this.newCommment = "";
 	}
-	contentCardController.prototype.onContentChanged = function(newContent, oldContent) {
+	contentCardController.prototype.editContent = function() {
+		this.editing = true;
 	}
+	contentCardController.prototype.finishEditingContent = function() {
+		this.editing = false;
+	}
+	contentCardController.prototype.editingSubmitted = function(newContent) {
+		this.finishEditingContent();
+		//this.content = newContent;
+	}
+
 	
 kusema.addModule('kusema.components.contentCard')
 		.directive('kusemaContentCard', contentCardDirective)
-		.controller('kusemaContentCardController', ['$scope', 'commentFactory', 'loginService', 'socketFactory', contentCardController]);
+		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentFactory', 'loginService', 'socketFactory', contentCardController]);

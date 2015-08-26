@@ -7,7 +7,7 @@ kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kus
     var questionFactory = {};
     var urlBase = kusemaConfig.url()+'api/questions';
 
-    questionFactory.getQuestions = function () {
+    questionFactory.getAll = function () {
         return $http.get(urlBase);
     };
 
@@ -16,40 +16,40 @@ kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kus
                     .then(function(response) {
                         return response.data.map(
                             function(questionJSON) {
-                                return this.createQuestion(questionJSON)
+                                return this.createClientModel(questionJSON)
                             }.bind(this)
                         );
                     }.bind(this));
     };
 
-    questionFactory.getQuestionById = function (id) {
+    questionFactory.get = function (id) {
         return $http.get(urlBase + '/' + id)
                     .then(function(response) {
-                        return this.createQuestion(response.data);
+                        return this.createClientModel(response.data);
                     }.bind(this));
     };
 
-    questionFactory.addQuestion = function (question) {
+    questionFactory.add = function (question) {
         return $http.post(urlBase, JSON.stringify(question));
     };
 
-    questionFactory.updateQuestion = function (id, editedQuestion) {
+    questionFactory.update = function (id, editedQuestion) {
         return $http.put(urlBase + '/' + id, editedQuestion);
     };
 
-    questionFactory.upVoteQuestion = function (id) {
+    questionFactory.upVote = function (id) {
       return $http.put(urlBase + '/upvote/' + id);
     };
 
-    questionFactory.downVoteQuestion = function (id) {
+    questionFactory.downVote = function (id) {
       return $http.put(urlBase + '/dnvote/' + id);
     };
 
-    questionFactory.deleteQuestion = function (id) {
+    questionFactory.delete = function (id) {
         return $http.delete(urlBase + '/' + id);
     };
 
-    questionFactory.createQuestion = function(responseJSON) {
+    questionFactory.createClientModel = function(responseJSON) {
         return new Question(responseJSON, questionFactory);
     }
 
@@ -58,7 +58,7 @@ kusema.factory('questionFactory', ['$http' , 'kusemaConfig', function($http, kus
       numberOfRequestsForQuestions: 1,
       questionsList: [],
       add: function(responseJSON) {
-        this.questionsList.push(questionFactory.createQuestion(responseJSON));
+        this.questionsList.push(questionFactory.createClientModel(responseJSON));
       },
       addQuestions: function(questions) {
         this.questionsList = questions;

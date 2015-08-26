@@ -9,7 +9,7 @@ var QuestionFullDirective = function() {
 	};
 };
 
-var QuestionFullController = function($scope, $stateParams, questionFactory, commentFactory) {
+var QuestionFullController = function($scope, $timeout, $stateParams, questionFactory, commentFactory) {
 
 		this.$scope = $scope;
 
@@ -23,43 +23,19 @@ var QuestionFullController = function($scope, $stateParams, questionFactory, com
 		this.questionEditorOpen = false;
 		this.questionEditorSubmitted = false;
 
-		this.questionFactory.getQuestionById(this.id)
+		this.questionFactory.get(this.id)
 			.then(function(question) {
-					console.log('gotcha');
-					this.question = question;
-					this.initializeEditQuestionForm();
+					$timeout(function() {
+						this.question = question;
+					}.bind(this), 0);
 			}.bind(this));
-	}
-	QuestionFullController.prototype.initializeEditQuestionForm = function() {
-		this.editingQuestion = {
-			'title': this.question.title,
-			'message': this.question.message
-		};
-	}
-	QuestionFullController.prototype.editQuestion = function() {
-		this.questionEditorSubmitted = true;
-		this.questionFactory.updateQuestion(this.id, this.editingQuestion)
-			.then(function(data) {
-				this.questionEditorOpen = false;
-				this.questionEditorSubmitted = false;
-				//TODO: get a push message from server that this question has been updated
-				this.questionFactory.getQuestionById(this.id)
-					.then( function(data) {
-							this.question = this.questionFactory.createQuestion(data);
-							this.initializeEditQuestionForm();
-					}.bind(this));
-			}.bind(this));
-
-	}
-	QuestionFullController.prototype.toggleEditor = function() {
-		this.questionEditorOpen = !this.questionEditorOpen;
 	}
 
 //} QuestionController
 
 kusema.addModule('kusema.user.questionFull')
       .directive('kusemaQuestionFull', QuestionFullDirective)
-	  .controller('questionFullController', ['$scope', '$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
+	  .controller('questionFullController', ['$scope', '$timeout', '$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
 
 
 /*
