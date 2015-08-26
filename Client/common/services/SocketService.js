@@ -20,12 +20,10 @@ function socketService(kusemaConfig) {
 
   socket.watchContent = function(content) {
     console.log('watching');
-    console.log(content);
     return this.emit('watchContent', contentId(content));
   }
   socket.unwatchContent = function(content) {
     console.log('unwatching');
-    console.log(content);
     return this.emit('unwatchContent', contentId(content));
   }
 

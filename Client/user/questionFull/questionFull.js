@@ -9,7 +9,7 @@ var QuestionFullDirective = function() {
 	};
 };
 
-var QuestionFullController = function($scope, $stateParams, questionFactory, commentFactory) {
+var QuestionFullController = function($scope, $timeout, $stateParams, questionFactory, commentFactory) {
 
 		this.$scope = $scope;
 
@@ -25,9 +25,10 @@ var QuestionFullController = function($scope, $stateParams, questionFactory, com
 
 		this.questionFactory.getQuestionById(this.id)
 			.then(function(question) {
-					console.log('gotcha');
-					this.question = question;
-					this.initializeEditQuestionForm();
+					$timeout(function() {
+						this.question = question;
+						this.initializeEditQuestionForm();
+					}.bind(this), 0);
 			}.bind(this));
 	}
 	QuestionFullController.prototype.initializeEditQuestionForm = function() {
@@ -59,7 +60,7 @@ var QuestionFullController = function($scope, $stateParams, questionFactory, com
 
 kusema.addModule('kusema.user.questionFull')
       .directive('kusemaQuestionFull', QuestionFullDirective)
-	  .controller('questionFullController', ['$scope', '$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
+	  .controller('questionFullController', ['$scope', '$timeout', '$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
 
 
 /*
