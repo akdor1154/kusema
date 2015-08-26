@@ -61,7 +61,7 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 	}
 	contentCardController.prototype.postComment = function() {
 		this.submittingComment = true;
-		this.commentFactory.addComment(this.content._id, {message: this.newComment}).then(
+		this.commentFactory.add({parent: this.content._id, message: this.newComment}).then(
 			function(response) {
 				this.submittingComment = false;
 				this.closeComment();

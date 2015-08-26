@@ -73,7 +73,7 @@ var CommentFactory = function($http, socketFactory, kusemaConfig) {
     };
 
     CommentFactory.prototype.createComments = function(responseJSON) {
-        return responseJSON.map(this.createComment.bind(this));
+        return responseJSON.map(this.createClientModel.bind(this));
     }
 
     CommentFactory.prototype.createClientModel = function(responseJSON) {
