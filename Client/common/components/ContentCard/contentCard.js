@@ -3,7 +3,8 @@
 var contentCardDirective = function() {
 		return {
 			bindToController: {
-				'content': '='
+				'content': '=',
+				'mode': '@'
 			},
 			scope: {},
 			templateUrl: 'common/components/ContentCard/contentCardTemplate.html',
@@ -24,7 +25,7 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.submittingComment = false;
 		this.newComment = ""
 		this.subscription = null;
-		this.editing = false;
+		this.mode = this.modes.VIEW;
 		$scope.$on('$destroy', this.destroy.bind(this));
 
 		return this;
@@ -44,8 +45,15 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 					this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
 				}
 			}
+		},
+		'mode': {
+			get: function() {return this._mode},
+			set: function(newMode) {
+				this._mode = (newMode) ? newMode : this.modes.VIEW;
+			}
 		}
 	});
+	contentCardController.prototype.modes = {VIEW: "view", CREATE: "create", EDIT: "edit"};
 	contentCardController.prototype.commentsChanged = function(newComments) {
 		console.log(newComments);
 		console.log('got new comments');
@@ -73,12 +81,19 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.newCommment = "";
 	}
 	contentCardController.prototype.editContent = function() {
-		this.editing = true;
+		this.mode = this.modes.EDIT;
 	}
 	contentCardController.prototype.finishEditingContent = function() {
-		this.editing = false;
+		this.mode = this.modes.VIEW;
 	}
 	contentCardController.prototype.editingSubmitted = function(newContent) {
+		this.finishEditingContent();
+		//this.content = newContent;
+	}
+	contentCardController.prototype.finishCreatingContent = function() {
+		this.mode = this.modes.VIEW;
+	}
+	contentCardController.prototype.creatingSubmitted = function(newContent) {
 		this.finishEditingContent();
 		//this.content = newContent;
 	}
@@ -86,4 +101,4 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 	
 kusema.addModule('kusema.components.contentCard')
 		.directive('kusemaContentCard', contentCardDirective)
-		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentFactory', 'loginService', 'socketFactory', contentCardController]);
+		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentService', 'loginService', 'socketFactory', contentCardController]);

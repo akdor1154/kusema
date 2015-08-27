@@ -1,18 +1,29 @@
-<md-card>
-	<md-card-content ng-if="!c.editing">
+<md-card ng-switch on="c.mode">
+	<md-card-content ng-switch-when="view">
 	  <h2 class="md-title" ng-bind="c.content.title"></h2>
 	  <div>
 	  	<span class="username">{{c.content.author.username}}:</span>
 	  	<span ng-bind="c.content.message"></span>
   	  </div>
 	</md-card-content>
-	<md-card-content ng-if="c.editing">
+	<md-card-content ng-switch-when="edit">
 	  <kusema-edit-content-form
 	  	action="edit"
 	  	on-cancel="c.finishEditingContent()"
 	  	on-submit="c.editingSubmitted(newContent)"
 	  	content="c.content"
 	  ></kusema-edit-content-form>
+	</md-card-content>
+	<md-card-content ng-switch-when="create">
+	  <kusema-edit-content-form
+	  	action="create"
+	  	on-cancel="c.finishCreatingContent()"
+	  	on-submit="c.creatingSubmitted(newContent)"
+	  	content="c.content"
+	  ></kusema-edit-content-form>
+	</md-card-content>
+	<md-card-content ng-switch-default>
+	  BAD!
 	</md-card-content>
 	<md-card-footer>
 		<div class="footer-contents">

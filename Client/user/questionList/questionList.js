@@ -64,4 +64,4 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 
 kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
 	  .directive('kusemaQuestionList', QuestionListDirective)
-	  .controller('questionListController', ['questionFactory', '$mdDialog', QuestionListController])
+	  .controller('questionListController', ['questionService', '$mdDialog', QuestionListController])
