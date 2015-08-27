@@ -6,7 +6,9 @@ var contentCardDirective = function() {
 				'content': '=',
 				'mode': '@'
 			},
-			scope: {},
+			scope: {
+				'contentType': '@'
+			},
 			templateUrl: 'common/components/ContentCard/contentCardTemplate.html',
 			css: 'common/components/ContentCard/contentCard.css',
 			controller: 'kusemaContentCardController',
@@ -20,11 +22,11 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.socketService = socketService;
 		this.$timeout = $timeout;
 		this.$scope = $scope;
-		this._content = null;
 		this.writingComment = false;
 		this.submittingComment = false;
 		this.newComment = ""
 		this.subscription = null;
+		this.updateSubscription();
 		this.mode = this.modes.VIEW;
 		$scope.$on('$destroy', this.destroy.bind(this));
 
@@ -34,16 +36,8 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		'content': {
 			get: function() {return this._content},
 			set: function(newContent) {
-				if (! (newContent instanceof kusema.models.BaseContent)) {
-					console.log('not proper content');
-					return;
-				}
-				var oldContent = this._content;
 				this._content = newContent;
-				if (this.subscription) this.subscription.cancel();
-				if (this.commentFactory) {
-					this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
-				}
+				this.updateSubscription();
 			}
 		},
 		'mode': {
@@ -60,6 +54,14 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.$scope.$apply(function() {
 			this.content.comments = newComments;
 		}.bind(this));
+	}
+	contentCardController.prototype.updateSubscription = function() {
+		if (this.content instanceof BaseContent) {
+			if (this.subscription) this.subscription.cancel();
+			if (this.commentFactory) {
+				this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
+			}
+		}
 	}
 	contentCardController.prototype.destroy = function() {
 		this.socketService.unwatchContent(this.content);
@@ -88,14 +90,10 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 	}
 	contentCardController.prototype.editingSubmitted = function(newContent) {
 		this.finishEditingContent();
-		//this.content = newContent;
-	}
-	contentCardController.prototype.finishCreatingContent = function() {
-		this.mode = this.modes.VIEW;
 	}
 	contentCardController.prototype.creatingSubmitted = function(newContent) {
 		this.finishEditingContent();
-		//this.content = newContent;
+		this.content = newContent;
 	}
 
 	

@@ -16,9 +16,8 @@ var questionSchema = new contentMethods.BaseContentSchema({
     group:          { type: objectId, ref: 'Group', required: false }, //TODO: SET REQUIRED TO TRUE!!
     answers:        {
     					type: Array,
-    					schema: {type: objectId, ref: 'Answer'},
-    					default: [],
-    					autoPopulate: true
+    					schema: objectId, ref: 'Answer',
+    					autopopulate: true
     				}
 });
 

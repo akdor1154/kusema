@@ -1,7 +1,7 @@
 'use strict';
 
 
-var BaseContent = function(contentJSON, factory) {
+var BaseContent = function BaseContent(contentJSON, factory) {
         Object.defineProperty(this, 'factory', {writable:true, value:null, enumerable: false});
         this.factory = factory;
         for (var property in Object.getPrototypeOf(this)) {
@@ -13,8 +13,8 @@ var BaseContent = function(contentJSON, factory) {
         this.dateModified = new Date(this.dateModified);
     	return this;
     }
-
     BaseContent.prototype = Object.create(Object.prototype, {
+        name: {writable: false, value: 'BaseContent', enumerable: false},
         constructor: {writable: false, value: BaseContent, enumerable: false},
         _id: {writable: true, value: 0, enumerable: true},
         author: { writable: true, value: 0, enumerable: true }, //TODO add object ID requirement here
@@ -29,7 +29,6 @@ var BaseContent = function(contentJSON, factory) {
             return this.upVotes - this.downVotes;
         }},
     });
-
     BaseContent.prototype.upVote = function() {
         this.factory.upVote(this._id);
         this.upVotes++;       
@@ -47,26 +46,25 @@ var BaseContent = function(contentJSON, factory) {
                     this.constructor.call(this, newJson, this.factory);
                     return this;
                 }.bind(this));  
- 
     };
+//} BaseContent
 
 
-
-var Question = function(questionJSON, questionFactory) {
+var Question = function Question(questionJSON, questionService) {
         //we need this to be NON-ENUMERABLE, else we get a circular dependancy when JSON.stringifying. Unfortunately setting non-enumerable on the prototype's property is not enough :(
-        BaseContent.call(this, questionJSON, questionFactory);
+        BaseContent.call(this, questionJSON, questionService);
+        if (this.answers) {
+            this.answers = questionService.answerService.createClientModels(this.answers);
+        };
         return this;
     }
-
     Question.prototype = Object.create(BaseContent.prototype, {
+        name: {writable: false, value: 'Question', enumerable: false},
         constructor: {writable: false, value: Question, enumerable: false},
         title: { writable: true, value: "", enumerable: true },
-    })
-    Question.prototype.delete = function() {
-        BaseContent.delete.call(this, this._id);
-        this.factory.questions.delete(this._id);       
-    }
-
+        answers: {writable: true, value: null, enumerable: true}
+    });
+//} Question
 
 
 var Comment = function(commentJSON, commentFactory) {
@@ -75,8 +73,21 @@ var Comment = function(commentJSON, commentFactory) {
     Comment.prototype = Object.create(BaseContent.prototype, {
         constructor: {writable: false, value: Comment, enumerable: false},
         parent: {writable: true, value: 0, enumerable: true},
-    })
+    });
+//} Comment
+
+
+var Answer = function Answer(answerJSON, answerFactory) {
+        BaseContent.call(this, answerJSON, answerFactory);
+    }
+    Answer.prototype = Object.create(BaseContent.prototype, {
+        constructor: {writable: false, value: Answer, enumerable: false},
+        question: {writable: true, value: null, enumerable: true}
+    });
+//} Answer
+
 
 kusema.models.BaseContent = BaseContent;
 kusema.models.Comment = Comment;
 kusema.models.Question = Question;
+kusema.models.Answer = Answer;

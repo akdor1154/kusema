@@ -1,6 +1,6 @@
 <form ng-submit="c.save()">
-<md-input-container>
-	<label>Question Subject</label>
+<md-input-container ng-if="c.contentType == 'Question'">
+	<label>{{c.contentType}} Subject</label>
 	<input ng-model="c.content.title" />
 </md-input-container>
 <md-input-container>
@@ -9,6 +9,6 @@
 </md-input-container>
 <div class="md-actions" layout="row">
 	<md-button type="button" ng-click="onCancel()">Cancel</md-button>
-	<md-button type="submit">{{c.saveText}}</md-button>
+	<md-button type="submit">{{c.actionText}} {{c.contentType}}</md-button>
 </div>
 </form>

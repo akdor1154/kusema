@@ -4,15 +4,15 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var exp = module.exports;
 
 exp.findByQuestionId = function(req, res, next) {
-
-    var getAnswers = Answer.find(
-        { 'questionId': new ObjectId(req.params.questionId) }
-    ).exec();
-
-    getAnswers.addBack(function (err, answers) {
-        if (err) return next(err);
-        res.json(answers);
-    })
+    Question.findById(req.params.questionId)
+    .then(
+        function(question) {
+            res.json(question.answers);
+        },
+        function(error) {
+            next(error);
+        }
+    );
 };
 
 exp.addByQuestionId = function(req, res, next) {
@@ -22,13 +22,17 @@ exp.addByQuestionId = function(req, res, next) {
     answer.author       = new ObjectId(req.user._id);
     answer.anonymous    = req.body.anonymous;
     answer.message      = req.body.message;
-    answer.questionId   = new ObjectId(req.params.questionId);
+    answer.question   = new ObjectId(req.params.questionId);
     answer.upVotes.     push(req.user._id);
 
-    answer.save( function (err, answer) {
-        if (err) return next(err);
-        res.json(answer)
-    });
+    answer.save().then(
+        function(answer) {
+            // if we want out plugins to run, i.e. autopopulation, then we need to run a database find :(
+            Answer.findById(answer._id).then(res.mjson.bind(res));
+        },
+        function (error) {
+            next(error);
+        });
 };
 
 exp.deleteAnswer = function(req, res, next) {
