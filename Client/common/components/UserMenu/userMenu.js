@@ -23,8 +23,10 @@ var userMenuController = function($scope, loginService) {
 	}
 	userMenuController.prototype.register = function() {
 		console.log('register');
-		this.loginService.register(this.data.username, this.data.password);
-		this.loginService.login(this.data.username, this.data.password);
+		this.loginService.register(this.data.username, this.data.password)
+		.then(function(registration) {
+			this.loginService.login(this.data.username, this.data.password);
+		}.bind(this));
 	}
 	userMenuController.prototype.logout = function() {
 		console.log('logout');

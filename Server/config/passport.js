@@ -30,7 +30,7 @@ module.exports = function(passport) {
             process.nextTick(function() {
                 console.log('registering2');
                 // Check if user already exits
-                User.findOne({ 'local.username' :  username }, function(err, user) {
+                User.findOne({ 'username' :  username }, function(err, user) {
                     if (err)
                         return done(err);
                     if (user) {

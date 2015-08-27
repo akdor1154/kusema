@@ -16,12 +16,14 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 	});
 	LoginService.prototype.register = function(username, password) {
 		var registerRequest = this.$http.post(this.kusemaConfig.url()+'account/register_local', {'username': username, 'password': password})
-		registerRequest.success(function(data, status, headers, config) {
-			console.log('register request done');
-		});
-		registerRequest.error(function(data, status, headers, config) {
-			console.log('register error');
-		});
+		return registerRequest.then(
+			function(response) {
+				console.log('register request done');
+			},
+			function(error) {
+				console.log('register error');
+			}
+		);
 	};
 	LoginService.prototype.login = function(username, password) {
 		var loginRequest = this.$http.post(this.kusemaConfig.url()+'account/login_local', {'username': username, 'password': password})
