@@ -39,7 +39,7 @@ router.get('/questions/:questionId', questionsCtrl.findByQuestionId);
 router.put('/questions/:questionId', questionsCtrl.updateQuestion);
 router.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
 router.put('/questions/upvote/:questionId', questionsCtrl.upVoteQuestion);
-router.put('/questions/dnvote/:questionId', questionsCtrl.downVoteQuestion);
+router.put('/questions/downvote/:questionId', questionsCtrl.downVoteQuestion);
 
 // Answer Routes
 router.get('/answers/:questionId', answersCtrl.findByQuestionId);

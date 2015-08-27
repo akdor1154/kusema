@@ -2,23 +2,10 @@
   <h1 class="md-headline">Question</h1>
   <kusema-content-card content="c.question"></kusema-content-card>
 
+
   <h1 class="md-headline">Answers</h1>
-  <md-card>
-    <md-card-content>
-      <h2 class="md-title">Paracosm</h2>
-      <p>
-        The titles of Washed Out's breakthrough song and the first single from Paracosm share the
-        two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
-      </p>
-    </md-card-content>
-  </md-card>
-  <md-card>
-    <md-card-content>
-      <h2 class="md-title">Paracosm</h2>
-      <p>
-        The titles of Washed Out's breakthrough song and the first single from Paracosm share the
-        two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
-      </p>
-    </md-card-content>
-  </md-card>
+  <kusema-content-card ng-repeat="answer in c.question.answers" content="answer"></kusema-content-card>
+
+  <h1 class="md-headline">Your Answer</h1>
+  <kusema-content-card mode="create" content-type="answer" content="c.newAnswer"></kusema-content-card>
 </div>

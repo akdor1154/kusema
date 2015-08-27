@@ -27,6 +27,7 @@ var QuestionFullController = function($scope, $timeout, $stateParams, questionFa
 			.then(function(question) {
 					$timeout(function() {
 						this.question = question;
+						this.newAnswer = {'__t': 'Answer', 'question': this.question};
 					}.bind(this), 0);
 			}.bind(this));
 	}
@@ -35,7 +36,7 @@ var QuestionFullController = function($scope, $timeout, $stateParams, questionFa
 
 kusema.addModule('kusema.user.questionFull')
       .directive('kusemaQuestionFull', QuestionFullDirective)
-	  .controller('questionFullController', ['$scope', '$timeout', '$stateParams', 'questionFactory', 'commentFactory', QuestionFullController]);
+	  .controller('questionFullController', ['$scope', '$timeout', '$stateParams', 'questionService', 'commentService', QuestionFullController]);
 
 
 /*

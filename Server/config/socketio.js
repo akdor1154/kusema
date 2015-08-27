@@ -10,7 +10,7 @@ function initializeSocketIo(app) {
 
         socket.on('watchContent', function(data) {
             if (socket.rooms.indexOf(data.contentId) === -1) {
-                console.log('thinger watching thingy'+data.contentId);
+                console.log('thinger watching thingy '+data.contentId);
                 socket.join(data.contentId);
             }
         });

@@ -3,9 +3,12 @@
 var contentCardDirective = function() {
 		return {
 			bindToController: {
-				'content': '='
+				'content': '=',
+				'mode': '@'
 			},
-			scope: {},
+			scope: {
+				'contentType': '@'
+			},
 			templateUrl: 'common/components/ContentCard/contentCardTemplate.html',
 			css: 'common/components/ContentCard/contentCard.css',
 			controller: 'kusemaContentCardController',
@@ -19,12 +22,12 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.socketService = socketService;
 		this.$timeout = $timeout;
 		this.$scope = $scope;
-		this._content = null;
 		this.writingComment = false;
 		this.submittingComment = false;
 		this.newComment = ""
 		this.subscription = null;
-		this.editing = false;
+		this.updateSubscription();
+		this.mode = this.modes.VIEW;
 		$scope.$on('$destroy', this.destroy.bind(this));
 
 		return this;
@@ -33,25 +36,32 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		'content': {
 			get: function() {return this._content},
 			set: function(newContent) {
-				if (! (newContent instanceof kusema.models.BaseContent)) {
-					console.log('not proper content');
-					return;
-				}
-				var oldContent = this._content;
 				this._content = newContent;
-				if (this.subscription) this.subscription.cancel();
-				if (this.commentFactory) {
-					this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
-				}
+				this.updateSubscription();
+			}
+		},
+		'mode': {
+			get: function() {return this._mode},
+			set: function(newMode) {
+				this._mode = (newMode) ? newMode : this.modes.VIEW;
 			}
 		}
 	});
+	contentCardController.prototype.modes = {VIEW: "view", CREATE: "create", EDIT: "edit"};
 	contentCardController.prototype.commentsChanged = function(newComments) {
 		console.log(newComments);
 		console.log('got new comments');
 		this.$scope.$apply(function() {
 			this.content.comments = newComments;
 		}.bind(this));
+	}
+	contentCardController.prototype.updateSubscription = function() {
+		if (this.content instanceof BaseContent) {
+			if (this.subscription) this.subscription.cancel();
+			if (this.commentFactory) {
+				this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
+			}
+		}
 	}
 	contentCardController.prototype.destroy = function() {
 		this.socketService.unwatchContent(this.content);
@@ -73,17 +83,20 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.newCommment = "";
 	}
 	contentCardController.prototype.editContent = function() {
-		this.editing = true;
+		this.mode = this.modes.EDIT;
 	}
 	contentCardController.prototype.finishEditingContent = function() {
-		this.editing = false;
+		this.mode = this.modes.VIEW;
 	}
 	contentCardController.prototype.editingSubmitted = function(newContent) {
 		this.finishEditingContent();
-		//this.content = newContent;
+	}
+	contentCardController.prototype.creatingSubmitted = function(newContent) {
+		this.finishEditingContent();
+		this.content = newContent;
 	}
 
 	
 kusema.addModule('kusema.components.contentCard')
 		.directive('kusemaContentCard', contentCardDirective)
-		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentFactory', 'loginService', 'socketFactory', contentCardController]);
+		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentService', 'loginService', 'socketFactory', contentCardController]);

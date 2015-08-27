@@ -40,9 +40,45 @@ var QuestionListDirective = function() {
 var QuestionListController = function(questionFactory, $mdDialog) {
 		this.allowMoreRequests = true;
 		this.writerOpen = false;
-		this.questions = questionFactory.questions;
+
 		this.$mdDialog = $mdDialog;
 		this.test = "hello";
+		
+		this.questions = {
+	      numberOfRequestsForQuestions: 1,
+	      questionsList: [],
+	      add: function(responseJSON) {
+	        this.questionsList.push(questionFactory.createClientModel(responseJSON));
+	      },
+	      addQuestions: function(questions) {
+	        this.questionsList = questions;
+	      },
+	      delete: function(id) {
+	        var questionIndex = this.getIndexOf(id);
+	        if (questionIndex) {
+	            this.questionsList.splice(questionIndex, 1);
+	        }
+	      },
+	      getIndexOf: function(id) {
+	        var possibleQuestions = this.questionsList.filter(function(question) {return question._id == id;});
+	        if (possibleQuestions.length > 0) {
+	            return possibleQuestions[0]
+	        } else {
+	            return null;
+	        }
+	      }
+	    };
+
+	    questionFactory.getNextTenQuestions(0)
+	    .then(
+	        function (quest) {
+	            this.questions.addQuestions(quest);
+	        }.bind(this),
+	        function (error) {
+	            console.error('Unable to load questions: ' + error + error.message);
+	        }
+	    );
+
 	}
 
 
@@ -64,4 +100,4 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 
 kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
 	  .directive('kusemaQuestionList', QuestionListDirective)
-	  .controller('questionListController', ['questionFactory', '$mdDialog', QuestionListController])
+	  .controller('questionListController', ['questionService', '$mdDialog', QuestionListController])
