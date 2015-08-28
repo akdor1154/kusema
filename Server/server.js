@@ -27,10 +27,17 @@ var here = function(pathToJoin) {
   return path.join(__dirname, pathToJoin)
 }
 
+if (!options) {
+  options = {};
+}
+
 if (!options.hostname) {
   var os             = require('os');
   options.hostname = os.hostname();
   console.log('I had to take a guess at your hostname, set it in serverConfig.json to the URL hostname that users will use for best results...');
+}
+if (!options.protocol) {
+  options.protocol = 'http';
 }
 
 app.options = options;
@@ -57,7 +64,7 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // Configure Passport
-require(here('config/passport'))(passport);
+require(here('config/passport'))(passport, app.options);
 app.use(expressSession({ // TODO add a data store to this
 	secret: 'mySecretKey',
 	resave: false,
