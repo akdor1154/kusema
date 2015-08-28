@@ -6,6 +6,8 @@
 //
 
 // Dependencies
+function kusema(options) {
+
 var express        = require('express');
 var path           = require('path');
 var favicon        = require('static-favicon');
@@ -24,6 +26,14 @@ var server         = require('http').createServer(app);
 var here = function(pathToJoin) {
   return path.join(__dirname, pathToJoin)
 }
+
+if (!options.hostname) {
+  var os             = require('os');
+  options.hostname = os.hostname();
+  console.log('I had to take a guess at your hostname, set it in serverConfig.json to the URL hostname that users will use for best results...');
+}
+
+app.options = options;
 
 // Configure database
 var dbConfig = require(here('config/database.js'));
@@ -127,7 +137,10 @@ app.use(function(err, req, res, next) {
   });
 });
 
+server.listen(options.port);
+console.log('Express server listening on port ' + app.options.hostname+':'+server.address().port);
 
+} // kusema()
 // Export server to be run from "./bin/<script>.js"
 // Run "npm test" to start the server
-module.exports = server;
+module.exports = kusema;

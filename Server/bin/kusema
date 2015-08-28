@@ -1,11 +1,28 @@
 #!/usr/bin/env node
 var debug = require('debug')('kusema');
 
-var app = require('../server');
+var kusema = require('../server');
 var program = require('commander');
+var path = require('path');
 
 var port;
 var node_env;
+
+var serverConfig;
+try {
+	var fs = require('fs');
+	var configString = fs.readFileSync(path.resolve(__dirname, '../serverConfig.json'));
+	try {
+		serverConfig = JSON.parse(configString, 'utf8');
+	} catch (e) {
+		console.error('error reading/parsing config file! make sure it is valid JSON...');
+		console.error(e);
+		throw e;
+	}
+} catch (e) {
+	// file not found, oh well we'll live
+	serverConfig = {};
+}
 
 program
 	.option('-p, --port <n>','The port to listen on');
@@ -28,13 +45,11 @@ program
 
 program.parse(process.argv);
 
-process.env.PORT =
-		(program.port) ? program.port
-		: (process.env.PORT) ? process.env.PORT
-		: (port) ? port
-		: 3000;
+serverConfig.port =
+		(program.port) ? program.port // cli option
+		: (serverConfig.port) ? serverConfig.port // config file option
+		: (port) ? port // default mode option
+		: 3000; // final default
 process.env.NODE_ENV = (node_env) ? node_env : (process.env.NODE_ENV) ? process.env.NODE_ENV : 'development';
 
-var server = app.listen(process.env.PORT, function() {
-  console.log('Express server listening on port ' + server.address().port);
-});
+kusema(serverConfig);
