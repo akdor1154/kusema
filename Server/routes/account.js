@@ -25,10 +25,12 @@ module.exports = function (passport) {
 
 	router.get('/login_monash', passport.authenticate('monash-login'),
 		function (req, res) {
-			res.json({
+			var userData = {
 				userId: req.user.id,
 				username: req.user.authcate
-			});
+			};
+			res.redirect('/common/components/UserMenu/monashLoginCallback.html?'+encodeURIComponent(JSON.stringify(userData)))
+			res.json();
 		}
 	);
 

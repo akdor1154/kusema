@@ -83,16 +83,20 @@ module.exports = function(passport) {
         },
         // callback with authcate username from Monash CAS server
         function(authcate, done) {
-
-            User.findOne({ 'authcate' :  authcate }, function (err, user) {
+            console.log(authcate);
+            User.findOne({ 'authcate' :  authcate.user }, function (err, user) {
                 if (err) {
+                    console.log('error1');
+                    console.log(err);
                     return done(err);
                 }
                 if (!user) {
                     // return done(null, false, {message: 'Unknown user'});
                     var newUser = new User();
-                    newUser.authcate = authcate;
+                    newUser.authcate = authcate.user;
                     newUser.save(function(err) {
+                        console.log('error2');
+                        console.log(err);
                         if (err) throw err;
                         return done(null, newUser);
                     });

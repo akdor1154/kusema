@@ -14,9 +14,9 @@
 
   <body ng-app="kusema" lang="en" ng-view ng-controller="MainController" layout="column">
 
-    <div><ng-include="'checkBrowser.html'"></div>
+    <ng-include="'checkBrowser.html'"></ng-include="'checkBrowser.html'">
     
-    <div ui-view></div>
+    <md-content id="content" style="position: fixed; width: 100%; height: 100%" ui-view></md-content>
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/json3/lib/json3.js"></script>
