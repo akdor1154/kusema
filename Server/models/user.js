@@ -37,5 +37,25 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
 
+userSchema.methods.configureFromAuthcate = function(authcateUserName) {
+    var ldap = require('../services/ldapClient.js');
+
+    this.authcate = authcateUserName;
+    return ldap.getUser(authcateUserName).then(
+        function(ldapUser) {
+            console.log('got ldap result');
+            this.email = ldapUser.mail;
+            this.authcate = ldapUser.uid;
+            this.username = ldapUser.givenName.split(' ')[0]+' '+ldapUser.sn.substring(0,1);
+            return this;
+        }.bind(this),
+        function(ldapError) {
+            console.error('couldn\'t find '+authcateUserName+' in ldap :(');
+            console.error(ldapError);
+            return ldapError;
+        }
+    );
+}
+
 
 module.exports = mongoose.model('User', userSchema);

@@ -1,6 +1,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 var CasStrategy     = require('passport-cas').Strategy;
 var User            = require('../models/user');
+var ldap            = require('../services/ldapClient.js');
 
 var url             = require('url');
 
@@ -86,29 +87,44 @@ module.exports = function(passport, options) {
         },
         // callback with authcate username from Monash CAS server
         function(authcate, done) {
-            User.findOne({ 'authcate' :  authcate.user }, function (err, user) {
-                if (err) {
-                    console.log('error1');
-                    console.log(err);
-                    return done(err);
-                }
+            User
+            .findOne({ 'authcate' :  authcate.user })
+            .then(
+            function(user) {
+
                 if (!user) {
-                    // return done(null, false, {message: 'Unknown user'});
-                    var newUser = new User();
-                    newUser.authcate = authcate.user;
-                    newUser.save(function(err) {
-                        console.log('error2');
-                        console.log(err);
-                        if (err) throw err;
-                        return done(null, newUser);
-                    });
+                    console.log('new user');
+                    user = new User();
                 } else {
-                    // user exists in system
-                    return done(null, user);
+                    console.log('got user');
                 }
-            });
-        }
-    ));
+
+                user
+                .configureFromAuthcate(authcate.user)
+                .then(
+                    function(configuredUser) {
+                        console.log('finished ldap');
+                        return configuredUser.save();
+                    }
+                ).then(
+                    function(savedUser) {
+                        console.log('finished saving');
+                        return done(null, savedUser)
+                    },
+                    function(saveError) {
+                        console.log('didn\'t save');
+                        console.error(saveError);
+                        return done(saveError);
+                    }
+                );
+                
+            },
+            function(error) {
+                console.error(error);
+                done(error);
+            }
+        );
+    }));
 
 
 };
