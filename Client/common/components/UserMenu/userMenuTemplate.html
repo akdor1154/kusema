@@ -19,3 +19,10 @@
 			<md-menu-item ng-if="c.loginData.loginState < 0"><md-button>Wait...</md-button></md-menu-item>
 	</md-menu-content>
 </md-menu>
+
+
+<template id="monashLoginDialog">
+<md-bottom-sheet style="position: fixed; min-height: 80%; display: flex;">
+<iframe src="/account/login_monash" style="flex: 1"></iframe>
+</md-bottom-sheet>
+</template>
