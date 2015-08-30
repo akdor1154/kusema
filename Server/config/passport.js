@@ -2,8 +2,10 @@ var LocalStrategy   = require('passport-local').Strategy;
 var CasStrategy     = require('passport-cas').Strategy;
 var User            = require('../models/user');
 
+var url             = require('url');
+
 // expose this function to our app using module.exports
-module.exports = function(passport) {
+module.exports = function(passport, options) {
 
     // Serialize/Deserialize for persistent log-in sessions
     passport.serializeUser(function(user, done) {
@@ -73,26 +75,31 @@ module.exports = function(passport) {
         }
     ));
 
+    console.log('cas callback set base '+url.format(options)+'. If this is not OK, set up a serverConfig.json file in kusema/Server');
     // Monash authcate user sign in (and register if new)
     passport.use('monash-login', new CasStrategy(
         {
           version: 'CAS3.0',
           ssoBaseURL: 'https://my.monash.edu.au/authentication/cas',
-          serverBaseURL: 'http://melts-dev.eng.monash.edu:8002/',
+          serverBaseURL: url.format(options),
           validateURL: '/serviceValidate'
         },
         // callback with authcate username from Monash CAS server
         function(authcate, done) {
-
-            User.findOne({ 'authcate' :  authcate }, function (err, user) {
+            console.log(authcate);
+            User.findOne({ 'authcate' :  authcate.user }, function (err, user) {
                 if (err) {
+                    console.log('error1');
+                    console.log(err);
                     return done(err);
                 }
                 if (!user) {
                     // return done(null, false, {message: 'Unknown user'});
                     var newUser = new User();
-                    newUser.authcate = authcate;
+                    newUser.authcate = authcate.user;
                     newUser.save(function(err) {
+                        console.log('error2');
+                        console.log(err);
                         if (err) throw err;
                         return done(null, newUser);
                     });

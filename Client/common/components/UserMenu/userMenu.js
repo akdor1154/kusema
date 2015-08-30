@@ -6,8 +6,9 @@ var userMenuDirective = function() {
 		};
 	};
 //}
-var userMenuController = function($scope, loginService) {
+var userMenuController = function($scope, loginService, $mdBottomSheet) {
 		this.$scope = $scope;
+		this.$mdBottomSheet = $mdBottomSheet;
 		this.originalEvent = null;
 		this.loginService = loginService;
 		this.loginData = loginService.bindables;
@@ -16,6 +17,9 @@ var userMenuController = function($scope, loginService) {
 	userMenuController.prototype.openMenu = function(openMenuFunction, event) {
 		this.originalEvent = event;
 		openMenuFunction(event);
+	}
+	userMenuController.prototype.loginMonash = function() {
+		this.loginService.loginMonash();
 	}
 	userMenuController.prototype.login = function() {
 		console.log('login');
@@ -52,6 +56,6 @@ var userMenuLoggedInDirective = function() {
 
 kusema.addModule('kusema.components.userMenu')
 		.directive('kusemaUserMenu', userMenuDirective)
-		.controller('kusemaUserMenuController', ['$scope', 'loginService', userMenuController])
+		.controller('kusemaUserMenuController', ['$scope', 'loginService', '$mdBottomSheet', userMenuController])
 		.directive('kusemaUserMenuNotLoggedIn', userMenuNotLoggedInDirective)
 		.directive('kusemaUserMenuLoggedIn', userMenuLoggedInDirective);
