@@ -1,5 +1,6 @@
 var express  = require('express');
 var router   = express.Router();
+var ldap 	= require('../services/ldapClient');
 
 module.exports = function (passport) {
 
