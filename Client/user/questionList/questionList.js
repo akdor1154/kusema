@@ -37,13 +37,12 @@ var QuestionListDirective = function() {
 	};
 }
 
-var QuestionListController = function(questionFactory, $mdDialog) {
+var QuestionListController = function(questionFactory, $mdDialog, $scope) {
 		this.allowMoreRequests = true;
 		this.writerOpen = false;
-
+		this.$scope = $scope;
 		this.$mdDialog = $mdDialog;
 		this.test = "hello";
-		
 		this.questions = {
 	      numberOfRequestsForQuestions: 1,
 	      questionsList: [],
@@ -85,9 +84,12 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 	QuestionListController.prototype.showWriter = function(e) {
 		console.log('asdf');
 		this.$mdDialog.show({
+			controller: function Dummy() {},
+			controllerAs: 'dc',
 			template: document.getElementById('addQuestionDialog').innerHTML,
 			targetEvent: e,
-			clickOutsideToClose: true
+			clickOutsideToClose: true,
+			scope: this.$scope.$new(),
 		}).then( function(answer) {
 			console.log('yay');
 		}, function(error) {
@@ -97,7 +99,11 @@ var QuestionListController = function(questionFactory, $mdDialog) {
 	QuestionListController.prototype.hideWriter = function() {
 		this.$mdDialog.hide();
 	}
+	QuestionListController.prototype.newQuestionPosted = function(newQuestion) {
+		this.questions.add(newQuestion);
+		this.hideWriter();
+	}
 
 kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
 	  .directive('kusemaQuestionList', QuestionListDirective)
-	  .controller('questionListController', ['questionService', '$mdDialog', QuestionListController])
+	  .controller('questionListController', ['questionService', '$mdDialog', '$scope', QuestionListController])

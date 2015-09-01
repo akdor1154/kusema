@@ -11,8 +11,9 @@
 <md-dialog><md-dialog-content>
 <kusema-edit-content-form
 	on-cancel="c.hideWriter()"
-	on-submit="c.hideWriter()"
+	on-submit="c.newQuestionPosted(newContent)"
 	content-type="Question"
+	action="create"
 ></kusema-edit-content-form>
 </md-dialog-content></md-dialog>
 </template>
