@@ -3,6 +3,7 @@ var assert = require('assert');
 
 var LdapClient = function() {
 	this.client = ldapjs.createClient({
+		reconnect: true,
 		url: 'ldap://directory.monash.edu',
 		bindDN: 'o=Monash University, c=au'
 	});
