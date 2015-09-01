@@ -1,9 +1,11 @@
 <section>
 <md-toolbar>
   <div class="md-toolbar-tools">
-      <md-button class="md-icon-button" aria-label="Settings">
+    <div class="settings-padding" ng-style="{width: $mdMedia('gt-md') ? '300px' : 'auto'}">
+      <md-button class="md-icon-button" aria-label="Settings" ng-click="toggle('group-navigation')">
         <md-icon md-font-library="material-icons">favorite</md-icon>
       </md-button>
+    </div>
     <h2>
       <a ui-sref="user.home">Kusema</a>
     </h2>
@@ -14,7 +16,7 @@
 
 <section layout="row" flex>
 
-<md-sidenav class="md-sidenav-left" md-component-id="group-navigation" md-is-locked-open="$mdMedia('gt-md')">
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="group-navigation" md-is-locked-open="$mdMedia('gt-md')" style="width: 300px;">
     <h2 class="md-subhead">Groups</h2>
     <md-content>
     <ul style="list-style-type: none; padding: 0;">
@@ -30,11 +32,11 @@
     </md-content>
 </md-sidenav>
 
-<md-content layout="row" style="width: 100%; overflow-y: scroll;">
-<div ui-view></div>
-</md-content>
+<md-content style="max-width: 600px; flex-grow: 1; overflow-y: auto;" ui-view></md-content>
 
-<div style="width: 180px; visibility: visible; padding: 10px; box-sizing: border-box;">
+<div style="flex-grow: 0.01" class="layout-spacer"></div>
+
+<div  class=" md-whiteframe-z2"style="width: 180px; visibility: visible; padding: 10px; box-sizing: border-box;" hide show-gt-md>
   <h2 class="md-subhead md-accent">Trending</h2>
   <ul style="list-style-type: none; padding: 0;">
     <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/question/123">Why do atoms act differently ...</a></li>
