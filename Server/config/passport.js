@@ -105,6 +105,9 @@ module.exports = function(passport, options) {
                     function(configuredUser) {
                         console.log('finished ldap');
                         return configuredUser.save();
+                    }, function(ldapError) {
+                        console.error('ldap error');
+                        return ldapError;
                     }
                 ).then(
                     function(savedUser) {
