@@ -30,11 +30,13 @@ var removeVotes = function (contentId, userId, cb) {
 	.exec(cb);
 }
 
-var setAsDeleted = function (contentId, userId, cb) {
+var setAsDeleted = function (contentId, userId) {
 	// check if user has permission to delete
-	return this.update({'_id': contentId},
-		{$set: {deleted: true}})
-	.exec(cb);
+	return this.findById(contentId)
+			   .then(function(content) {
+			   		content.deleted = true;
+			   		return content.save();
+			   });
 }
 
 var BaseContentSchema = function() {
@@ -46,7 +48,7 @@ var BaseContentSchema = function() {
 	    authorName:     { type: String, required: false }, 
 	    anonymous:      { type: Boolean, default: false },
 	    message:        { type: String, required: true },
-	    comments: 		{ type: Array, schema: ObjectId, ref: 'Comment', autopopulate: {select: 'author message'}},
+	    comments: 		{ type: Array, schema: ObjectId, ref: 'Comment', autopopulate: {select: 'author message', match: { deleted: false}}},
 		
 	    dateCreated:    { type: Date, default: Date.now },
 	    dateModified:   { type: Date, default: null },
@@ -58,7 +60,7 @@ var BaseContentSchema = function() {
 
 	this.statics.upVote = upVote;
 	this.statics.downVote = downVote;
-	this.statics.delete = setAsDeleted;
+	this.statics.setAsDeleted = setAsDeleted;
 	this.plugin(autoPopulate);
 }
 util.inherits(BaseContentSchema, mongoose.Schema);

@@ -38,12 +38,11 @@ exp.addByQuestionId = function(req, res, next) {
 exp.deleteAnswer = function(req, res, next) {
   
     // TODO add auth info ensure only creator, mods and admin can delete
-    var done = function (err, deleted) {
-        if(err) return next(err);
-        res.json(deleted);
-    }
 
-    Answer.setAsDeleted(req.params.answerId, req.user._id, done)
+    Answer.setAsDeleted(req.params.answerId, req.user._id).then(
+        res.json,
+        next
+    );
 };
 
 exp.upVoteAnswer = function(req, res, next) {

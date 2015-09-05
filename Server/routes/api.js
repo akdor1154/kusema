@@ -54,6 +54,7 @@ router.get('/comments', commentsCtrl.findByQAId);
 router.get('/comments/:commentId', commentsCtrl.findByCommentId);
 router.post('/comments/:parentId', commentsCtrl.addByQAId);
 router.delete('/comments/:commentId', commentsCtrl.deleteComment);
+router.put('/comments/:commentId', commentsCtrl.updateComment);
 router.put('/comments/upvote/:commentId', commentsCtrl.upVoteComment);
 router.put('/comments/downvote/:commentId', commentsCtrl.downVoteComment);
 
