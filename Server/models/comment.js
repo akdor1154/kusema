@@ -9,18 +9,12 @@ var commentSchema = new contentMethods.BaseContentSchema({
 })
 
 var emitChanged = function(comment) {
-	console.log('finding');
-	console.log(comment);
-	console.log('this');
-	console.log(this);
 	contentMethods.BaseContent.findById(this.parent)
 	   .then(function(parent) {
-	   		console.log('found you!');
 	   		console.log(parent);
 			socketio.io.emit('contentChanged', {'_id': parent._id, 'comments':parent.comments});
 	   }, function(error) {
-	   	console.log('oops');
-	   	console.log(error);
+	   		console.log(error);
 	   })
 }
 
