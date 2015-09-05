@@ -1,0 +1,13 @@
+.boringLink {
+	text-decoration: none;
+}
+
+
+.usernameFloat {
+	font-weight: bold;
+	display: block;
+	float: left;
+}
+.usernameFloat:after {
+	content: ':\a0';
+}

@@ -5,7 +5,8 @@ var questionPreviewDirective = function() {
 			},
 			templateUrl: 'common/components/QuestionPreview/questionPreviewTemplate.html',
 			controller: 'kusemaQuestionPreviewController',
-			controllerAs: 'c'
+			controllerAs: 'c',
+			css: 'common/components/QuestionPreview/questionPreview.css'
 		};
 	};
 //}

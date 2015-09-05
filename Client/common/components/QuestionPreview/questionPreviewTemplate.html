@@ -1,9 +1,10 @@
 <md-card>
 	<md-card-content>
-		<h2 class="md-title" ui-sref="user.question({id: c.question._id})">{{c.question.title}}</h2>
-		<p>
-		{{c.question.message}}
-		</p>
+		<a class="boringLink" ui-sref="user.question({id: c.question._id})">
+			<h2 class="md-title">{{c.question.title}}</h2>
+		</a>
+		<div class="usernameFloat">{{c.question.author.username}}</div>
+		<div kusema-markdown input="c.question.message"></div>
 	</md-card-content>
 	<div class="md-actions" layout="row" layout-align="end center">
 		<md-button ui-sref="user.question({id: c.question._id})">Answer</md-button>

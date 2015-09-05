@@ -12,6 +12,11 @@ kusema-content-card .comment {
 
 kusema-content-card .username {
 	font-weight: bold;
+	display: block;
+	float: left;
+}
+kusema-content-card .username:after {
+	content: ':\a0';
 }
 
 kusema-content-card md-card {

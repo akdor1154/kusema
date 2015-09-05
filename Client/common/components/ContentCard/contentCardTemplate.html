@@ -3,8 +3,8 @@
 	<md-card-content ng-switch-when="view">
 	  <h2 class="md-title" ng-bind="c.content.title"></h2>
 	  <div>
-	  	<span class="username">{{c.content.author.username}}:</span>
-	  	<span ng-bind="c.content.message"></span>
+	  	<span class="usernameFloat" ng-bind="c.content.author.username"></span>
+	  	<span><kusema-markdown input="c.content.message"></kusema-markdown></span>
   	  </div>
 	</md-card-content>
 
@@ -44,15 +44,15 @@
 
 <div class="comments-container md-whiteframe-z1" ng-if="c.content.comments">
 	<div class="comment" ng-repeat="comment in c.content.comments">
-		<span class="username">{{comment.author.username}}:</span>
-		<span class="message">{{comment.message}}</span>
+		<span class="username" ng-bind="comment.author.username"></span>
+		<span class="message" kusema-markdown input="comment.message" inline="true"></span>
 	</div>
 	<div class="addCommentContainer" kusema-needs-login>
 		<div class="md-actions" layout="row" layout-align="center" ng-hide="c.writingComment">
 			<md-button ng-click="c.writeComment()" >Comment on This</md-button>
 		</div>
 		<form class="commentForm" ng-show="c.writingComment">
-			<span class="username">{{c.loginData.user.username}}:</span>
+			<span class="usernameFloat">{{c.loginData.user.username}}:</span>
 			<md-input-container>
 				<label>Comment</label>
 				<textarea name="comment" ng-model="c.newComment"></textarea>

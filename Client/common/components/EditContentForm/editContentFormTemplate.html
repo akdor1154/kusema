@@ -11,4 +11,8 @@
 	<md-button type="button" ng-click="onCancel()">Cancel</md-button>
 	<md-button type="submit">{{c.actionText}} {{c.contentType}}</md-button>
 </div>
+<div>
+	<h2 class="md-title">Preview</h2>
+	<div readonly kusema-markdown input="c.content.message"></div>
+</div>
 </form>

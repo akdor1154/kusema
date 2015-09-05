@@ -1,0 +1,4 @@
+kusema-question-preview md-card-content {
+	max-height: 12em;
+	overflow: hidden;
+}
