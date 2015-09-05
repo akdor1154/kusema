@@ -43,28 +43,11 @@
 
 
 <div class="comments-container md-whiteframe-z1" ng-if="c.content.comments">
-	<div class="comment" ng-repeat="comment in c.content.comments">
-		<span class="username" ng-bind="comment.author.username"></span>
-		<span class="message" kusema-markdown input="comment.message" inline="true"></span>
-	</div>
+	<kusema-content-card-comment class="comment" ng-repeat="comment in c.content.comments" comment="comment">
+	</kusema-content-card-comment>
 	<div class="addCommentContainer" kusema-needs-login>
 		<div class="md-actions" layout="row" layout-align="center" ng-hide="c.writingComment">
 			<md-button ng-click="c.writeComment()" >Comment on This</md-button>
 		</div>
-		<form class="commentForm" ng-show="c.writingComment">
-			<span class="usernameFloat">{{c.loginData.user.username}}:</span>
-			<md-input-container>
-				<label>Comment</label>
-				<textarea name="comment" ng-model="c.newComment"></textarea>
-			</md-input-container>
-			<md-button class="md-icon-button" type="submit" ng-click="c.postComment()">
-				<md-icon md-font-set="material-icons">publish</md-icon>
-			</md-button>
-			<md-button class="md-icon-button" type="reset" ng-click="c.cancelComment()">
-				<md-icon md-font-set="material-icons">clear</md-icon>
-			</md-button>
-		</form>
-
-
 	</div>
 </div>

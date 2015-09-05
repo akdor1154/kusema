@@ -1,0 +1,32 @@
+<ng-switch on="c.viewMode">
+	<div ng-switch-when="view" style="clear: both;" class="commentView">
+		<span class="usernameFloat" ng-bind="c.comment.author.username"></span>
+		<span class="message" kusema-markdown input="c.comment.message" inline="true"></span>
+		<md-button class="md-icon-button editComment" type="button"
+					ng-click="c.startEditing()"
+					kusema-needs-login needs-user="c.comment.author"
+					style="float: right; margin-bottom: -12px; margin-top: -12px;">
+
+			<md-icon md-font-set="material-icons">edit</md-icon>
+		</md-button>
+	</div>
+
+	<div ng-switch-when="edit">
+		<form class="commentForm">
+			<span class="usernameFloat">{{c.loginData.user.username}}</span>
+			<md-input-container>
+				<label>Comment</label>
+				<textarea name="comment" ng-model="c.newComment"></textarea>
+			</md-input-container>
+			<md-button class="md-icon-button" type="submit" ng-click="c.submitComment()">
+				<md-icon md-font-set="material-icons">publish</md-icon>
+			</md-button>
+			<md-button class="md-icon-button" type="reset" ng-click="c.stopEditing()">
+				<md-icon md-font-set="material-icons">clear</md-icon>
+			</md-button>
+			<md-button class="md-icon-button" type="button" ng-click="c.deleteComment()">
+				<md-icon md-font-set="material-icons">delete</md-icon>
+			</md-button>
+		</form>
+	</div>
+</ng-switch>
