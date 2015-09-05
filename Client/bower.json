@@ -10,6 +10,7 @@
     "angular-animate": null,
     "angular-material": "~0.10.1",
     "angular-css": null,
+    "markdown-it": "~4.4.0",
     "ui-router": "~0.2.15"
   },
   "devDependencies": {
