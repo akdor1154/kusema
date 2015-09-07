@@ -46,15 +46,28 @@ exp.findByCommentId = function(req, res, next) {
 	});
 }
 
+exp.updateComment = function(req, res, next) {
+	Comment.findById(req.params.commentId).then(
+		function(comment) {
+			comment.message = req.body.message;
+			return comment.save();
+		}).then(
+		function(savedComment) {
+			res.json(savedComment);
+		},
+		function(error) {
+			return next(error);
+		});
+}
+
 exp.deleteComment = function(req, res, next) {
   
     // TODO add auth info ensure only creator, mods and admin can delete
-    var done = function (err, deleted) {
-        if(err) return next(err);
-        res.json(deleted);
-    }
 
-    Comment.setAsDeleted(req.params.commentId, req.user._id, done)
+    Comment.setAsDeleted(req.params.commentId, req.user._id).then(
+    	res.mjson,
+    	next
+    );
 };
 
 exp.upVoteComment = function(req, res, next) {

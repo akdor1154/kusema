@@ -9,11 +9,12 @@ var commentSchema = new contentMethods.BaseContentSchema({
 })
 
 var emitChanged = function(comment) {
-	console.log('finding');
 	contentMethods.BaseContent.findById(this.parent)
 	   .then(function(parent) {
-	   		console.log('found you!');
+	   		console.log(parent);
 			socketio.io.emit('contentChanged', {'_id': parent._id, 'comments':parent.comments});
+	   }, function(error) {
+	   		console.log(error);
 	   })
 }
 
@@ -26,7 +27,7 @@ commentSchema.path('message').index({text : true});
 
 commentSchema.pre('save', function(next) {
 	console.log('updating daddy');
-	contentMethods.BaseContent.update({_id: this.parent},{$push:{'comments': this._id}}, next);
+	contentMethods.BaseContent.update({_id: this.parent},{$addToSet:{'comments': this._id}}, next);
 	console.log('daddy updated');
 })
 commentSchema.pre('remove', function(next) {

@@ -22,9 +22,6 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.socketService = socketService;
 		this.$timeout = $timeout;
 		this.$scope = $scope;
-		this.writingComment = false;
-		this.submittingComment = false;
-		this.newComment = ""
 		this.subscription = null;
 		this.updateSubscription();
 		this.mode = this.modes.VIEW;
@@ -66,22 +63,6 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 	contentCardController.prototype.destroy = function() {
 		this.socketService.unwatchContent(this.content);
 	}
-	contentCardController.prototype.writeComment = function() {
-		this.writingComment = true;
-	}
-	contentCardController.prototype.postComment = function() {
-		this.submittingComment = true;
-		this.commentFactory.add({parent: this.content._id, message: this.newComment}).then(
-			function(response) {
-				this.submittingComment = false;
-				this.closeComment();
-			}.bind(this)
-		);
-	}
-	contentCardController.prototype.closeComment = function() {
-		this.writingComment = false;
-		this.newCommment = "";
-	}
 	contentCardController.prototype.editContent = function() {
 		this.mode = this.modes.EDIT;
 	}
@@ -96,7 +77,99 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.content = newContent;
 	}
 
+var contentCardCommentDirective = function() {
+	return {
+		bindToController: {
+			'comment': '=',
+			'parentId': '=',
+			'mode': '@'
+		},
+		scope: {},
+		templateUrl: 'common/components/ContentCard/contentCardCommentTemplate.html',
+		controller: 'kusemaContentCardCommentController',
+		controllerAs: 'c',
+	}
+}
+
+var contentCardCommentController = function(commentService, loginService) {
+		this.submittingComment = false;
+		this.newComment = ""
+		this.commentService = commentService;
+		this.loginData = loginService.bindables;
+	}
+	contentCardCommentController.prototype = Object.create(Object.prototype, {
+		mode: {writable: true, value: "view"},
+		viewMode: {
+			get: function() {
+				switch (this.mode) {
+					case "create":
+					case "edit":
+						return "edit";
+						break;
+					case "view":
+					default:
+						return "view";
+						break;
+				}
+			}
+		},
+		submitComment: {
+			get: function() {
+				switch (this.mode) {
+					case "create":
+						return this.createComment;
+					case "edit":
+						return this.editComment;
+					default:
+						return function() {};
+				}
+			}
+		}
+	})
+	contentCardCommentController.prototype.startCreating = function() {
+		this.mode = "create";
+	}
+	contentCardCommentController.prototype.startEditing = function() {
+		this.mode = "edit";
+		this.newComment = this.comment.message;
+	}
+	contentCardCommentController.prototype.postComment = function() {
+		this.submittingComment = true;
+		this.commentService.add({parent: this.parentId, message: this.newComment}).then(
+			function(response) {
+				this.submittingComment = false;
+				this.stopEditing();
+			}.bind(this)
+		);
+	}
+	contentCardCommentController.prototype.editComment = function() {
+		this.submittingComment = true;
+		this.commentService.update(this.comment._id, {parent: this.parentId, message: this.newComment}).then(
+			function(response) {
+				this.submittingComment = false;
+				this.stopEditing();
+			}.bind(this)
+		);
+	}
+	contentCardCommentController.prototype.deleteComment = function() {
+		this.submittingComment = true;
+		this.commentService.delete(this.comment._id).then(
+			function(response) {
+				this.submittingComment = false;
+				this.stopEditing();
+			}.bind(this)
+		);
+	}
+	contentCardCommentController.prototype.stopEditing = function() {
+		this.newCommment = "";
+		this.mode = "view";
+	}
+
 	
 kusema.addModule('kusema.components.contentCard')
 		.directive('kusemaContentCard', contentCardDirective)
 		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentService', 'loginService', 'socketFactory', contentCardController]);
+
+kusema.addModule('kusema.components.contentCard.comment')
+      .directive('kusemaContentCardComment', contentCardCommentDirective)
+      .controller('kusemaContentCardCommentController', ['commentService', 'loginService', contentCardCommentController]);

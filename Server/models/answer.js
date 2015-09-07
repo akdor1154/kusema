@@ -18,7 +18,7 @@ answerSchema.index({ downVotes: 1 });
 answerSchema.path('message').index({text : true});
 
 answerSchema.pre('save', function(next) {
-    Question.update({_id: this.question},{$push:{'answers': this._id}}, next);
+    Question.update({_id: this.question},{$addToSet:{'answers': this._id}}, next);
 })
 answerSchema.pre('remove', function(next) {
     Question.update({_id: this.question},{$pull:{'answers': this._id}}, next);

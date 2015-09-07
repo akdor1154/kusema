@@ -76,12 +76,10 @@ exp.updateQuestion = function (req, res, next) {
 exp.deleteQuestion = function(req, res, next) {
   
     // TODO add auth info ensure only creator, mods and admin can delete
-    var done = function (err, deleted) {
-        if(err) return next(err);
-        res.mjson(deleted);
-    }
-
-    Question.setAsDeleted(req.params.questionId, req.user._id, done)
+    Question.setAsDeleted(req.params.questionId, req.user._id).then(
+      res.mjson,
+      next
+    );
 };
 
 exp.upVoteQuestion = function(req, res, next) {

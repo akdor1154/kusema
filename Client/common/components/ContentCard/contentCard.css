@@ -10,9 +10,6 @@ kusema-content-card .comment {
 	margin: 4px;
 }
 
-kusema-content-card .username {
-	font-weight: bold;
-}
 
 kusema-content-card md-card {
 	position: relative; /* so z-index works on the shadow */
@@ -36,6 +33,14 @@ kusema-content-card .commentForm {
 	align-items: center;
 }
 
+kusema-content-card .commentView {
+	display: flex;
+	align-items: center;
+}
+
+kusema-content-card .commentView .message {
+	flex-grow: 1;
+}
 kusema-content-card .commentForm md-input-container {
 	flex-grow: 1;
 }
