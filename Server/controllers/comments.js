@@ -17,75 +17,56 @@ exp.findByQAId = function(req, res, next) {
 		findQuery.push({underscoreProperty: valueToPush});
 	});
 
-	var getComments = Comment.find({$and: findQuery}).exec();
-
-	getComments.addBack(function (err, comments) {
-		if (err) return next(err);
-		res.json(comments);
-	})
+	Comment.find({$and: findQuery})
+	.then( res.json )
+	.catch( next );
 };
 
 exp.addByQAId = function(req, res, next) {
 	var comment = new Comment();
 
-	comment.author = req.user._id;
+	comment.author  = req.user._id;
 	comment.message = req.body.message;
-	comment.parent = new ObjectId(req.params.parentId);
+	comment.parent  = new ObjectId(req.params.parentId);
 
-	comment.save( function (err, comment) {
-		if (err) return next(err);
-		res.json(comment)
-	});
+	comment.save()
+	.then( res.json )
+	.catch ( next );
 };
 
 exp.findByCommentId = function(req, res, next) {
-	var getComment = Comment.findById(req.params.commentId).exec();
-	getComment.addBack(function (err, comment) {
-		if (err) return next(err);
-		res.json(comment);
-	});
+	Comment.findById(req.params.commentId)
+	.then( res.json )
+	.catch( next );
 }
 
 exp.updateComment = function(req, res, next) {
-	Comment.findById(req.params.commentId).then(
-		function(comment) {
-			comment.message = req.body.message;
-			return comment.save();
-		}).then(
-		function(savedComment) {
-			res.json(savedComment);
-		},
-		function(error) {
-			return next(error);
-		});
+	Comment.findById(req.params.commentId)
+	.then( function(comment) {
+		comment.message = req.body.message;
+		return comment.save();
+	})
+	.then( res.json )
+	.catch( next );
 }
 
 exp.deleteComment = function(req, res, next) {
   
     // TODO add auth info ensure only creator, mods and admin can delete
 
-    Comment.setAsDeleted(req.params.commentId, req.user._id).then(
-    	res.mjson,
-    	next
-    );
+    Comment.setAsDeleted(req.params.commentId, req.user._id)
+    .then( res.mjson )
+    .catch( next );
 };
 
 exp.upVoteComment = function(req, res, next) {
-
-    var done = function (err, upVoted) {
-        if(err) return next(err);
-        res.json(upVoted);
-    }
-
-    Comment.upVote(req.params.commentId, req.user._id, done)
+    Comment.upVote(req.params.commentId, req.user._id)
+    .then( res.json )
+    .catch( next );
 };
 
 exp.downVoteComment = function(req, res, next) {
-
-    var done = function (err, downVoted) {
-        if(err) return next(err);
-        res.json(downVoted);
-    }
-
-    Comment.downVote(req.params.commentId, req.user._id, done)
+    Comment.downVote(req.params.commentId, req.user._id)
+    .then( res.json )
+    .catch( next );
 };

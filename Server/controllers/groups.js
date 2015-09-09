@@ -5,31 +5,16 @@ var exp = module.exports;
 
 
 exp.findById = function (req, res, next) {
-
-  var getGroup = Group.findOne(
-    { '_id': new ObjectId(req.params.groupId) }
-  ).exec();
-
-  getGroup.addBack( function (err, group) {
-    if (err) return next(err);
-    res.json(group);
-  });
-
+  Group.findById(req.params.groupId)
+  .then( res.json )
+  .catch( next );
 };
-
 
 exp.findAll = function (req, res, next) {
-
   Group.find()
-  .then(function(groups) {
-    res.mjson(groups);
-  })
-  .catch(function(error) {
-    next(error);
-  });
-
+  .then( res.mjson )
+  .catch( next );
 };
-
 
 exp.addGroup = function (req, res, next) {
 
@@ -37,18 +22,12 @@ exp.addGroup = function (req, res, next) {
 
   var group = new Group();
   
-  group.name = req.body.name;
+  group.name   = req.body.name;
+  group.topics = req.body.topics;
 
-  var topics = req.body.topics;
-  
-  for(var i in topics) {
-    group.topics.push(ObjectId(topics[i]))
-  }
-  
-  group.save( function (err, group) {
-    if (err) return next(err);
-    res.json(group)
-  });
+  group.save()
+  .then( res.json )
+  .error( next );
 
 };
 
@@ -63,22 +42,21 @@ exp.updateTopics = function (req, res, next) {
     { '_id': req.params.groupId }
   ).exec();
 
-  updateTopics.addBack( function (err, group) {
-    if (err) return next(err);
-
-    if (group) { 
-      
+  Group.findById(req.params.groupId)
+  .then( function(group) {
+    if (group) {
       for (var i in topics) {
         if (group.topics.indexOf(topics[i]) === -1) {
-          group.topics.push(ObjectId(topics[i]));
+          group.topics.push(topics[i]);
         }  
       }
-
-      group.save();
+      return group.save();
+    } else {
+      return group;
     }
-
-    res.json(group);
-  });
+  })
+  .then( res.json )
+  .catch( next);
 
 };
 
@@ -90,11 +68,8 @@ exp.deleteGroup = function (req, res, next) {
   var deleteGroup = Group.update(
     { '_id': req.params.groupId },
     { $set: { 'deleted': true } }
-  ).exec();
-
-  deleteGroup.addBack( function (err, updated, raw) {
-    if (err) return next(err);
-    res.json(raw);
-  });
+  )
+  .then( res.json )
+  .catch( next );
 
 };

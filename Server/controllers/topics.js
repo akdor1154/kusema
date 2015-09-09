@@ -5,15 +5,9 @@ var exp = module.exports;
 
 exp.findById = function (req, res, next) {
 
-  Topic.findOne(
-    { '_id': new ObjectId(req.params.topicId) }
-  )
-  .then( function (topic) {
-    res.json(topic);
-  })
-  .catch(function(error) {
-    return next(error)
-  });
+  Topic.findById(req.params.topicId)
+  .then( res.json )
+  .catch( next );
 
 };
 
@@ -27,14 +21,9 @@ exp.findByName = function (req, res, next) {
 
 exp.findAll = function (req, res, next) {
 
-  Topic.find().exec()
-  .then( function (topics) {
-    res.mjson(topics);
-  })
-  .catch(function(error) {
-    return next(error)
-  });
-
+  Topic.find()
+  .then( res.mjson )
+  .catch( next );
 };
 
 
@@ -46,10 +35,9 @@ exp.addTopic = function (req, res, next) {
   // TODO set case of topic (all lower?)
   topic.name = req.body.name;
 
-  topic.save( function (err, topic) {
-    if (err) return next(err);
-    res.json(topic)
-  });
+  topic.save()
+  .then( res.json )
+  .catch( next );
 
 };
 
@@ -58,14 +46,11 @@ exp.deleteTopic = function (req, res, next) {
   
   // TODO check if user is admin
 
-  var deleteTopic = Topic.update(
+  Topic.update(
     { '_id': req.params.topicId },
     { $set: { 'deleted': true } }
-  ).exec();
-
-  deleteTopic.addBack( function (err, updated, raw) {
-    if (err) return next(err);
-    res.json(raw);
-  });
+  )
+  .then( res.json )
+  .catch( next );
 
 };
