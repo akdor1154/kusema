@@ -1,7 +1,7 @@
 'use strict';
 
 
-var BaseContent = function BaseContent(contentJSON, factory) {
+var BaseJson = function BaseJson(contentJSON, factory) {
         Object.defineProperty(this, 'factory', {writable:true, value:null, enumerable: false});
         this.factory = factory;
         for (var property in Object.getPrototypeOf(this)) {
@@ -9,19 +9,31 @@ var BaseContent = function BaseContent(contentJSON, factory) {
                 this[property] = contentJSON[property];
             }
         }
+        this.json = contentJSON;
         this.dateCreated = new Date(this.dateCreated);
         this.dateModified = new Date(this.dateModified);
+    }
+
+    BaseJson.prototype = Object.create(Object.prototype, {
+        constructor: {writable: false, value: BaseJson, enumerable: false},
+        json: {writable: true, value: 'BaseContent', enumerable: false},
+        _id: {writable: true, value: 0, enumerable: true},
+        dateCreated: { writable: true, value: null, enumerable: true },
+        dateModified: { writable: true, value: null, enumerable: true },
+    })
+//} BaseJson
+
+
+var BaseContent = function BaseContent(contentJSON, factory) {
+        BaseJson.call(this, contentJSON, factory);
     	return this;
     }
-    BaseContent.prototype = Object.create(Object.prototype, {
+    BaseContent.prototype = Object.create(BaseJson.prototype, {
         name: {writable: false, value: 'BaseContent', enumerable: false},
         constructor: {writable: false, value: BaseContent, enumerable: false},
-        _id: {writable: true, value: 0, enumerable: true},
         author: { writable: true, value: 0, enumerable: true }, //TODO add object ID requirement here
         authorName: { writable: true, value: "", enumerable: true},
         message: { writable: true, value: 0, enumerable: true },
-        dateCreated: { writable: true, value: null, enumerable: true },
-        dateModified: { writable: true, value: null, enumerable: true },
         comments: { writable: true, value: [], enumerable: true},
         upVotes: { writable: true, value: 0, enumerable: true },
         downVotes: { writable: true, value: 0, enumerable: true},
@@ -87,6 +99,9 @@ var Answer = function Answer(answerJSON, answerFactory) {
 //} Answer
 
 
+
+
+kusema.models.BaseJson = BaseJson;
 kusema.models.BaseContent = BaseContent;
 kusema.models.Comment = Comment;
 kusema.models.Question = Question;
