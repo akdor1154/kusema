@@ -1,11 +1,61 @@
 <form ng-submit="c.save()">
+
 <md-input-container ng-if="c.contentType == 'Question'">
 	<label>{{c.contentType}} Subject</label>
 	<input ng-model="c.content.title" />
 </md-input-container>
+
 <md-input-container>
 	<label>Message</label>
 	<textarea ng-model="c.content.message"></textarea>
+</md-input-container>
+
+<md-autocomplete
+	ng-if="c.contentType == 'Question'"
+	md-no-cache="true"
+	md-selected-item="c.content.group"
+	md-search-text = "c.groupSearchText"
+	md-search-text-change = "c.log()"
+	md-selected-item-change = "c.log()"
+	md-min-length=0
+	md-items = "group in groupService.bindables.groupsArray"
+	md-item-text = "group.name"
+  	md-autofocus = "true"
+  	md-floating-label = "Which Group does this Question belong in?"
+	>
+	<md-item-template>
+		<span class="groupCode">
+		{{group.unitCode}}:
+		</span>
+		<span class="groupName">
+		{{group.title}}
+		</span>
+	</md-item-template>
+</md-autocomplete>
+
+<md-chips
+	ng-model = "c.content.topics"
+	ng-if="c.contentType == 'Question'"
+	md-autocomplete-snap
+	md-require-match="true"
+	>
+	<md-autocomplete
+		md-selected-item = "c.selectedTopic"
+		md-search-text = "c.topicSearchText"
+		md-items = "topic in groupService.topicService.bindables.topicsArray"
+		md-item-text = "topic.name"
+		md-floating-label = "Which Topics are relevant to this question?"
+		>
+		<span md-highligt-text="c.topicSearchText">
+		{{topic.name}}
+		</span>
+	</md-autocomplete>
+	<md-chip-template>
+		{{$chip.name}}
+	</md-chip-template>
+</md-chips>
+
+
 </md-input-container>
 <div class="md-actions" layout="row">
 	<md-button type="button" ng-click="onCancel()">Cancel</md-button>

@@ -33,7 +33,15 @@
 	
 	<md-card-footer>
 		<div class="footer-contents">
-	Posted on <kusema-inline-date date="c.content.dateCreated"></kusema-inline-date>
+			Posted on <kusema-inline-date date="c.content.dateCreated"></kusema-inline-date>
+			<span ng-if="c.content.name == 'Question'">
+				, in <kusema-inline-group group="c.content.group"></kusema-inline-group>.
+			</span>
+			<md-chips ng-model="c.content.topics" readonly="true">
+				<md-chip-template>
+					{{$chip.name}}
+				</md-chip-template>
+			</md-chips>
 		</div>
 		<md-button class="md-icon-button" kusema-needs-login needs-user="c.content.author" ng-click="c.editContent()">
 			<md-icon md-font-set="material-icons">edit</md-icon>

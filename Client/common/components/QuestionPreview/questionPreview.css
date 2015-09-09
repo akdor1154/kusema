@@ -1,4 +1,8 @@
-kusema-question-preview md-card-content {
+kusema-question-preview md-card-content message {
 	max-height: 12em;
 	overflow: hidden;
+}
+/*HACK while md-chips are broken*/
+kusema-question-preview md-chip[index="0"] {
+	background-color: rgb(220, 200, 220);
 }
