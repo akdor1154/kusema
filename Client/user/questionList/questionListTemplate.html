@@ -3,12 +3,13 @@
 
 </md-content>
 
-<md-button class="md-fab" aria-label="Ask a Question" style="position: fixed; bottom: 20px; right: 20px;" ng-click="c.showWriter()">
+<md-button class="md-fab" aria-label="Ask a Question" style="position: fixed; bottom: 20px; right: 20px;" ng-click="c.showWriter($event)">
   <md-icon md-font-set="material-icons">add</md-icon>
 </md-button>
 
 <template id="addQuestionDialog">
-<md-dialog><md-dialog-content>
+<md-dialog
+	md-focus-on-open="false"><md-dialog-content>
 <kusema-edit-content-form
 	on-cancel="c.hideWriter()"
 	on-submit="c.newQuestionPosted(newContent)"
