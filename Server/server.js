@@ -44,6 +44,8 @@ app.options = options;
 
 // Configure database
 var dbConfig = require(here('config/database.js'));
+
+mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.url);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

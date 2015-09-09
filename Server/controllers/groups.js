@@ -20,12 +20,13 @@ exp.findById = function (req, res, next) {
 
 exp.findAll = function (req, res, next) {
 
-  var getGroups = Group.find().exec();
-
-  getGroups.addBack( function (err, groups) {
-    if (err) return next(err);
-    res.json(groups);
+  Group.find()
+  .then(function(groups) {
+    res.mjson(groups);
   })
+  .catch(function(error) {
+    next(error);
+  });
 
 };
 

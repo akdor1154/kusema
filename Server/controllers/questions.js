@@ -42,11 +42,14 @@ exp.addQuestion = function (req, res, next) {
   //question.code.        push(req.body.code);
   question.upVotes.     push(req.user._id);
 
-  question.save( function (err, question) {
-    if (err) return next(err);
+  question.save()
+  .then(function(question) {
     res.json(question);
-    console.log(question);
-  });
+  })
+  .catch(function(error) {
+    console.error(error);
+    next(error);
+  })
 };
 
 exp.updateQuestion = function (req, res, next) {
@@ -60,14 +63,14 @@ exp.updateQuestion = function (req, res, next) {
     question.topics        = req.body.topics;
     question.dateModified = new Date();
     return question.save();
-  }).then(
-    function(updatedQuestion) {
-      res.mjson(updatedQuestion);
-    },
-    function(error) {
-      return next(error);
-    }
-  );
+  })
+  .then(function(updatedQuestion) {
+    res.mjson(updatedQuestion);
+  })
+  .catch( function(error) {
+    console.error(error);
+    return next(error);
+  });
 };
 
 exp.deleteQuestion = function(req, res, next) {
