@@ -3,6 +3,7 @@ var objectId = mongoose.Schema.Types.ObjectId;
 
 // Schema definition
 var topicSchema = mongoose.Schema({
+    _id:            { type: String, required: true, unique: true }, 
     name:           { type: String, required: true },
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
@@ -11,6 +12,10 @@ var topicSchema = mongoose.Schema({
 
 // Indexes
 topicSchema.path('name').index({text : true});
+topicSchema.pre('validate', function(next) {
+	this._id = this.name;
+	next();
+});
 
 
 module.exports = mongoose.model('Topic', topicSchema);

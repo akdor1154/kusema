@@ -12,8 +12,8 @@ var autoPopulate 	= require('mongoose-autopopulate');
 // Schema definition
 var questionSchema = new contentMethods.BaseContentSchema({
     title:          { type: String, required: true },
-    topics:         [{ type: objectId, ref: 'Topic' }],
-    group:          { type: objectId, ref: 'Group', required: false }, //TODO: SET REQUIRED TO TRUE!!
+    topics:         [{ type: String, ref: 'Topic' }],
+    group:          { type: String, ref: 'Group', required: false }, //TODO: SET REQUIRED TO TRUE!!
     answers:        {
     					type: Array,
     					schema: objectId, ref: 'Answer',
