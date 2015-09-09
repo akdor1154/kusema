@@ -76,13 +76,20 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.finishEditingContent();
 		this.content = newContent;
 	}
+	contentCardController.prototype.writeComment = function() {
+		this.writingComment = true;
+	}
+	contentCardController.prototype.finishedWritingComment = function() {
+		this.writingComment = false;
+	}
 
 var contentCardCommentDirective = function() {
 	return {
 		bindToController: {
 			'comment': '=',
 			'parentId': '=',
-			'mode': '@'
+			'mode': '@',
+			'onFinishedEditing': '&'
 		},
 		scope: {},
 		templateUrl: 'common/components/ContentCard/contentCardCommentTemplate.html',
@@ -115,6 +122,7 @@ var contentCardCommentController = function(commentService, loginService) {
 		},
 		submitComment: {
 			get: function() {
+			console.log('posting');
 				switch (this.mode) {
 					case "create":
 						return this.createComment;
@@ -133,12 +141,15 @@ var contentCardCommentController = function(commentService, loginService) {
 		this.mode = "edit";
 		this.newComment = this.comment.message;
 	}
-	contentCardCommentController.prototype.postComment = function() {
+	contentCardCommentController.prototype.createComment = function() {
 		this.submittingComment = true;
 		this.commentService.add({parent: this.parentId, message: this.newComment}).then(
 			function(response) {
 				this.submittingComment = false;
 				this.stopEditing();
+				//if we've just created a comment, we are a create form and should be reset
+				this.mode = "create";
+				this.newComment = "";
 			}.bind(this)
 		);
 	}
@@ -163,6 +174,9 @@ var contentCardCommentController = function(commentService, loginService) {
 	contentCardCommentController.prototype.stopEditing = function() {
 		this.newCommment = "";
 		this.mode = "view";
+		if (this.onFinishedEditing) {
+			this.onFinishedEditing();
+		}
 	}
 
 	
