@@ -4,15 +4,11 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var exp = module.exports;
 
 exp.findUserById = function (req, res, next) {
-  User.findById(req.params.userId)
-  .then( res.json )
-  .catch( next );
+  return User.findById(req.params.userId);
 };
 
 exp.findUserByUsername = function (req, res, next) {
-  User.findOne(
+  return User.findOne(
     { 'local.username': req.body.username }
-  )
-  .then( res.json )
-  .catch( next );
+  );
 };

@@ -4,12 +4,9 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var exp = module.exports;
 
 exp.findByQuestionId = function(req, res, next) {
-    Question.findById(req.params.questionId)
+    return Question.findById(req.params.questionId)
     .then( function(question) {
-        res.json(question.answers);
-    })
-    .catch( function(error) {
-        next(error);
+        return question.answers;
     });
 };
 
@@ -39,5 +36,5 @@ exp.upVoteAnswer = function(req, res, next) {
 };
 
 exp.downVoteAnswer = function(req, res, next) {
-    Answer.downVote(req.params.answerId, req.user._id);
+    return Answer.downVote(req.params.answerId, req.user._id);
 };
