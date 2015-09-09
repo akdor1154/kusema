@@ -68,13 +68,23 @@ var Question = function Question(questionJSON, questionService) {
         if (this.answers) {
             this.answers = questionService.answerService.createClientModels(this.answers);
         };
+        questionService.groupService.waitForGroups.then(function() {
+            if (this.group) {
+                this.group = questionService.groupService.getGroup(this.group);
+            }
+            if (this.topics) {
+                this.topics = questionService.groupService.topicService.getTopics(this.topics);
+            }
+        }.bind(this));
         return this;
     }
     Question.prototype = Object.create(BaseContent.prototype, {
         name: {writable: false, value: 'Question', enumerable: false},
         constructor: {writable: false, value: Question, enumerable: false},
         title: { writable: true, value: "", enumerable: true },
-        answers: {writable: true, value: null, enumerable: true}
+        answers: {writable: true, value: null, enumerable: true},
+        group: {writable: true, value: null, enumerable: true},
+        topics: {writable: true, value: null, enumerable: true}
     });
 //} Question
 
@@ -99,6 +109,25 @@ var Answer = function Answer(answerJSON, answerFactory) {
 //} Answer
 
 
+var Group = function Group(groupJSON, groupService) {
+        BaseJson.call(this, groupJSON, groupService);
+        if (this.topics) {
+            this.topics = this.topics.map(function(topicID) { return groupService.topicService.getTopic(topicID); });
+        }
+    }
+    Group.prototype = Object.create(BaseJson.prototype, {
+        name: {writable: true, value: '', enumerable: true},
+        topics: {writable: true, value: null, enumerable: true},
+        unitCode: {writable: true, value: '', enumerable: true},
+        title: {writable: true, value: '', enumerable: true}
+    });
+
+var Topic = function Topic(topicJSON) {
+        BaseJson.call(this, topicJSON);
+    }
+    Topic.prototype = Object.create(BaseJson.prototype, {
+        name: {writable: true, value: '', enumerable: true},
+    });
 
 
 kusema.models.BaseJson = BaseJson;
@@ -106,3 +135,5 @@ kusema.models.BaseContent = BaseContent;
 kusema.models.Comment = Comment;
 kusema.models.Question = Question;
 kusema.models.Answer = Answer;
+kusema.models.Group = Group;
+kusema.models.Topic = Topic;
