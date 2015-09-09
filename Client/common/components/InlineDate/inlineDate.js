@@ -3,7 +3,7 @@
 var inlineDateDirective = function() {
 		return {
 			bindToController: {
-				'date': '&'
+				'date': '='
 			},
 			scope: {},
 			templateUrl: 'common/components/InlineDate/inlineDate.html',
@@ -13,7 +13,6 @@ var inlineDateDirective = function() {
 	};
 //}
 var inlineDateController = function($scope) {
-		this.date = new Date();
 		return this;
 	}
 	inlineDateController.prototype.format = function($scope) {
