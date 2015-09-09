@@ -102,13 +102,15 @@ app.use(function(req, res, next) {
 });
 
 // Add routes
-var account = require('./routes/account')(passport);
-var api 	= require('./routes/api');
+var account = require(here('./routes/account'))(passport);
+var api 	= require(here('./routes/api'));
 var baucis  = require(here('config/baucis'));
 
 app.use('/account', account);
 app.use('/api', api);
 app.use('/rest', baucis());
+
+require(here('config/groups'));
 
 /// Catch 404 and forward to error handler
 app.use(function(req, res, next) {
