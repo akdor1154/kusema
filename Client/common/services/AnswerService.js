@@ -2,7 +2,7 @@
 
 var AnswerService = function($http, kusemaConfig, socketFactory) {
 		this.initCommonDeps($http, kusemaConfig, socketFactory);
-		this.urlBase = kusemaConfig.url()+'api/answers';
+		this.urlBase = 'api/answers';
 	}
 
 	AnswerService.prototype = Object.create(BaseContentService.prototype ,{

@@ -2,7 +2,7 @@
 
 var QuestionService = function($http, kusemaConfig, socketFactory, answerService, groupService) {
 		this.initCommonDeps($http, kusemaConfig, socketFactory);
-		this.urlBase = this.kusemaConfig.url()+'api/questions';
+		this.urlBase = 'api/questions';
 		this.answerService = answerService;
 		this.groupService = groupService;
 	}

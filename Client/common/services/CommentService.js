@@ -24,7 +24,7 @@ var CommentSubscription = function(socketFactory, commentFactory, baseContent, c
 
 var CommentService = function($http, kusemaConfig, socketFactory) {
 		this.initCommonDeps($http, kusemaConfig, socketFactory);
-        this.urlBase = kusemaConfig.url()+'api/comments';
+        this.urlBase = 'api/comments';
     }
 
 	CommentService.prototype = Object.create(BaseContentService.prototype, {

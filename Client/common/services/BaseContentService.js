@@ -58,7 +58,8 @@ var BaseContentService = function($http, kusemaConfig, socketFactory, questionSe
         		   .then(this.modelFromResponse.bind(this));
     };
     BaseContentService.prototype.update = function (id, editedContent) {
-        return this.$http.put(this.urlBase + '/' + id, editedContent);
+        return this.$http.put(this.urlBase + '/' + id, JSON.stringify(editedContent, this.sanitizeJson))
+        		   .then(function(response) {return response.data});
     };
     BaseContentService.prototype.upVote = function (id) {
     	return this.$http.put(this.urlBase + '/upvote/' + id);

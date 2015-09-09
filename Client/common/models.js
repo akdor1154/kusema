@@ -55,7 +55,7 @@ var BaseContent = function BaseContent(contentJSON, factory) {
     BaseContent.prototype.update = function(newJson) {
         return this.factory.update(this._id, newJson)
                 .then(function(updated) {
-                    this.constructor.call(this, newJson, this.factory);
+                    this.constructor.call(this, updated, this.factory);
                     return this;
                 }.bind(this));  
     };
