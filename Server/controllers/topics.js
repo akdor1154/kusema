@@ -5,9 +5,7 @@ var exp = module.exports;
 
 exp.findById = function (req, res, next) {
 
-  Topic.findById(req.params.topicId)
-  .then( res.json )
-  .catch( next );
+  return Topic.findById(req.params.topicId);
 
 };
 
@@ -21,9 +19,7 @@ exp.findByName = function (req, res, next) {
 
 exp.findAll = function (req, res, next) {
 
-  Topic.find()
-  .then( res.mjson )
-  .catch( next );
+  return Topic.find();
 };
 
 
@@ -35,9 +31,7 @@ exp.addTopic = function (req, res, next) {
   // TODO set case of topic (all lower?)
   topic.name = req.body.name;
 
-  topic.save()
-  .then( res.json )
-  .catch( next );
+  return topic.save();
 
 };
 
@@ -46,11 +40,9 @@ exp.deleteTopic = function (req, res, next) {
   
   // TODO check if user is admin
 
-  Topic.update(
+  return Topic.update(
     { '_id': req.params.topicId },
     { $set: { 'deleted': true } }
-  )
-  .then( res.json )
-  .catch( next );
+  );
 
 };

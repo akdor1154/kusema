@@ -5,15 +5,11 @@ var exp = module.exports;
 
 
 exp.findById = function (req, res, next) {
-  Group.findById(req.params.groupId)
-  .then( res.json )
-  .catch( next );
+  return Group.findById(req.params.groupId);
 };
 
 exp.findAll = function (req, res, next) {
-  Group.find()
-  .then( res.mjson )
-  .catch( next );
+  return Group.find();
 };
 
 exp.addGroup = function (req, res, next) {
@@ -25,9 +21,7 @@ exp.addGroup = function (req, res, next) {
   group.name   = req.body.name;
   group.topics = req.body.topics;
 
-  group.save()
-  .then( res.json )
-  .error( next );
+  return group.save();
 
 };
 
@@ -38,11 +32,7 @@ exp.updateTopics = function (req, res, next) {
 
   var topics = req.body.topics;
 
-  var updateTopics = Group.findOne(
-    { '_id': req.params.groupId }
-  ).exec();
-
-  Group.findById(req.params.groupId)
+  return Group.findById(req.params.groupId)
   .then( function(group) {
     if (group) {
       for (var i in topics) {
@@ -54,9 +44,7 @@ exp.updateTopics = function (req, res, next) {
     } else {
       return group;
     }
-  })
-  .then( res.json )
-  .catch( next);
+  });
 
 };
 
@@ -65,11 +53,9 @@ exp.deleteGroup = function (req, res, next) {
   
   // TODO add auth info ensure only mods and admin can delete
 
-  var deleteGroup = Group.update(
+  return Group.update(
     { '_id': req.params.groupId },
     { $set: { 'deleted': true } }
-  )
-  .then( res.json )
-  .catch( next );
+  );
 
 };

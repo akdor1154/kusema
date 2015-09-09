@@ -7,6 +7,7 @@ var exp = module.exports;
 
 exp.findByQAId = function(req, res, next) {
 	findQuery = [];
+	//I wholeheartedly apologize for the following godawful mess and will fix soon :)
 	propertiesToFind ['questionId', 'answerId'];
 	propertiesToFind.foreach(function(property) {
 		var valueToPush;
@@ -17,9 +18,7 @@ exp.findByQAId = function(req, res, next) {
 		findQuery.push({underscoreProperty: valueToPush});
 	});
 
-	Comment.find({$and: findQuery})
-	.then( res.json )
-	.catch( next );
+	return Comment.find({$and: findQuery});
 };
 
 exp.addByQAId = function(req, res, next) {
@@ -29,44 +28,32 @@ exp.addByQAId = function(req, res, next) {
 	comment.message = req.body.message;
 	comment.parent  = new ObjectId(req.params.parentId);
 
-	comment.save()
-	.then( res.json )
-	.catch ( next );
+	return comment.save();
 };
 
 exp.findByCommentId = function(req, res, next) {
-	Comment.findById(req.params.commentId)
-	.then( res.json )
-	.catch( next );
+	return Comment.findById(req.params.commentId)
 }
 
 exp.updateComment = function(req, res, next) {
-	Comment.findById(req.params.commentId)
+	return Comment.findById(req.params.commentId)
 	.then( function(comment) {
 		comment.message = req.body.message;
 		return comment.save();
 	})
-	.then( res.json )
-	.catch( next );
 }
 
 exp.deleteComment = function(req, res, next) {
   
     // TODO add auth info ensure only creator, mods and admin can delete
 
-    Comment.setAsDeleted(req.params.commentId, req.user._id)
-    .then( res.mjson )
-    .catch( next );
+    return Comment.setAsDeleted(req.params.commentId, req.user._id)
 };
 
 exp.upVoteComment = function(req, res, next) {
-    Comment.upVote(req.params.commentId, req.user._id)
-    .then( res.json )
-    .catch( next );
+    return Comment.upVote(req.params.commentId, req.user._id);
 };
 
 exp.downVoteComment = function(req, res, next) {
-    Comment.downVote(req.params.commentId, req.user._id)
-    .then( res.json )
-    .catch( next );
+    return Comment.downVote(req.params.commentId, req.user._id);
 };

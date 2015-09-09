@@ -14,7 +14,6 @@ exp.findByQuestionId = function(req, res, next) {
 };
 
 exp.addByQuestionId = function(req, res, next) {
-
     var answer = new Answer();
     
     answer.author       = new ObjectId(req.user._id);
@@ -23,32 +22,22 @@ exp.addByQuestionId = function(req, res, next) {
     answer.question     = new ObjectId(req.params.questionId);
     answer.upVotes.     push(req.user._id);
 
-    answer.save()
+    return answer.save()
     .then( function(answer) {
-            // if we want out plugins to run, i.e. autopopulation, then we need to run a database find :(
-            Answer.findById(answer._id).then(res.mjson.bind(res));
-    })
-    .catch( function (error) {
-            next(error);
+            // if we want our plugins to run, i.e. autopopulation, then we need to run a database find :(
+            return Answer.findById(answer._id)
     });
-};
+}
 
 exp.deleteAnswer = function(req, res, next) {
-  
     // TODO add auth info ensure only creator, mods and admin can delete
-    Answer.setAsDeleted(req.params.answerId, req.user._id)
-    .then( res.json )
-    .catch( next );
+    return Answer.setAsDeleted(req.params.answerId, req.user._id);
 };
 
 exp.upVoteAnswer = function(req, res, next) {
-    Answer.upVote(req.params.answerId, req.user._id)
-    .then( res.json )
-    .catch( next );
+    return Answer.upVote(req.params.answerId, req.user._id);
 };
 
 exp.downVoteAnswer = function(req, res, next) {
-    Answer.downVote(req.params.answerId, req.user._id)
-    .then( res.json )
-    .catch( next );
+    Answer.downVote(req.params.answerId, req.user._id);
 };
