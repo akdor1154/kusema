@@ -1,6 +1,7 @@
 var mongoose = require('mongoose');
 var objectId = mongoose.Schema.Types.ObjectId;
 var bcrypt   = require('bcrypt');
+var Group   = require('./group');
 
 // Schema definition
 var userSchema = mongoose.Schema({
@@ -8,10 +9,15 @@ var userSchema = mongoose.Schema({
     password:       String,
     authcate:       String,
     email:          String,
+    type:           String,
+    personalTitleFull: String,
+    givenNames:     [String],
+    surname:        String,
+    displayName: String,
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
-    subscriptions:  [{ type: objectId, active: Boolean }],
-    enrollments:    [{ type: objectId, active: Boolean }],
+    subscriptions:  [{ type: String }],
+    enrollments:    [{ type: String }],
     isAdmin:        { type: Boolean, default: false },
     moderatorOf:    [{ type: objectId, ref: 'Group' }]
 })
@@ -37,24 +43,115 @@ userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.password);
 };
 
+userSchema.virtual('firstName').get(function() { try { return this.givenNames[0] } catch (e) { return '' } });
+
+userSchema.path('displayName').get(function(displayName) {
+    return displayName ? displayName : this.username;
+});
+
+// in theory this might be a virtual, however that means we can't do lean queries and such without pulling
+// in half the user object anyway, and as we'll be using this all the time it's probably worth just saving it.
+userSchema.methods.generateDisplayName = function() {
+    try {
+        switch (this.type) {
+            case 'staff':
+                return this.personalTitle+'.'
+                        +' '+this.firstName
+                        +' '+this.surname;
+                break;
+            case 'student':
+                return this.firstName
+                        +' '+this.surname.substring(0,1);
+                break;
+            default:
+                var e =  new Error('old account with no type!');
+                console.error(e);
+                console.trace(e);
+                console.log(this);
+                throw e;
+                break;
+        }
+    } catch (e) {
+        return this.username;
+    }
+};
+
+userSchema.virtual('personalTitle').get(function() {
+    switch (this.personalTitleFull) {
+        case 'Professor':
+            return 'Prof';
+        case 'Associate Professor':
+            return 'A.Prof';
+        default:
+            return this.personalTitleFull;
+    }
+});
+
+userSchema.set('toJSON', {virtuals: true, getters: true});
+userSchema.set('toObject', {virtuals: true, getters: true});
+
 userSchema.methods.configureFromAuthcate = function(authcateUserName) {
     var ldap = require('../services/ldapClient.js');
 
     this.authcate = authcateUserName;
-    return ldap.getUser(authcateUserName).then(
-        function(ldapUser) {
+    var user = this;
+    return ldap.getUser(authcateUserName)
+        .then( function(ldapUser) {
             console.log('got ldap result');
-            this.email = ldapUser.mail;
-            this.authcate = ldapUser.uid;
-            this.username = ldapUser.givenName.split(' ')[0]+' '+ldapUser.sn.substring(0,1);
-            return this;
-        }.bind(this),
-        function(ldapError) {
-            console.error('couldn\'t find '+authcateUserName+' in ldap :(');
-            console.error(ldapError);
-            return ldapError;
-        }
-    );
+            user.email = ldapUser.mail;
+            user.authcate = ldapUser.uid;
+
+            if (ldapUser.ou.indexOf('Staff') != -1) {
+                user.type = 'staff';
+            } else if (ldapUser.ou.indexOf('Student') != -1) {
+                user.type = 'student';
+            }
+
+            user.personalTitleFull = ldapUser.personalTitle;
+            user.givenNames = ldapUser.givenName.split(' ');
+            user.surname = ldapUser.sn;
+            user.username = user.authcate;
+
+            user.displayName = user.generateDisplayName();
+
+            user.ldapUser = ldapUser;
+
+            var userP = Promise.resolve(user);
+
+            if (ldapUser.monashEnrolledSubject) {
+                userP = userP
+                    .then(function() {
+                        return Group.find({
+                            '_id': { '$in': ldapUser.monashEnrolledSubject }
+                        })
+                        .then(function(groups) {
+                            console.log(groups);
+                            user.enrollments = groups.map(function(group) {return group._id});
+                            return user;
+                        });
+                    });
+            }
+
+            if (ldapUser.monashTeachingCommitment) {
+                userP = userP
+                    .then( function() {
+                        Group.find({
+                            '_id': { '$in': ldapUser.monashTechingCommitment.map(function(u) { return u.toLower() }) }
+                        })
+                        .then(function(groups) {
+                            user.enrollments = groups.map(function(group) { return group._id});
+                            return user;
+                        });
+                    });
+            }
+
+            return userP;
+        })
+        .catch( function(error) {
+            console.error('error initializing '+authcateUserName+' from ldap');
+            console.error(error.stack);
+            return error;
+        });
 }
 
 
