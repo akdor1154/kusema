@@ -73,6 +73,7 @@ promisedRouter.get('/user/:username', usersCtrl.findUserByUsername);
 // Question Routes
 promisedRouter.post('/questions', questionsCtrl.addQuestion);
 promisedRouter.get('/questions/tenMore/:requestNumber', questionsCtrl.nextTenQuestions); // TODO Replace this with feed
+promisedRouter.get('/questions/tenMore/:groupID/:requestNumber', questionsCtrl.nextTenQuestions); // TODO Replace this with feed
 promisedRouter.get('/questions/:questionId', questionsCtrl.findByQuestionId);
 promisedRouter.put('/questions/:questionId', questionsCtrl.updateQuestion);
 promisedRouter.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
