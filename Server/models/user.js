@@ -10,8 +10,8 @@ var userSchema = mongoose.Schema({
     email:          String,
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
-    subscriptions:  [{ type: objectId, active: Boolean }],
-    enrollments:    [{ type: objectId, active: Boolean }],
+    subscriptions:  [String],
+    enrollments:    [String],
     isAdmin:        { type: Boolean, default: false },
     moderatorOf:    [{ type: objectId, ref: 'Group' }]
 })
