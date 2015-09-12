@@ -28,7 +28,8 @@
 
 var QuestionListDirective = function() {
 	return {
-		scope: {
+		scope: {},
+		bindToController: {
 			'group': '='
 		},
 		templateUrl: 'user/questionList/questionListTemplate.html',
@@ -68,7 +69,7 @@ var QuestionListController = function(questionFactory, $mdDialog, $scope) {
 	      }
 	    };
 
-	    questionFactory.getNextTenQuestions(0)
+	    questionFactory.getNextTenQuestions(0, this.group)
 	    .then(
 	        function (quest) {
 	            this.questions.addQuestions(quest);

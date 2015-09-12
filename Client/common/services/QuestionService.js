@@ -11,11 +11,12 @@ var QuestionService = function($http, kusemaConfig, socketFactory, answerService
 		model: {writable: false, enumerable: false, value: Question}
 	});
 
-	QuestionService.prototype.getNextTenQuestions = function (requestNumber) {
-	        return this.$http.get(this.urlBase + '/tenMore/' + requestNumber)
-	                    .then(function(response) {
-	                        return this.createClientModels(response.data);
-	                    }.bind(this));
+	QuestionService.prototype.getNextTenQuestions = function (requestNumber, group) {
+		var groupURL = (group) ? ('/'+group) : '';
+        return this.$http.get(this.urlBase + '/tenMore' + groupURL + '/' + requestNumber)
+                    .then(function(response) {
+                        return this.createClientModels(response.data);
+                    }.bind(this));
 	    };
 	    
 
