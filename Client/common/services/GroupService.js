@@ -1,11 +1,13 @@
-var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
+var GroupService = function($rootScope, $http, topicService, kusemaConfig, loginService) {
 		this.initCommonDeps($http, kusemaConfig);
 		this.topicService = topicService;
 		this.rootScope = $rootScope;
+		this.loginService = loginService;
 		this.urlBase = 'api/groups'
 		this.bindables = {
 			groups: null,
-			groupsArray: null // there are some places where we need to lookup by key, and others where we need an array :(
+			groupsArray: null, // there are some places where we need to lookup by key, and others where we need an array :(
+			userGroups: null
 		}
 		this._wait = {};
 		this.waitForGroups = new Promise(function(resolve, reject) {
@@ -13,6 +15,9 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 			this._wait.reject = reject;
 		}.bind(this));
 		this.getAll();
+		this.rootScope.$on('loginChanged', function() {
+			this.waitForGroups.then(this.updateUserGroups.bind(this));
+		}.bind(this));
 	}
 
 	GroupService.prototype = Object.create(BaseJsonService.prototype, {
@@ -30,6 +35,7 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 				this.bindables.groupsArray.push(group);
 			}
 			this._wait.resolve();
+			this.updateUserGroups();
 			return this.bindables.groups;
 		}.bind(this));
 	}
@@ -37,5 +43,16 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 	GroupService.prototype.getGroup = function(groupID) {
 		return this.bindables.groups[groupID];
 	}
+	GroupService.prototype.getGroups = function(groupsIDs) {
+		return groupsIDs.map(function(groupID) { return this.getGroup(groupID) }.bind(this));
+	}
+	GroupService.prototype.updateUserGroups = function() {
+		this.bindables.userGroups =  ( 
+			(this.loginService.bindables.loginState > 0)
+	     	&& (this.loginService.bindables.user.enrollments)
+     	)
+     		? this.getGroups(this.loginService.bindables.user.enrollments)
+	     	: this.bindables.groups;
+	}
 
-kusema.service('groupService', ['$rootScope', '$http', 'topicService', 'kusemaConfig', GroupService]);
+kusema.service('groupService', ['$rootScope', '$http', 'topicService', 'kusemaConfig', 'loginService', GroupService]);
