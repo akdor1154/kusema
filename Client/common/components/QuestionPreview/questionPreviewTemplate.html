@@ -4,7 +4,21 @@
 			<h2 class="md-title">{{c.question.title}}</h2>
 		</a>
 		<div class="usernameFloat">{{c.question.author.username}}</div>
-		<div kusema-markdown input="c.question.message"></div>
+		<div class="message" kusema-markdown input="c.question.message"></div>
+		<!-- HACK while md-chips are broken. static chips flat out don't work
+		     and manual ng-repeat is buggy. -->
+		<md-chips ng-model="c.groupsAndTopics" readonly="true">
+			<md-chip-template>
+				<kusema-inline-group ng-if="$chip.unitCode" group="$chip"></kusema-inline-group>
+				<ng-if ng-if="!$chip.unitCode">{{$chip.name}}</ng-if>
+			</md-chip-template>
+		</md-chips>
+		<!-- what should work:
+			<md-chips>
+				<md-chip class="groupChip">{{c.question.group.unitCode}}</md-chip>
+				<md-chip class="topicChip" ng-repeat="topic in c.question.topics">{{topic.name}}</md-chip>
+			</md-chips>
+		-->
 	</md-card-content>
 	<div class="md-actions" layout="row" layout-align="end center">
 		<md-button ui-sref="user.question({id: c.question._id})">Answer</md-button>

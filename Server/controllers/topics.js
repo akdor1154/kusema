@@ -5,13 +5,14 @@ var exp = module.exports;
 
 exp.findById = function (req, res, next) {
 
-  var getTopic = Topic.findOne(
+  Topic.findOne(
     { '_id': new ObjectId(req.params.topicId) }
-  ).exec();
-
-  getTopic.addBack( function (err, topic) {
-    if (err) return next(err);
+  )
+  .then( function (topic) {
     res.json(topic);
+  })
+  .catch(function(error) {
+    return next(error)
   });
 
 };
@@ -26,12 +27,13 @@ exp.findByName = function (req, res, next) {
 
 exp.findAll = function (req, res, next) {
 
-  var getTopics = Topic.find().exec();
-
-  getTopics.addBack( function (err, topics) {
-    if (err) return next(err);
-    res.json(topics);
+  Topic.find().exec()
+  .then( function (topics) {
+    res.mjson(topics);
   })
+  .catch(function(error) {
+    return next(error)
+  });
 
 };
 

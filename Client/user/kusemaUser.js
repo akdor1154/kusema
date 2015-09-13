@@ -23,11 +23,14 @@ var KusemaUserDirective = function() {
 	};
 };
 
-var KusemaUserController = function($scope, $mdSidenav) {
+var KusemaUserController = function($scope, $mdSidenav, groupService) {
 	console.log('yo')
 	this.$mdSidenav = $mdSidenav;
 	$scope.toggle = this.toggle.bind(this);
-	return this;
+	$scope.groupServiceData = groupService.bindables;
+	$scope.searchGroups = function() {
+		return $scope.groupServiceData.groupsArray;
+	}
 }
 KusemaUserController.prototype = Object.create(Object.prototype);
 
@@ -36,7 +39,8 @@ KusemaUserController.prototype.toggle = function(id) {
 	this.$mdSidenav(id).toggle();
 }
 
+
 kusema.addModule('kusema.user', ['ngMaterial'])
 	   .config(KusemaUserConfig)
 	   .directive('kusemaUser', KusemaUserDirective)
-	   .controller('kusemaUserController', ['$scope', '$mdSidenav', KusemaUserController]);
+	   .controller('kusemaUserController', ['$scope', '$mdSidenav', 'groupService', KusemaUserController]);

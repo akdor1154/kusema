@@ -20,13 +20,9 @@
     <h2 class="md-subhead">Groups</h2>
     <md-content>
     <ul style="list-style-type: none; padding: 0;">
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">ENG1003</a></li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">Monash Stalker Space</a></li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">Chem Questions</a></li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">Monash Hikers</a></li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">Monash Stalker Space</a></li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">Chem Questions</a></li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="#/group/eng1002">Monash Hikers</a></li>
+    <li ng-repeat="group in groupServiceData.groups">
+      <a href="group/{{group.code}}" ng-bind="group.name"></a>
+    </li>
     <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="">+ Make a group</a></li>
     </ul>
     </md-content>

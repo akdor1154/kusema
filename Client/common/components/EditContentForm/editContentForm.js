@@ -16,13 +16,14 @@ var editContentFormDirective = function() {
     };
 //}
 
-var editContentFormController = function($scope, baseContentService) {
+var editContentFormController = function($scope, baseContentService, groupService) {
         this.$scope = $scope;
         this.baseContentService = baseContentService;
         this.initializeContent();
         this._checkContentType();
         this.actionText = 'asdf'
-
+        $scope.groupService = groupService;
+        this.groupSearchText = '';
         return this;
     }
 
@@ -66,16 +67,21 @@ var editContentFormController = function($scope, baseContentService) {
                 this.content.message = newContent.message;
                 this.content._id = newContent._id;
                 this.content.question = newContent.question;
+                this.content.group = newContent.group;
+                this.content.topics = newContent.topics;
                 this._outsideContent = newContent;
             }
         }
 
     })
 
+
     editContentFormController.prototype.initializeContent = function() {
         this.content = (this.content) ? this.content : {
             title: '',
             message: '',
+            group: null,
+            topics: [],
         };
     }
 
@@ -113,9 +119,16 @@ var editContentFormController = function($scope, baseContentService) {
         return this.contentService.add(this.content);
     }
 
+    editContentFormController.prototype.searchGroups = function(searchText) {
+        console.log(this.groupService.bindables.groups);
+        return this.groupService.bindables.groupsArray;
+    }
+    editContentFormController.prototype.log = function() {
+        console.log('ffs');
+    }
 
 //}
 
 kusema.addModule('kusema.components.editContent')
     .directive('kusemaEditContentForm', editContentFormDirective)
-    .controller('editContentFormController', ['$scope', 'baseContentService', editContentFormController]);
+    .controller('editContentFormController', ['$scope', 'baseContentService', 'groupService', editContentFormController]);

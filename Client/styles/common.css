@@ -11,3 +11,7 @@
 .usernameFloat:after {
 	content: ':\a0';
 }
+
+.unitCode {
+	font-variant: small-caps;
+}

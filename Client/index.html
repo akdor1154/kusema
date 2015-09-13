@@ -21,7 +21,6 @@
     <md-content id="content" style="position: fixed; width: 100%; height: 100%" ui-view></md-content>
 
     <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/json3/lib/json3.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-animate/angular-animate.min.js"></script>
     <script src="bower_components/socket.io-client/socket.io.js"></script>
@@ -37,10 +36,16 @@
 
     <script src="common/models.js"></script>
 
+    <script src="common/services/BaseJsonService.js"></script>
+
     <script src="common/services/BaseContentService.js"></script>
     <script src="common/services/QuestionService.js"></script>
     <script src="common/services/AnswerService.js"></script>
     <script src="common/services/CommentService.js"></script>
+
+    <script src="common/services/TopicService.js"></script>
+    <script src="common/services/GroupService.js"></script>
+
     <script src="common/services/LoginService.js"></script>
     <script src="common/services/SocketService.js"></script>
     <script src="common/services/MarkdownService.js"></script>
@@ -62,6 +67,7 @@
     <script src="common/components/QuestionPreview/questionPreview.js"></script>
     <script src="common/components/ContentCard/contentCard.js"></script>
     <script src="common/components/InlineDate/inlineDate.js"></script>
+    <script src="common/components/InlineGroup/inlineGroup.js"></script>
     <script src="common/components/Markdown/markdown.js"></script>
 
 

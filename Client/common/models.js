@@ -1,7 +1,7 @@
 'use strict';
 
 
-var BaseContent = function BaseContent(contentJSON, factory) {
+var BaseJson = function BaseJson(contentJSON, factory) {
         Object.defineProperty(this, 'factory', {writable:true, value:null, enumerable: false});
         this.factory = factory;
         for (var property in Object.getPrototypeOf(this)) {
@@ -9,19 +9,31 @@ var BaseContent = function BaseContent(contentJSON, factory) {
                 this[property] = contentJSON[property];
             }
         }
+        this.json = contentJSON;
         this.dateCreated = new Date(this.dateCreated);
         this.dateModified = new Date(this.dateModified);
+    }
+
+    BaseJson.prototype = Object.create(Object.prototype, {
+        constructor: {writable: false, value: BaseJson, enumerable: false},
+        json: {writable: true, value: 'BaseContent', enumerable: false},
+        _id: {writable: true, value: 0, enumerable: true},
+        dateCreated: { writable: true, value: null, enumerable: true },
+        dateModified: { writable: true, value: null, enumerable: true },
+    })
+//} BaseJson
+
+
+var BaseContent = function BaseContent(contentJSON, factory) {
+        BaseJson.call(this, contentJSON, factory);
     	return this;
     }
-    BaseContent.prototype = Object.create(Object.prototype, {
+    BaseContent.prototype = Object.create(BaseJson.prototype, {
         name: {writable: false, value: 'BaseContent', enumerable: false},
         constructor: {writable: false, value: BaseContent, enumerable: false},
-        _id: {writable: true, value: 0, enumerable: true},
         author: { writable: true, value: 0, enumerable: true }, //TODO add object ID requirement here
         authorName: { writable: true, value: "", enumerable: true},
         message: { writable: true, value: 0, enumerable: true },
-        dateCreated: { writable: true, value: null, enumerable: true },
-        dateModified: { writable: true, value: null, enumerable: true },
         comments: { writable: true, value: [], enumerable: true},
         upVotes: { writable: true, value: 0, enumerable: true },
         downVotes: { writable: true, value: 0, enumerable: true},
@@ -43,7 +55,7 @@ var BaseContent = function BaseContent(contentJSON, factory) {
     BaseContent.prototype.update = function(newJson) {
         return this.factory.update(this._id, newJson)
                 .then(function(updated) {
-                    this.constructor.call(this, newJson, this.factory);
+                    this.constructor.call(this, updated, this.factory);
                     return this;
                 }.bind(this));  
     };
@@ -56,13 +68,23 @@ var Question = function Question(questionJSON, questionService) {
         if (this.answers) {
             this.answers = questionService.answerService.createClientModels(this.answers);
         };
+        questionService.groupService.waitForGroups.then(function() {
+            if (this.group) {
+                this.group = questionService.groupService.getGroup(this.group);
+            }
+            if (this.topics) {
+                this.topics = questionService.groupService.topicService.getTopics(this.topics);
+            }
+        }.bind(this));
         return this;
     }
     Question.prototype = Object.create(BaseContent.prototype, {
         name: {writable: false, value: 'Question', enumerable: false},
         constructor: {writable: false, value: Question, enumerable: false},
         title: { writable: true, value: "", enumerable: true },
-        answers: {writable: true, value: null, enumerable: true}
+        answers: {writable: true, value: null, enumerable: true},
+        group: {writable: true, value: null, enumerable: true},
+        topics: {writable: true, value: null, enumerable: true}
     });
 //} Question
 
@@ -87,7 +109,31 @@ var Answer = function Answer(answerJSON, answerFactory) {
 //} Answer
 
 
+var Group = function Group(groupJSON, groupService) {
+        BaseJson.call(this, groupJSON, groupService);
+        if (this.topics) {
+            this.topics = this.topics.map(function(topicID) { return groupService.topicService.getTopic(topicID); });
+        }
+    }
+    Group.prototype = Object.create(BaseJson.prototype, {
+        name: {writable: true, value: '', enumerable: true},
+        topics: {writable: true, value: null, enumerable: true},
+        unitCode: {writable: true, value: '', enumerable: true},
+        title: {writable: true, value: '', enumerable: true}
+    });
+
+var Topic = function Topic(topicJSON) {
+        BaseJson.call(this, topicJSON);
+    }
+    Topic.prototype = Object.create(BaseJson.prototype, {
+        name: {writable: true, value: '', enumerable: true},
+    });
+
+
+kusema.models.BaseJson = BaseJson;
 kusema.models.BaseContent = BaseContent;
 kusema.models.Comment = Comment;
 kusema.models.Question = Question;
 kusema.models.Answer = Answer;
+kusema.models.Group = Group;
+kusema.models.Topic = Topic;

@@ -36,22 +36,20 @@ exp.addQuestion = function (req, res, next) {
   question.anonymous    = req.body.anonymous;
   question.message      = req.body.message;
   question.group        = req.body.group;
+  question.topics       = req.body.topics;
   //question.images.      push(req.body.imageUrl);
   //question.videos.      push(req.body.videoUrl);
   //question.code.        push(req.body.code);
   question.upVotes.     push(req.user._id);
 
-  var topics = req.body.topics;
-
-  for (var i in topics) {
-  	question.topics.push(topics[i])
-  }
-
-  question.save( function (err, question) {
-    if (err) return next(err);
+  question.save()
+  .then(function(question) {
     res.json(question);
-    console.log(question);
-  });
+  })
+  .catch(function(error) {
+    console.error(error);
+    next(error);
+  })
 };
 
 exp.updateQuestion = function (req, res, next) {
@@ -61,16 +59,18 @@ exp.updateQuestion = function (req, res, next) {
   .then(function(question) {
     question.message = req.body.message;
     question.title = req.body.title;
+    question.group        = req.body.group;
+    question.topics        = req.body.topics;
     question.dateModified = new Date();
     return question.save();
-  }).then(
-    function(updatedQuestion) {
-      res.mjson(updatedQuestion);
-    },
-    function(error) {
-      return next(error);
-    }
-  );
+  })
+  .then(function(updatedQuestion) {
+    res.mjson(updatedQuestion);
+  })
+  .catch( function(error) {
+    console.error(error);
+    return next(error);
+  });
 };
 
 exp.deleteQuestion = function(req, res, next) {
