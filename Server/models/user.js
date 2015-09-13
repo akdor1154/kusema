@@ -5,27 +5,28 @@ var Group   = require('./group');
 
 // Schema definition
 var userSchema = mongoose.Schema({
-    username:       String,
-    password:       String,
-    authcate:       String,
-    email:          String,
-    type:           String,
-    personalTitleFull: String,
-    givenNames:     [String],
-    surname:        String,
-    displayName: String,
-    dateCreated:    { type: Date, default: Date.now },
-    dateModified:   { type: Date, default: null },
-    subscriptions:  [String],
-    enrolments:    [String],
-    isAdmin:        { type: Boolean, default: false },
-    moderatorOf:    [{ type: objectId, ref: 'Group' }]
+    username:           String,
+    password:           String,
+    authcate:           String,
+    email:              String,
+    type:               String,
+    personalTitleFulL:  String,
+    givenNames:         [String],
+    surname:            String,
+    displayName:        String,
+    dateCreated:        { type: Date, default: Date.now },
+    dateModified:       { type: Date, default: null },
+    subscriptions:      [String],
+    enrolments:         [String],
+    isAdmin:            { type: Boolean, default: false },
+    moderatorOf:        [{ type: objectId, ref: 'Group' }]
 })
 
 // Indexes
 userSchema.index({ subscriptions: 1 });
 userSchema.path('username').index({text : true});
 userSchema.path('authcate').index({text : true});
+
 
 //TODO Make the following methods asynch
 // generating a hash
@@ -42,6 +43,7 @@ userSchema.methods.validPassword = function(password) {
     }
     return bcrypt.compareSync(password, this.password);
 };
+
 
 userSchema.virtual('firstName').get(function() { try { return this.givenNames[0] } catch (e) { return '' } });
 
@@ -65,9 +67,6 @@ userSchema.methods.generateDisplayName = function() {
                 break;
             default:
                 var e =  new Error('old account with no type!');
-                console.error(e);
-                console.trace(e);
-                console.log(this);
                 throw e;
                 break;
         }
@@ -87,8 +86,6 @@ userSchema.virtual('personalTitle').get(function() {
     }
 });
 
-userSchema.set('toJSON', {virtuals: true, getters: true});
-userSchema.set('toObject', {virtuals: true, getters: true});
 
 userSchema.methods.configureFromAuthcate = function(authcateUserName) {
     var ldap = require('../services/ldapClient.js');
@@ -153,6 +150,10 @@ userSchema.methods.configureFromAuthcate = function(authcateUserName) {
             return error;
         });
 }
+
+
+userSchema.set('toJSON', {virtuals: true, getters: true});
+userSchema.set('toObject', {virtuals: true, getters: true});
 
 
 module.exports = mongoose.model('User', userSchema);
