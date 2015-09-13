@@ -47,8 +47,8 @@ function jsonRoute(jsonPromise) {
 			res.mjson(promiseResult);
 		})
 		.catch( function(error) {
-			console.log(error);
-			next(error)
+			console.error(error.stack);
+			next(error);
 		});
 	}
 }
