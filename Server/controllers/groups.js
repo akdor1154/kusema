@@ -5,31 +5,12 @@ var exp = module.exports;
 
 
 exp.findById = function (req, res, next) {
-
-  var getGroup = Group.findOne(
-    { '_id': new ObjectId(req.params.groupId) }
-  ).exec();
-
-  getGroup.addBack( function (err, group) {
-    if (err) return next(err);
-    res.json(group);
-  });
-
+  return Group.findById(req.params.groupId);
 };
-
 
 exp.findAll = function (req, res, next) {
-
-  Group.find()
-  .then(function(groups) {
-    res.mjson(groups);
-  })
-  .catch(function(error) {
-    next(error);
-  });
-
+  return Group.find();
 };
-
 
 exp.addGroup = function (req, res, next) {
 
@@ -37,18 +18,10 @@ exp.addGroup = function (req, res, next) {
 
   var group = new Group();
   
-  group.name = req.body.name;
+  group.name   = req.body.name;
+  group.topics = req.body.topics;
 
-  var topics = req.body.topics;
-  
-  for(var i in topics) {
-    group.topics.push(ObjectId(topics[i]))
-  }
-  
-  group.save( function (err, group) {
-    if (err) return next(err);
-    res.json(group)
-  });
+  return group.save();
 
 };
 
@@ -59,25 +32,18 @@ exp.updateTopics = function (req, res, next) {
 
   var topics = req.body.topics;
 
-  var updateTopics = Group.findOne(
-    { '_id': req.params.groupId }
-  ).exec();
-
-  updateTopics.addBack( function (err, group) {
-    if (err) return next(err);
-
-    if (group) { 
-      
+  return Group.findById(req.params.groupId)
+  .then( function(group) {
+    if (group) {
       for (var i in topics) {
         if (group.topics.indexOf(topics[i]) === -1) {
-          group.topics.push(ObjectId(topics[i]));
+          group.topics.push(topics[i]);
         }  
       }
-
-      group.save();
+      return group.save();
+    } else {
+      return group;
     }
-
-    res.json(group);
   });
 
 };
@@ -87,14 +53,9 @@ exp.deleteGroup = function (req, res, next) {
   
   // TODO add auth info ensure only mods and admin can delete
 
-  var deleteGroup = Group.update(
+  return Group.update(
     { '_id': req.params.groupId },
     { $set: { 'deleted': true } }
-  ).exec();
-
-  deleteGroup.addBack( function (err, updated, raw) {
-    if (err) return next(err);
-    res.json(raw);
-  });
+  );
 
 };

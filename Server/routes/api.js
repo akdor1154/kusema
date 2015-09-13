@@ -25,52 +25,90 @@ function authWrite(req, res, next) {
 	}
 }
 
+// call this with a route controller that returns a promise, for fun and profit.
+// function getQuestions(req, res, next) {
+//   Question.find()
+//   .then( function(q) { res.json(q) } )
+//   .catch( function(error) { next(error) }) ;
+// }
+//
+// is equivalent to
+// function getQuestionSimple(req) {
+//   return Question.find();
+// }
+//
+// jsonRoute(getQuestionsSimple);
+
+
+function jsonRoute(jsonPromise) {
+	return function(req, res, next) {
+		jsonPromise(req, res, next)
+		.then(function(promiseResult) {
+			res.mjson(promiseResult);
+		})
+		.catch( function(error) {
+			console.log(error);
+			next(error)
+		});
+	}
+}
+
+var promisedRouter = {};
+
+//now promisedRouter.get('/route', ctrl.doSomething)
+//    == router.get('/route', jsonRoute(ctrl.doSomething));
+['get','post','put','delete','patch'].forEach(function(action) {
+	promisedRouter[action] = function(route, jsonPromise) {
+		return router[action](route, jsonRoute(jsonPromise));
+	}
+});
+
 // All API routes require auth
 router.use(authWrite)
 
 // User Routes
-router.get('/user/:userId', usersCtrl.findUserById);
-router.get('/user/:username', usersCtrl.findUserByUsername);
+promisedRouter.get('/user/:userId', usersCtrl.findUserById);
+promisedRouter.get('/user/:username', usersCtrl.findUserByUsername);
 
 // Question Routes
-router.post('/questions', questionsCtrl.addQuestion);
-router.get('/questions/tenMore/:requestNumber', questionsCtrl.nextTenQuestions); // TODO Replace this with feed
-router.get('/questions/:questionId', questionsCtrl.findByQuestionId);
-router.put('/questions/:questionId', questionsCtrl.updateQuestion);
-router.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
-router.put('/questions/upvote/:questionId', questionsCtrl.upVoteQuestion);
-router.put('/questions/downvote/:questionId', questionsCtrl.downVoteQuestion);
+promisedRouter.post('/questions', questionsCtrl.addQuestion);
+promisedRouter.get('/questions/tenMore/:requestNumber', questionsCtrl.nextTenQuestions); // TODO Replace this with feed
+promisedRouter.get('/questions/:questionId', questionsCtrl.findByQuestionId);
+promisedRouter.put('/questions/:questionId', questionsCtrl.updateQuestion);
+promisedRouter.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
+promisedRouter.put('/questions/upvote/:questionId', questionsCtrl.upVoteQuestion);
+promisedRouter.put('/questions/downvote/:questionId', questionsCtrl.downVoteQuestion);
 
 // Answer Routes
-router.get('/answers/:questionId', answersCtrl.findByQuestionId);
-router.post('/answers/:questionId', answersCtrl.addByQuestionId);
-router.delete('/answers/:answerId', answersCtrl.deleteAnswer);
-router.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer);
-router.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer);
+promisedRouter.get('/answers/:questionId', answersCtrl.findByQuestionId);
+promisedRouter.post('/answers/:questionId', answersCtrl.addByQuestionId);
+promisedRouter.delete('/answers/:answerId', answersCtrl.deleteAnswer);
+promisedRouter.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer);
+promisedRouter.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer);
 
 // Comment Routes
 // to be called as comment?questionId=id&answerId=id
-router.get('/comments', commentsCtrl.findByQAId);
-router.get('/comments/:commentId', commentsCtrl.findByCommentId);
-router.post('/comments/:parentId', commentsCtrl.addByQAId);
-router.delete('/comments/:commentId', commentsCtrl.deleteComment);
-router.put('/comments/:commentId', commentsCtrl.updateComment);
-router.put('/comments/upvote/:commentId', commentsCtrl.upVoteComment);
-router.put('/comments/downvote/:commentId', commentsCtrl.downVoteComment);
+promisedRouter.get('/comments', commentsCtrl.findByQAId);
+promisedRouter.get('/comments/:commentId', commentsCtrl.findByCommentId);
+promisedRouter.post('/comments/:parentId', commentsCtrl.addByQAId);
+promisedRouter.delete('/comments/:commentId', commentsCtrl.deleteComment);
+promisedRouter.put('/comments/:commentId', commentsCtrl.updateComment);
+promisedRouter.put('/comments/upvote/:commentId', commentsCtrl.upVoteComment);
+promisedRouter.put('/comments/downvote/:commentId', commentsCtrl.downVoteComment);
 
 // Group Routes
-router.get('/groups', groupsCtrl.findAll);
-router.post('/groups', groupsCtrl.addGroup);
-router.get('/groups/:groupId', groupsCtrl.findById);
-router.put('/groups/:groupId', groupsCtrl.updateTopics);
-router.delete('/groups/:groupId', groupsCtrl.deleteGroup);
+promisedRouter.get('/groups', groupsCtrl.findAll);
+promisedRouter.post('/groups', groupsCtrl.addGroup);
+promisedRouter.get('/groups/:groupId', groupsCtrl.findById);
+promisedRouter.put('/groups/:groupId', groupsCtrl.updateTopics);
+promisedRouter.delete('/groups/:groupId', groupsCtrl.deleteGroup);
 
 // Topic Routes
-router.get('/topics', topicsCtrl.findAll);
-router.post('/topics', topicsCtrl.addTopic);
-router.get('/topics/:topicId', topicsCtrl.findById);
-router.get('/topics/name/:topicName', topicsCtrl.findByName);
-router.delete('/topics/:topicId', topicsCtrl.deleteTopic);
+promisedRouter.get('/topics', topicsCtrl.findAll);
+promisedRouter.post('/topics', topicsCtrl.addTopic);
+promisedRouter.get('/topics/:topicId', topicsCtrl.findById);
+promisedRouter.get('/topics/name/:topicName', topicsCtrl.findByName);
+promisedRouter.delete('/topics/:topicId', topicsCtrl.deleteTopic);
 
 
 module.exports = router;

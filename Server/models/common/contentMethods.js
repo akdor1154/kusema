@@ -8,26 +8,27 @@ var ObjectId 		= require('mongoose').Schema.Types.ObjectId;
 
 var autoPopulate 	= require('mongoose-autopopulate');
 
-var upVote = function (contentId, userId, cb) {
+var upVote = function (contentId, userId) {
 	return this.update({'_id': contentId},
 		{
 			$pull: {'downVotes': userId},
 			$addToSet: {'upVotes': userId}
-		}).exec(cb);
+		});
 }
 
-var downVote = function (contentId, userId, cb) {
+var downVote = function (contentId, userId) {
 	return this.update({'_id': contentId},
 		{	
 			$pull: {'upVotes': userId},
 			$addToSet: {'downVotes': userId}
-		}).exec(cb);
+		});
 }
 
-var removeVotes = function (contentId, userId, cb) {
+var removeVotes = function (contentId, userId) {
 	return this.update({'_id': contentId},
-		{$pull: {'upVotes': userId, 'downVotes': userId}})
-	.exec(cb);
+		{
+			$pull: {'upVotes': userId, 'downVotes': userId}
+		});
 }
 
 var setAsDeleted = function (contentId, userId) {
