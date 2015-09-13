@@ -45,7 +45,7 @@ var BaseContentSchema = function() {
 	mongoose.Schema.apply(this, arguments);
 
 	this.add({
-	    author:         { type: ObjectId, ref: 'User', required: true, autopopulate: {select: 'username displayName'} },
+	    author:         { type: ObjectId, ref: 'User', required: true, autopopulate: {select: 'username displayName', options: {lean: true}} },
 	    authorName:     { type: String, required: false }, 
 	    anonymous:      { type: Boolean, default: false },
 	    message:        { type: String, required: true },

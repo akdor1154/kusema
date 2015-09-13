@@ -16,8 +16,14 @@ var userSchema = mongoose.Schema({
     displayName:        String,
     dateCreated:        { type: Date, default: Date.now },
     dateModified:       { type: Date, default: null },
-    subscriptions:      [String],
-    enrolments:         [String],
+    manualSubscriptions: {
+        groups:         [{ type: String, ref: 'Group'}], 
+        topics:         [{ type: String, ref: 'Topic'}],
+    },
+    authcateSubscriptions: {
+        groups:         [{ type: String, ref: 'Group'}], 
+        topics:         [{ type: String, ref: 'Topic'}],
+    },
     isAdmin:            { type: Boolean, default: false },
     moderatorOf:        [{ type: objectId, ref: 'Group' }]
 })
@@ -87,6 +93,18 @@ userSchema.virtual('personalTitle').get(function() {
 });
 
 
+userSchema.virtual('subscriptions.groups').get(function() {
+    return this.manualSubscriptions.groups.concat(
+                this.authcateSubscriptions.groups
+            );
+});
+userSchema.virtual('subscriptions.topics').get(function() {
+    return this.manualSubscriptions.topics.concat(
+                this.authcateSubscriptions.topics
+            );
+});
+
+
 userSchema.methods.configureFromAuthcate = function(authcateUserName) {
     var ldap = require('../services/ldapClient.js');
 
@@ -123,7 +141,7 @@ userSchema.methods.configureFromAuthcate = function(authcateUserName) {
                         })
                         .then(function(groups) {
                             console.log(groups);
-                            user.enrollments = groups.map(function(group) {return group._id});
+                            user.authcateSubscriptions.groups = groups.map(function(group) {return group._id});
                             return user;
                         });
                     });
@@ -136,7 +154,7 @@ userSchema.methods.configureFromAuthcate = function(authcateUserName) {
                             '_id': { '$in': ldapUser.monashTechingCommitment.map(function(u) { return u.toLower() }) }
                         })
                         .then(function(groups) {
-                            user.enrollments = groups.map(function(group) { return group._id});
+                            user.authcateSubscriptions.groups = groups.map(function(group) { return group._id});
                             return user;
                         });
                     });
@@ -153,7 +171,6 @@ userSchema.methods.configureFromAuthcate = function(authcateUserName) {
 
 
 userSchema.set('toJSON', {virtuals: true, getters: true});
-userSchema.set('toObject', {virtuals: true, getters: true});
 
 
 module.exports = mongoose.model('User', userSchema);
