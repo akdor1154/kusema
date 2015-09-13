@@ -89,8 +89,7 @@ module.exports = function(passport, options) {
         function(authcate, done) {
             User
             .findOne({ 'authcate' :  authcate.user })
-            .then(
-            function(user) {
+            .then( function(user) {
 
                 if (!user) {
                     console.log('new user');
@@ -101,32 +100,26 @@ module.exports = function(passport, options) {
 
                 user
                 .configureFromAuthcate(authcate.user)
-                .then(
-                    function(configuredUser) {
-                        console.log('finished ldap');
-                        return configuredUser.save();
-                    }, function(ldapError) {
-                        console.error('ldap error');
-                        return ldapError;
-                    }
-                ).then(
-                    function(savedUser) {
-                        console.log('finished saving');
-                        return done(null, savedUser)
-                    },
-                    function(saveError) {
-                        console.log('didn\'t save');
-                        console.error(saveError);
-                        return done(saveError);
-                    }
-                );
+                .then( function(configuredUser) {
+                    console.log('finished ldap');
+                    return configuredUser.save();
+                })
+                .then( function(savedUser) {
+                    console.log('finished saving');
+                    return done(null, savedUser)
+                })
+                .catch( function(error) {
+                    console.error('error getting the user from LDAP and saving');
+                    console.error(error);
+                    console.error(error.stack);
+                    done(error);
+                });
                 
-            },
-            function(error) {
-                console.error(error);
-                done(error);
-            }
-        );
+        })
+        .catch( function(error) {
+            console.error(error);
+            done(error);
+        });
     }));
 
 

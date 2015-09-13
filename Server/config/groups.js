@@ -34,7 +34,6 @@ var topics = [
 	{n:'Sequences', p:['Mathematics', 'Series']},
 	{n:'Series', p:['Calculus']},
 
-
 	{n:'Physics'},
 	{n:'Kinetics', p:['Physics']},
 
@@ -104,6 +103,12 @@ var units = [
 		'Software Testing',
 		'Software Documentation',
 		'Javascript'
+	]},
+	{c:'fit3036',n:'Computer Science Project', t:[
+		'Software Engineering',
+		'Software Testing',
+		'Software Documentation',
+		'Computer Science'
 	]}
 ];
 

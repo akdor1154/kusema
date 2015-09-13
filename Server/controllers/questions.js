@@ -18,7 +18,6 @@ exp.nextTenQuestions = function (req, res, next) {
 };
 
 exp.addQuestion = function (req, res, next) {
-  
   var question = new Question();
 
   question.title        = req.body.title;
@@ -47,7 +46,6 @@ exp.updateQuestion = function (req, res, next) {
 };
 
 exp.deleteQuestion = function(req, res, next) {
-  
     // TODO add auth info ensure only creator, mods and admin can delete
     return Question.setAsDeleted(req.params.questionId, req.user._id)
 };
