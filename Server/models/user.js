@@ -11,7 +11,7 @@ var userSchema = mongoose.Schema({
     dateCreated:    { type: Date, default: Date.now },
     dateModified:   { type: Date, default: null },
     subscriptions:  [String],
-    enrollments:    [String],
+    enrolments:    [String],
     isAdmin:        { type: Boolean, default: false },
     moderatorOf:    [{ type: objectId, ref: 'Group' }]
 })
