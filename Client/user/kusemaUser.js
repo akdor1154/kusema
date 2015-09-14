@@ -4,6 +4,10 @@ var KusemaUserConfig = function($stateProvider) {
 		    url: '',
 		    template: '<kusema-question-list></kusema-question-list>'
 		})
+		.state('user.group', {
+		    url: '/group/:groupID',
+		    template: '<kusema-question-list group="$root.$stateParams.groupID"></kusema-question-list>'
+		})
 		.state('user.question', {
 			url: '/question/:id',
 			template: '<kusema-question-full></kusema-question-full>'

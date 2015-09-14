@@ -10,7 +10,11 @@ exp.findByQuestionId = function (req, res, next) {
 
 exp.nextTenQuestions = function (req, res, next) {
   // TODO This will be replaced with the feed soon...
-  return Question.find()
+  if (req.params.groupID) {
+    return Question.find({'group': req.params.groupID});
+  } else {
+    return Question.find()
+  }
 };
 
 exp.addQuestion = function (req, res, next) {

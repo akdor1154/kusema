@@ -43,28 +43,13 @@ kusema.config(function (
     .when('','/kusema')
     .when('/','/kusema');
 
-
-  /*
-  .state('/question/:id', {
-    templateUrl: 'user/question/question.html',
-  })
-  .when('/group/:id', {
-    templateUrl: 'user/group/group.html',
-  })
-  .when('/newcomment/:id', {
-	  templateUrl: 'views/newComment.html',
-  })
-  .when('/newquestion/', {
-	  templateUrl: 'views/newQuestion.html',
-  })
-  .when('/newunit/', {
-	  templateUrl: 'views/newUnit.html',
-  })
-  .when('/newarea/', {
-	  templateUrl: 'views/newArea.html',
-  });*/
   
 });
+
+kusema.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
+  $rootScope.$stateParams = $stateParams;
+  console.log('hellooooo! :)');
+}]);
 
 /*
 kusema.addModule(string moduleName, dependencies=[], autoRequire=true)

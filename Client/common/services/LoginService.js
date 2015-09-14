@@ -48,15 +48,15 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 		return this.$http.post(
 							this.kusemaConfig.url()+'account/login_local',
 							{'username': username, 'password': password}
-						).then(
-						function(response) {
+						)
+						.then( function(response) {
 							console.log('login request done');
 							return this.checkLogin();
-						}.bind(this),
-						function(error) {
+						}.bind(this))
+						.catch( function(error) {
+							this.loginState = 0;
 							console.log('login error');
-						}
-					);
+						}.bind(this));
 	};
 	LoginService.prototype.logout = function() {
 		var logoutRequest = this.$http.post(this.kusemaConfig.url()+'account/logout');

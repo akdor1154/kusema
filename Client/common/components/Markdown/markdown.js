@@ -34,12 +34,6 @@ markdownController.prototype = Object.create(Object.prototype, {
 markdownController.prototype.updateOutput = function() {
 	if (this.md && this._input) {
 		var renderer = (this.inline) ? this.md.renderInline.bind(this.md) : this.md.render.bind(this.md);
-		if (this.inline) {
-			console.log('rendering inline: '+this.input);
-		} else {
-			console.log('rendering full: '+this.input);
-
-		}
 		this.output = this.$sce.trustAsHtml(renderer(this.input));
 	}
 } 
