@@ -51,7 +51,17 @@
 
 
 <div class="comments-container md-whiteframe-z1" ng-if="c.content.comments">
-	<kusema-content-card-comment class="comment" ng-repeat="comment in c.content.comments" comment="comment">
+	<kusema-content-card-comment
+		class="comment"
+		ng-repeat="comment in c.content.comments"
+		comment="comment">
+	</kusema-content-card-comment>
+	<kusema-content-card-comment
+		ng-show="c.writingComment"
+		class="comment"
+		mode="create"
+		parent-id = "c.content._id"
+		on-finished-editing="c.finishedWritingComment()">
 	</kusema-content-card-comment>
 	<div class="addCommentContainer" kusema-needs-login>
 		<div class="md-actions" layout="row" layout-align="center" ng-hide="c.writingComment">
