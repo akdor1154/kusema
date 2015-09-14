@@ -11,7 +11,6 @@ var commentSchema = new contentMethods.BaseContentSchema({
 var emitChanged = function(comment) {
 	contentMethods.BaseContent.findById(this.parent)
 	   .then(function(parent) {
-	   		console.log(parent);
 			socketio.io.emit('contentChanged', {'_id': parent._id, 'comments':parent.comments});
 	   }, function(error) {
 	   		console.log(error);

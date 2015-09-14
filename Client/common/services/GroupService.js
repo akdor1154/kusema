@@ -49,9 +49,9 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig, login
 	GroupService.prototype.updateUserGroups = function() {
 		this.bindables.userGroups =  ( 
 			(this.loginService.bindables.loginState > 0)
-	     	&& (this.loginService.bindables.user.enrolments)
+	     	&& (this.loginService.bindables.user.subscriptions.groups)
      	)
-     		? this.getGroups(this.loginService.bindables.user.enrolments)
+     		? this.getGroups(this.loginService.bindables.user.subscriptions.groups)
 	     	: this.bindables.groups;
 	}
 
