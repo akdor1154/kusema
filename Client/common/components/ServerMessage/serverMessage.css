@@ -1,0 +1,11 @@
+.serverMessage {
+	padding: 16px 0px;
+	background: #FF5252;
+	color: white;
+	text-align: center;
+
+}
+
+kusema-server-message {
+	display: block;
+}
