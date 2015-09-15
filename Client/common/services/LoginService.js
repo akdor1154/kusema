@@ -54,7 +54,7 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 							return this.checkLogin();
 						}.bind(this))
 						.catch( function(error) {
-							this.loginState = 0;
+							this.bindables.loginState = 0;
 							console.log('login error');
 						}.bind(this));
 	};

@@ -62,16 +62,17 @@ module.exports = function(passport, options) {
         // callback with username and password from client side form
         function(req, username, password, done) {
 
-            User.findOne({ 'username' :  username }, function(err, user) {
-                if (err)
-                    return done(err);
+            User.findOne({ 'username' :  username })
+            .then( function(user) {
                 if (!user)
                     return done(null, false, { message: 'Incorrect username.' });
                 if (!user.validPassword(password))
                     return done(null, false, { message: 'Incorrect password.' });
 
-                // username and password matches
                 return done(null, user);
+            })
+            .catch( function(error) {
+                return done(error);
             });
         }
     ));
