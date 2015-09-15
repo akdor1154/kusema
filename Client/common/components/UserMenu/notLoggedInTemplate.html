@@ -9,8 +9,18 @@
 	<label>Password</label>
 	<input type="password" name="password" ng-model="c.data.password"/>
 </md-input-container>
-<div style="display: flex; flex-direction: row;">
-<md-menu-item><md-button type="submit" ng-click="c.login()">Login Local</md-button></md-menu-item>
-<md-menu-item><md-button type="submit" ng-click="c.register()">Register Local</md-button></md-menu-item>
+
+<div
+	style="display: flex; flex-direction: row;"
+	ng-show="c.loginData.loginState == 0"
+	>
+	<md-menu-item><md-button type="submit" id="loginButton" md-menu-disable-close>Login Local</md-button></md-menu-item>
+	<md-menu-item><md-button type="submit" ng-click="c.register()">Register Local</md-button></md-menu-item>
 </div>
+
+<md-menu-item
+	ng-show="c.loginData.loginState < 0"
+	>
+	<md-button disabled type="button">Wait...</md-button>
+</md-menu-item>
 </form>

@@ -9,20 +9,13 @@
 		<span ng-if="c.loginData.loginState == -2">Logging out...</span>
 		<md-icon md-font-library="material-icons">account_circle</md-icon>
 	</md-button>
-	<md-menu-content width="4">
+	<md-menu-content class="userMenuContent" width="4" style="overflow-x: hidden;">
 			<kusema-user-menu-logged-in
-				ng-if="c.loginData.loginState == 1"
+				ng-show="c.loginData.loginState == 1"
 			></kusema-user-menu-logged-in>
+
 			<kusema-user-menu-not-logged-in
-				ng-if="c.loginData.loginState == 0"
+				ng-show="c.loginData.loginState < 1"
 			></kusema-user-menu-not-logged-in>
-			<md-menu-item ng-if="c.loginData.loginState < 0"><md-button>Wait...</md-button></md-menu-item>
 	</md-menu-content>
 </md-menu>
-
-
-<template id="monashLoginDialog">
-<md-bottom-sheet style="position: fixed; min-height: 80%; display: flex;">
-<iframe src="/account/login_monash" style="flex: 1"></iframe>
-</md-bottom-sheet>
-</template>
