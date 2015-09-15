@@ -1,8 +1,9 @@
 'use strict';
 
-var LoginService = function($http, $rootScope, kusemaConfig) {
+var LoginService = function($http, $rootScope, $q, kusemaConfig) {
 		this.$rootScope = $rootScope;
 		this.$http = $http;
+		this.$q = $q;
 		this.kusemaConfig = kusemaConfig;
 		this.bindables = {
 			loginState: 0,
@@ -55,7 +56,7 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 						}.bind(this))
 						.catch( function(error) {
 							this.bindables.loginState = 0;
-							console.log('login error');
+							return this.$q.reject(error);
 						}.bind(this));
 	};
 	LoginService.prototype.logout = function() {
@@ -90,4 +91,4 @@ var LoginService = function($http, $rootScope, kusemaConfig) {
 	}
 //} loginService
 
-kusema.service('loginService', ['$http', '$rootScope', 'kusemaConfig', LoginService]);
+kusema.service('loginService', ['$http', '$rootScope', '$q', 'kusemaConfig', LoginService]);
