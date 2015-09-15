@@ -1,6 +1,10 @@
 <md-menu-item><md-button ng-click="c.loginMonash()">Login with Authcate</md-button></md-menu-item>
 <md-menu-divider></md-menu-divider>
 <form style="padding: 0.5em">
+<kusema-server-message
+	message="c.loginMessage"
+	style="margin: 0px -8px;"
+	></kusema-server-message>
 <md-input-container>
 	<label>Username</label>
 	<input name="username" ng-model="c.data.displayName"/>
