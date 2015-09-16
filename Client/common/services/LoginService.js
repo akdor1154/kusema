@@ -51,7 +51,7 @@ var LoginService = function($http, $rootScope, $q, kusemaConfig) {
 							{'username': username, 'password': password}
 						)
 						.then( function(response) {
-							console.log('login request done');
+							console.log('logged in as '+response.data.username);
 							return this.checkLogin();
 						}.bind(this))
 						.catch( function(error) {
@@ -64,7 +64,6 @@ var LoginService = function($http, $rootScope, $q, kusemaConfig) {
 		this.bindables.loginState = -2;
 		return logoutRequest.then(
 			function(response) {
-				console.log('logout done');
 				return this.checkLogin();
 			}.bind(this),
 			function(error) {
@@ -80,10 +79,8 @@ var LoginService = function($http, $rootScope, $q, kusemaConfig) {
 		return checkRequest.then(function(response) {
 			if (response.data) {
 				this.bindables.loginState = 1;
-				console.log('we\'re in!');
 			} else {
 				this.bindables.loginState = 0;
-				console.log('we\'re out!');
 			}
 			this.bindables.user = response.data;
 			this.$rootScope.$broadcast('loginChanged');

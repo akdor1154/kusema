@@ -46,6 +46,7 @@ var userMenuController = function($scope, $timeout, $mdMenu, $q, loginService) {
 		console.log('login');
 		return this.loginService.login(this.data.username, this.data.password)
 		.catch(function(e) {
+			console.log('caught');
 			this.loginMessage = e;
 			return this.$q.reject(e);
 		}.bind(this));
