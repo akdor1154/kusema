@@ -28,7 +28,11 @@ exp.addByQAId = function(req, res, next) {
 	var comment = new Comment();
 	comment.setFromJSON(data, req.user._id);
 
-	return comment.save();
+	return comment.save()
+	.then(function(comment) {
+		comment.populate('author');
+		return comment;
+	});
 };
 
 exp.findByCommentId = function(req, res, next) {
@@ -40,7 +44,10 @@ exp.updateComment = function(req, res, next) {
 	.then( function(comment) {
 		comment.setFromJSON(req.body, req.user._id);
 		return comment.save();
-	})
+	}).then( function(comment) {
+		comment.populate('author');
+		return comment;
+	});
 }
 
 exp.deleteComment = function(req, res, next) {
