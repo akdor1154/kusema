@@ -9,3 +9,8 @@
 kusema-server-message {
 	display: block;
 }
+
+kusema-server-message.antiPad {
+	margin-left: -8px;
+	margin-right: -8px;
+}
