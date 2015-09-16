@@ -2,7 +2,8 @@ var serverMessageDirective = function() {
 	return {
 		scope: {},
 		bindToController: {
-			'message': '='
+			'message': '=',
+			'messagePrefix': '='
 		},
 		templateUrl: 'common/components/ServerMessage/serverMessageTemplate.html',
 		controller: 'kusemaServerMessageController',
@@ -27,6 +28,13 @@ serverMessageController.prototype = Object.create(Object.prototype, {
 			console.log('setting message');
 			this._message = newMessage;
 			this.setMessageProperties();
+		}
+	},
+	'messagePrefixBind': {
+		get: function() {
+			if (this.messagePrefix) {
+				return this.messagePrefix + ': ';
+			}
 		}
 	},
 	'type': {writable: true, enumerable: false, value: ''},
