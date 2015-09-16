@@ -94,19 +94,18 @@ var editContentFormController = function($scope, baseContentService, groupServic
     editContentFormController.prototype.saveFunction = function() {};
 
     editContentFormController.prototype.save = function() {
+        this.sendError = null;
         return  this.saveFunction()
-                    .then(
-                        function (newContent) {
-                            console.log('add succeeded');
-                            if (this.$scope.onSubmit) {
-                                this.$scope.onSubmit({'newContent': newContent});
-                            }
-                        }.bind(this),
-                        function (error) {
-                            console.log('add error');
-                            this.status = 'Unable to add question: ' + error.message;
-                        }.bind(this)
-                    );
+                    .then( function (newContent) {
+                        console.log('add succeeded');
+                        if (this.$scope.onSubmit) {
+                            this.$scope.onSubmit({'newContent': newContent});
+                        }
+                    }.bind(this) )
+                    .catch( function (error) {
+                        console.log('add error');
+                        this.sendError = error;
+                    }.bind(this) );
     }
 
     editContentFormController.prototype.edit = function() {

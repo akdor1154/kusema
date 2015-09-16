@@ -41,7 +41,11 @@ serverMessageController.prototype.setMessageProperties = function() {
 	} else {
 		console.log('showing error');
 		this.type = this.message.type || 'error';
-		this.messageText = (this.message.data && this.message.data.message) || this.message.data || 'Server Problem';
+		this.messageText = (this.message.data && this.message.data.message)
+							|| this.message.data
+							|| this.message.message
+							|| this.message
+							|| 'Server Problem';
 	}
 }
 
