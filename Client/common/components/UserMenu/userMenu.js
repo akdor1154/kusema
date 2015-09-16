@@ -24,7 +24,10 @@ var userMenuController = function($scope, $timeout, $mdMenu, $q, loginService) {
 		this.$timeout(function() { 
 			// we need to do this instead of ngClick because if we can't cancel
 			// the event, we can't stop the menu closing.
-			document.getElementById('loginButton').addEventListener('click', this.clickLogin.bind(this), true)
+			if (!this.listenerAdded) {
+				document.getElementById('loginButton').addEventListener('click', this.clickLogin.bind(this), true)
+				this.listenerAdded = true;
+			}
 		}.bind(this));
 	}
 	userMenuController.prototype.loginMonash = function() {
