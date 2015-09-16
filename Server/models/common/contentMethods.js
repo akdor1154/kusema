@@ -8,6 +8,8 @@ var ObjectId 		= require('mongoose').Schema.Types.ObjectId;
 
 var autoPopulate 	= require('mongoose-autopopulate');
 
+var UnauthorizedError = require('../../errors.js').UnauthorizedError;
+
 var upVote = function (contentId, userId) {
 	return this.update({'_id': contentId},
 		{
@@ -42,7 +44,13 @@ var setAsDeleted = function (contentId, userId) {
 
 var setFromJSON = function(data, userId) {
 	//check if user can set, throw an exception if no deal
-
+	//TODO: check if they are a mod, maybe they can edit anyway...?
+	if (this.author) {
+		if ( (this.author._id && !this.author._id.equals(userId))
+		  || (!this.author._id && this.author.equals(userId) ) ) {
+			throw new UnauthorizedError('You are not the author of that post!');
+		}
+	}
 	this.author 	  = userId;
 	if (data.authorName) this.authorName   = data.authorName;
 	if (data.anonymous)  this.anonymous    = data.anonymous;

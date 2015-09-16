@@ -49,7 +49,7 @@ function jsonRoute(jsonPromise) {
 		.catch( function(error) {
 			console.error(error.stack);
 			next(error);
-		});
+		})
 	}
 }
 

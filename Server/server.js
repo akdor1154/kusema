@@ -131,9 +131,12 @@ require(here('/config/socketio'))(server);
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
     res.status(err.status || 500);
+    console.log(err.message);
+    console.log(err.stack);
     res.json({
       message: err.message,
-      error: err
+      error: err,
+      stack: err.stack
     });
   });
 }
