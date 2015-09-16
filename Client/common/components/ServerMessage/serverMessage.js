@@ -3,7 +3,7 @@ var serverMessageDirective = function() {
 		scope: {},
 		bindToController: {
 			'message': '=',
-			'messagePrefix': '='
+			'messagePrefix': '@'
 		},
 		templateUrl: 'common/components/ServerMessage/serverMessageTemplate.html',
 		controller: 'kusemaServerMessageController',
