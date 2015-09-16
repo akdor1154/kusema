@@ -1,11 +1,11 @@
 var mongoose        = require('mongoose');
-var objectId        = mongoose.Schema.Types.ObjectId;
+var ObjectId        = mongoose.Schema.Types.ObjectId;
 var contentMethods  = require('./common/contentMethods');
 var socketio				= require('../config/socketio');
 
 // Schema definition
 var commentSchema = new contentMethods.BaseContentSchema({
-    parent:     { type: objectId, ref: 'BaseContent', required: true },
+    parent:     { type: ObjectId, ref: 'BaseContent', required: true },
 })
 
 var emitChanged = function(comment) {
@@ -34,6 +34,14 @@ commentSchema.pre('remove', function(next) {
 })
 commentSchema.post('save', emitChanged);
 commentSchema.post('remove', emitChanged);
+
+commentSchema.methods.setFromJSON = function(data, userId) {
+    this.__proto__.__proto__.setFromJSON.call(this, data, userId);
+    //don't allow resetting the comment's parent
+	if (data.parent && !this.parent) {
+			this.parent = data.parent;
+		}
+}
 
 
 module.exports = contentMethods.BaseContent.discriminator('Comment', commentSchema);

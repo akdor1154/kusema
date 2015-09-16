@@ -22,11 +22,11 @@ exp.findByQAId = function(req, res, next) {
 };
 
 exp.addByQAId = function(req, res, next) {
-	var comment = new Comment();
+	var data = req.body;
+	data.parent = req.params.parentId;
 
-	comment.author  = req.user._id;
-	comment.message = req.body.message;
-	comment.parent  = new ObjectId(req.params.parentId);
+	var comment = new Comment();
+	comment.setFromJSON(data, req.user._id);
 
 	return comment.save();
 };
@@ -38,7 +38,7 @@ exp.findByCommentId = function(req, res, next) {
 exp.updateComment = function(req, res, next) {
 	return Comment.findById(req.params.commentId)
 	.then( function(comment) {
-		comment.message = req.body.message;
+		comment.setFromJSON(req.body, req.user._id);
 		return comment.save();
 	})
 }

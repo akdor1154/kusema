@@ -11,17 +11,15 @@ exp.findByQuestionId = function(req, res, next) {
 };
 
 exp.addByQuestionId = function(req, res, next) {
-    var answer = new Answer();
+    var data = req.body;
+    data.parent = req.params.questionId;
     
-    answer.author       = new ObjectId(req.user._id);
-    answer.anonymous    = req.body.anonymous;
-    answer.message      = req.body.message;
-    answer.question     = new ObjectId(req.params.questionId);
-    answer.upVotes.     push(req.user._id);
+    var answer = new Answer();
+    answer.setFromJSON(data, req.user._id);
 
     return answer.save()
     .then( function(answer) {
-            // if we want our plugins to run, i.e. autopopulation, then we need to run a database find :(
+            // if we want our plugins to run, i.e. autopopulation, then we need to run a db find :(
             return Answer.findById(answer._id)
     });
 }

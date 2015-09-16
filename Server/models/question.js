@@ -31,5 +31,12 @@ questionSchema.index({ downVotes: 1 });
 questionSchema.path('title').index({text : true});
 questionSchema.path('message').index({text : true});
 
+questionSchema.methods.setFromJSON = function(data, userId) {
+	this.__proto__.__proto__.setFromJSON.call(this, data, userId);
+	if (data.title)  this.title		= data.title;
+	if (data.topics) this.topics	= data.topics;
+	if (data.group)  this.group		= data.group;
+}
+
 
 module.exports = contentMethods.BaseContent.discriminator('Question', questionSchema);

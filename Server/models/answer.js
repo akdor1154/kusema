@@ -1,12 +1,12 @@
 var mongoose        = require('mongoose');
-var objectId        = mongoose.Schema.Types.ObjectId;
+var ObjectId        = mongoose.Schema.Types.ObjectId;
 var Question        = require('../models/question');
 var media           = require('./common/media');
 var contentMethods  = require('./common/contentMethods');
 
 // Schema definition
 var answerSchema = new contentMethods.BaseContentSchema({
-    question:     { type: objectId, ref: 'Question', required: true },
+    question:     { type: ObjectId, ref: 'Question', required: true },
     isAccepted:     { type: Boolean, ref: 'Answer', default: false}
 })
 
@@ -23,6 +23,11 @@ answerSchema.pre('save', function(next) {
 answerSchema.pre('remove', function(next) {
     Question.update({_id: this.question},{$pull:{'answers': this._id}}, next);
 })
+
+answerSchema.methods.setFromJSON = function(data, userId) {
+    this.__proto__.__proto__.setFromJSON.call(this, data, userId);
+    this.question = data.question;
+}
 
 // Validation
 answerSchema.path('question').validate(function (value, respond) {

@@ -40,6 +40,15 @@ var setAsDeleted = function (contentId, userId) {
 			   });
 }
 
+var setFromJSON = function(data, userId) {
+	//check if user can set, throw an exception if no deal
+
+	this.author 	  = userId;
+	if (data.authorName) this.authorName   = data.authorName;
+	if (data.anonymous)  this.anonymous    = data.anonymous;
+	if (data.message) 	 this.message      = data.message;
+}
+
 var BaseContentSchema = function() {
 
 	mongoose.Schema.apply(this, arguments);
@@ -62,6 +71,9 @@ var BaseContentSchema = function() {
 	this.statics.upVote = upVote;
 	this.statics.downVote = downVote;
 	this.statics.setAsDeleted = setAsDeleted;
+
+	this.methods.setFromJSON = setFromJSON;
+
 	this.plugin(autoPopulate);
 }
 util.inherits(BaseContentSchema, mongoose.Schema);
