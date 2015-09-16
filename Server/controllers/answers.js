@@ -12,8 +12,8 @@ exp.findByQuestionId = function(req, res, next) {
 
 exp.addByQuestionId = function(req, res, next) {
     var data = req.body;
-    data.parent = req.params.questionId;
-    
+    data.question = req.params.questionId;
+
     var answer = new Answer();
     answer.setFromJSON(data, req.user._id);
 
