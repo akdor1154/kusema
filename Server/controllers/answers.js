@@ -24,6 +24,24 @@ exp.addByQuestionId = function(req, res, next) {
     });
 }
 
+exp.updateAnswer = function(req, res, next) {
+    return Answer.findById(req.params.answerId)
+    .then( function(answer) {
+        console.log(answer);
+        answer.setFromJSON(req.body, req.user._id);
+        return answer.save();
+    })
+    .then( function(answer) {
+        console.log(answer);
+        return answer.populate('author');
+    })
+    .then(function(answer) {
+
+        console.log(answer);
+        return answer;
+    });
+}
+
 exp.deleteAnswer = function(req, res, next) {
     // TODO add auth info ensure only creator, mods and admin can delete
     return Answer.setAsDeleted(req.params.answerId, req.user._id);

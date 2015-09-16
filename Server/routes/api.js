@@ -84,6 +84,7 @@ promisedRouter.put('/questions/downvote/:questionId', questionsCtrl.downVoteQues
 promisedRouter.get('/answers/:questionId', answersCtrl.findByQuestionId);
 promisedRouter.post('/answers/:questionId', answersCtrl.addByQuestionId);
 promisedRouter.delete('/answers/:answerId', answersCtrl.deleteAnswer);
+promisedRouter.put('/answers/:answerId', answersCtrl.updateAnswer);
 promisedRouter.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer);
 promisedRouter.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer);
 
