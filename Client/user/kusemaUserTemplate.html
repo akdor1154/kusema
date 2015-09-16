@@ -1,4 +1,4 @@
-<section>
+
 <md-toolbar>
   <div class="md-toolbar-tools">
     <div class="settings-padding" ng-style="{width: $mdMedia('gt-md') ? '300px' : 'auto'}">
@@ -14,7 +14,7 @@
   </div>
 </md-toolbar>
 
-<section layout="row" flex>
+<md-content layout="row" style="height: 100%;" flex>
 
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="group-navigation" md-is-locked-open="$mdMedia('gt-md')" style="width: 300px;">
     <h2 class="md-subhead">Groups</h2>
@@ -28,9 +28,9 @@
     </md-content>
 </md-sidenav>
 
-<md-content style="max-width: 600px; flex-grow: 1; overflow-y: auto;" ui-view></md-content>
+<section class="kusema-centre" style="max-width: 600px; flex-grow: 1;" ui-view></section>
 
-<div style="flex-grow: 0.01" class="layout-spacer"></div>
+<div class="kusema-centre" style="flex-grow: 0.01" class="layout-spacer"></div>
 
 <div  class=" md-whiteframe-z2"style="width: 180px; visibility: visible; padding: 10px; box-sizing: border-box;" hide show-gt-md>
   <h2 class="md-subhead md-accent">Trending</h2>
@@ -45,5 +45,4 @@
   </ul>
 </div>
 
-</section>
-</section>
+</md-content>

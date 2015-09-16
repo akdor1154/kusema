@@ -21,9 +21,9 @@ var KusemaUserDirective = function() {
 			action: '='
 		},
 		templateUrl: 'user/kusemaUserTemplate.html',
-		replace: true,
 		controller: 'kusemaUserController',
-		controllerAs: 'c'
+		controllerAs: 'c',
+		css: 'user/kusemaUser.css'
 	};
 };
 
