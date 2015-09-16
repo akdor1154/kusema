@@ -10,6 +10,10 @@ kusema-server-message {
 	display: block;
 }
 
+md-card kusema-server-message.antiPad {
+	margin-left: -16px;
+	margin-right: -16px;
+}
 kusema-server-message.antiPad {
 	margin-left: -8px;
 	margin-right: -8px;
