@@ -3,7 +3,7 @@
 	<md-card-content ng-switch-when="view">
 	  <h2 class="md-title" ng-bind="c.content.title"></h2>
 	  <div>
-	  	<span class="usernameFloat" ng-bind="c.content.author.username"></span>
+	  	<span class="usernameFloat" ng-bind="c.content.author.displayName"></span>
 	  	<span><kusema-markdown input="c.content.message"></kusema-markdown></span>
   	  </div>
 	</md-card-content>
