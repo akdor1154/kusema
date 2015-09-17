@@ -3,7 +3,7 @@
 		<a class="boringLink" ui-sref="user.question({id: c.question._id})">
 			<h2 class="md-title">{{c.question.title}}</h2>
 		</a>
-		<div class="usernameFloat">{{c.question.author.username}}</div>
+		<div class="usernameFloat">{{c.question.author.displayName}}</div>
 		<div class="message" kusema-markdown input="c.question.message"></div>
 		<!-- HACK while md-chips are broken. static chips flat out don't work
 		     and manual ng-repeat is buggy. -->

@@ -1,6 +1,6 @@
 <ng-switch on="c.viewMode">
 	<div ng-switch-when="view" style="clear: both;" class="commentView">
-		<span class="usernameFloat" ng-bind="c.comment.author.username"></span>
+		<span class="usernameFloat" ng-bind="c.comment.author.displayName"></span>
 		<span class="message" kusema-markdown input="c.comment.message" inline="true"></span>
 		<md-button class="md-icon-button editComment" type="button"
 					ng-click="c.startEditing()"
@@ -13,7 +13,7 @@
 
 	<div ng-switch-when="edit">
 		<form class="commentForm">
-			<span class="usernameFloat">{{c.loginData.user.username}}</span>
+			<span class="usernameFloat">{{c.loginData.user.displayName}}</span>
 			<md-input-container>
 				<label>Comment</label>
 				<textarea name="comment" ng-model="c.newComment"></textarea>
