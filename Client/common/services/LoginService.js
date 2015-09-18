@@ -1,10 +1,11 @@
 'use strict';
 
-var LoginService = function($http, $rootScope, $q, kusemaConfig) {
+var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 		this.$rootScope = $rootScope;
 		this.$http = $http;
 		this.$q = $q;
 		this.kusemaConfig = kusemaConfig;
+		this.groupService = groupService;
 		this.bindables = {
 			loginState: 0,
 			user: null,
@@ -82,10 +83,29 @@ var LoginService = function($http, $rootScope, $q, kusemaConfig) {
 			} else {
 				this.bindables.loginState = 0;
 			}
-			this.bindables.user = response.data;
+			console.log(this.bindables);
+			return this.populateUser(response.data);
+		}.bind(this) )
+		.then( function(user) {
+			console.log('wat');
+			console.log(this.bindables);
 			this.$rootScope.$broadcast('loginChanged');
-		}.bind(this));
+		}.bind(this) );
+	}
+	LoginService.prototype.populateUser = function(userData) {
+		var user = userData;
+		console.log('yay?');
+		return this.groupService.waitForGroups
+		.then( function() {
+			console.log('yay');
+			for (var subscriptions of [user.subscriptions, user.authcateSubscriptions, user.manualSubscriptions]) {
+				subscriptions.groups = this.groupService.getGroups(subscriptions.groups);
+				subscriptions.topics = this.groupService.getTopics(subscriptions.topics)
+			}
+			this.bindables.user = user;
+			return user;
+		}.bind(this) );
 	}
 //} loginService
 
-kusema.service('loginService', ['$http', '$rootScope', '$q', 'kusemaConfig', LoginService]);
+kusema.service('loginService', ['$http', '$rootScope', '$q', 'groupService', 'kusemaConfig', LoginService]);

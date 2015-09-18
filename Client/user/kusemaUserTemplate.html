@@ -20,7 +20,7 @@
     <h2 class="md-subhead">Groups</h2>
     <md-content>
     <ul style="list-style-type: none; padding: 0;">
-    <li ng-repeat="group in groupServiceData.userGroups">
+    <li ng-repeat="group in loginData.user.subscriptions.groups">
       <a ui-sref="user.group({groupID: group._id})" ng-bind="group.name"></a>
     </li>
     <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="">+ Make a group</a></li>
