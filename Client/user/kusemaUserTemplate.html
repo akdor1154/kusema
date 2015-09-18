@@ -14,7 +14,7 @@
   </div>
 </md-toolbar>
 
-<md-content layout="row" style="height: 100%;" flex>
+<section layout="row" style="overflow: hidden">
 
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="group-navigation" md-is-locked-open="$mdMedia('gt-md')" style="width: 300px;">
     <h2 class="md-subhead">Groups</h2>
@@ -28,7 +28,7 @@
     </md-content>
 </md-sidenav>
 
-<section class="kusema-centre" style="max-width: 600px; flex-grow: 1;" ui-view></section>
+<md-content id="content" style="max-width: 600px; flex-grow: 1;" ui-view></md-content>
 
 <div class="kusema-centre" style="flex-grow: 0.01" class="layout-spacer"></div>
 
@@ -45,4 +45,4 @@
   </ul>
 </div>
 
-</md-content>
+</section>

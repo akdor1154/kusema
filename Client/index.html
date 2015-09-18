@@ -12,13 +12,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="bower_components/highlightjs/styles/github.css">
-  </head>
-
-  <body ng-app="kusema" lang="en" ng-view ng-controller="MainController" layout="column">
-
-    <ng-include="'checkBrowser.html'"></ng-include="'checkBrowser.html'">
-    
-    <section id="content" style="position: fixed; width: 100%; height: 100%" ui-view></section>
 
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
@@ -71,7 +64,14 @@
     <script src="common/components/Markdown/markdown.js"></script>
     <script src="common/components/ServerMessage/serverMessage.js"></script>
     <script src="common/components/UserControlPanel/userControlPanel.js"></script>
-    
+
+  </head>
+
+  <body ng-app="kusema" lang="en" ui-view ng-view ng-controller="MainController" layout="column" style="overflow: hidden">
+
+    <ng-include="'checkBrowser.html'"></ng-include="'checkBrowser.html'">
+
+
 </body>
 
 </html>
