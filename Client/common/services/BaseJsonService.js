@@ -1,5 +1,7 @@
 'use strict';
 
+import {BaseJson} from 'common/models';
+
 var BaseJsonService = function($http, kusemaConfig) {
 		this.initCommonDeps($http, kusemaConfig);
 		this.serverURL = kusemaConfig.url();
@@ -57,4 +59,7 @@ var BaseJsonService = function($http, kusemaConfig) {
         		   }.bind(this));
     };
 
+import kusema from 'kusema';
 kusema.service('baseJsonService', ['$http', 'kusemaConfig', BaseJsonService]);
+
+export default BaseJsonService;

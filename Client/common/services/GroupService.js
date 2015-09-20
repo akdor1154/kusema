@@ -1,3 +1,6 @@
+import BaseJsonService from './BaseJsonService';
+import {Group} from 'common/models';
+
 var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 		this.initCommonDeps($http, kusemaConfig);
 		this.topicService = topicService;
@@ -49,4 +52,7 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 		return groupsIDs.map(this.getGroup.bind(this));
 	}
 
+import kusema from 'kusema';
 kusema.service('groupService', ['$rootScope', '$http', 'topicService', 'kusemaConfig', GroupService]);
+
+export default GroupService;

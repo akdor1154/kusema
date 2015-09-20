@@ -57,6 +57,8 @@ serverMessageController.prototype.setMessageProperties = function() {
 	}
 }
 
-kusema.addModule('components.serverMessage')
+import {addModule} from 'kusema';
+
+addModule('components.serverMessage')
       .directive('kusemaServerMessage', serverMessageDirective)
       .controller('kusemaServerMessageController', serverMessageController);

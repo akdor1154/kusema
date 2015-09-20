@@ -1,5 +1,8 @@
 'use strict';
 
+import BaseJsonService from './BaseJsonService';
+import {BaseContent} from 'common/models';
+
 var BaseContentService = function($http, kusemaConfig, socketFactory, questionService, answerService, commentService) {
 		this.initCommonDeps($http, kusemaConfig, socketFactory);
 		this.questionService = questionService;
@@ -72,4 +75,7 @@ var BaseContentService = function($http, kusemaConfig, socketFactory, questionSe
     };
 //} BaseContentService
 
+import kusema from 'kusema';
 kusema.service('baseContentService', ['$http', 'kusemaConfig', 'socketFactory', 'questionService', 'answerService', 'commentService', 'baseJsonService', BaseContentService]);
+
+export default BaseContentService;

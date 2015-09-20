@@ -78,8 +78,8 @@ var userMenuLoggedInDirective = function() {
 	}
 }
 
-
-kusema.addModule('kusema.components.userMenu')
+import {addModule} from 'kusema';
+addModule('kusema.components.userMenu')
 		.directive('kusemaUserMenu', userMenuDirective)
 		.controller('kusemaUserMenuController', ['$scope', '$timeout', '$mdMenu', '$q', 'loginService', userMenuController])
 		.directive('kusemaUserMenuNotLoggedIn', userMenuNotLoggedInDirective)

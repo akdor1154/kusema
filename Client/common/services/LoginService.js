@@ -108,4 +108,7 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 	}
 //} loginService
 
+import kusema from 'kusema';
 kusema.service('loginService', ['$http', '$rootScope', '$q', 'groupService', 'kusemaConfig', LoginService]);
+
+export default LoginService;

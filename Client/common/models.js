@@ -129,11 +129,4 @@ var Topic = function Topic(topicJSON) {
         name: {writable: true, value: '', enumerable: true},
     });
 
-
-kusema.models.BaseJson = BaseJson;
-kusema.models.BaseContent = BaseContent;
-kusema.models.Comment = Comment;
-kusema.models.Question = Question;
-kusema.models.Answer = Answer;
-kusema.models.Group = Group;
-kusema.models.Topic = Topic;
+export {BaseJson, BaseContent, Question, Answer, Comment, Group, Topic};

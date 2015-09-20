@@ -16,7 +16,8 @@ var inlineGroupController = function() {
 		return this;
 	}
 
-	
-kusema.addModule('kusema.components.inlineGroup')
+import {addModule} from 'kusema';
+
+addModule('kusema.components.inlineGroup')
 		.directive('kusemaInlineGroup', inlineGroupDirective)
 		.controller('kusemaInlineGroupController', inlineGroupController);

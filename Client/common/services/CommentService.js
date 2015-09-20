@@ -1,5 +1,8 @@
 'use strict';
 
+import BaseContentService from './BaseContentService';
+import {Comment} from 'common/models';
+
 var CommentSubscription = function(socketFactory, commentFactory, baseContent, callback) {
 	    this.callback = callback;
 	    this.socketFactory = socketFactory;
@@ -44,5 +47,7 @@ var CommentService = function($http, kusemaConfig, socketFactory) {
     }
 //} CommentService 
 
-
+import kusema from 'kusema';
 kusema.service('commentService', ['$http', 'kusemaConfig', 'socketFactory', CommentService]);
+
+export default CommentService;

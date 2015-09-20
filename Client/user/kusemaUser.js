@@ -1,3 +1,5 @@
+import 'kusema';
+
 var KusemaUserConfig = function($stateProvider) {
 	$stateProvider
 		.state('user.home', {
@@ -45,7 +47,8 @@ KusemaUserController.prototype.toggle = function(id) {
 }
 
 
-kusema.addModule('kusema.user', ['ngMaterial'])
-	   .config(KusemaUserConfig)
+
+export default angular.module('kusema.user', ['ngMaterial', 'kusema'])
+	   .config(['$stateProvider', KusemaUserConfig])
 	   .directive('kusemaUser', KusemaUserDirective)
 	   .controller('kusemaUserController', ['$scope', '$mdSidenav', 'loginService', KusemaUserController]);

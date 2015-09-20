@@ -1,5 +1,8 @@
 'use strict';
 
+import BaseContentService from './BaseContentService';
+import {Question} from 'common/models';
+
 var QuestionService = function($http, kusemaConfig, socketFactory, answerService, groupService) {
 		this.initCommonDeps($http, kusemaConfig, socketFactory);
 		this.urlBase = 'api/questions';
@@ -20,5 +23,5 @@ var QuestionService = function($http, kusemaConfig, socketFactory, answerService
 	    };
 	    
 
-
+import kusema from 'kusema';
 kusema.service('questionService', ['$http', 'kusemaConfig', 'socketFactory', 'answerService', 'groupService', QuestionService]);

@@ -38,8 +38,9 @@ var GroupListItemDirective = function() {
 	}
 }
 
+import {addModule} from 'kusema';
 
-kusema.addModule('components.userControlPanel')
+addModule('components.userControlPanel')
       .directive('kusemaUserControlPanel', UserControlPanelDirective)
       .controller('userControlPanelController', ['$css', '$scope', 'loginService', UserControlPanelController])
       .directive('kusemaGroupListItem', GroupListItemDirective)

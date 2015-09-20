@@ -18,4 +18,5 @@ var MarkdownService = function(hljs) {
 		});
 }
 
+import kusema from 'kusema';
 kusema.factory('markdownService', ['highlightService', MarkdownService]);

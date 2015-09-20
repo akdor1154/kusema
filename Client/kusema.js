@@ -1,18 +1,21 @@
 'use strict';
 
+import angular from 'angular';
+import 'angular-material';
+import 'angular-ui-router';
+import 'angular-css';
+
 var kusema = angular.module('kusema', [
-'ngAnimate',
 'ngMaterial',
 'ui.router',
 'door3.css',
 'kusema.config',
-'kusema.user',
-'kusema.components'
+'kusema.user'
 ]);
 
 kusema.models = {};
 
-kusema.config(function (
+kusema.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$mdThemingProvider', '$locationProvider', function (
                 $stateProvider,
                 $urlRouterProvider,
                 $httpProvider,
@@ -44,7 +47,7 @@ kusema.config(function (
     .when('/','/kusema');
 
   
-});
+}]);
 
 kusema.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
   $rootScope.$stateParams = $stateParams;
@@ -67,7 +70,7 @@ kusema.addModule(string moduleName, dependencies=[], autoRequire=true)
   addModule('kusema.components') has exactly the same effect as
   addModule('components') .
 */
-kusema.addModule = function (moduleName, dependencies, autoRequire) {
+var addModule = function (moduleName, dependencies, autoRequire) {
   if (dependencies === undefined) {
     dependencies = [];
   }
@@ -79,20 +82,24 @@ kusema.addModule = function (moduleName, dependencies, autoRequire) {
   }
   var splitName = moduleName.split(".");
   var parentChain = splitName.slice(0,-1);
-  var module = splitName[splitName.length-1];
-  var parent = this;
+  var parent = kusema;
   if (parentChain.length > 0 && parentChain[0] == "kusema") {
     parentChain = parentChain.slice(1);
   } else {
     moduleName = "kusema."+moduleName;
   }
-  for (var property of parentChain) {
-    parent = parent[property];
-  }
-  parent[module] = angular.module(moduleName, dependencies);
+
+
+  var module = angular.module(moduleName, dependencies);
   if (autoRequire) {
     parent.requires.push(moduleName);
   }
 
-  return parent[module];
+  return parent;
 }
+
+kusema.addModule = addModule;
+export {addModule};
+
+
+export default kusema;

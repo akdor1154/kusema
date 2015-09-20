@@ -1,3 +1,6 @@
+import BaseJsonService from './BaseJsonService'
+import {Topic} from 'common/models';
+
 var TopicService = function($http, kusemaConfig) {
 		this.initCommonDeps($http, kusemaConfig);
 		this.urlBase = 'api/topics'
@@ -38,4 +41,5 @@ var TopicService = function($http, kusemaConfig) {
 		return topicIDs.map(this.getTopic.bind(this));
 	}
 
+import kusema from 'kusema';
 kusema.service('topicService', ['$http', 'kusemaConfig', TopicService]);

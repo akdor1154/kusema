@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" ng-app="kusema">
+<html class="no-js">
 
   <head>
 
@@ -13,64 +13,18 @@
     <link rel="stylesheet" href="styles/common.css">
     <link rel="stylesheet" href="bower_components/highlightjs/styles/github.css">
 
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.min.js"></script>
-    <script src="bower_components/socket.io-client/socket.io.js"></script>
-    <script src="bower_components/angular-material/angular-material.min.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.min.js"></script>
-    <script src="bower_components/ui-router/release/angular-ui-router.min.js"></script>
-    <script src="bower_components/angular-css/angular-css.min.js"></script>
-    <script src="bower_components/markdown-it/dist/markdown-it.js"></script>
-    <script src="bower_components/highlightjs/highlight.pack.min.js"></script>
-
-    <script src="config.js"></script>
-    <script src="app.js"></script>
-
-    <script src="common/models.js"></script>
-
-    <script src="common/services/BaseJsonService.js"></script>
-
-    <script src="common/services/BaseContentService.js"></script>
-    <script src="common/services/QuestionService.js"></script>
-    <script src="common/services/AnswerService.js"></script>
-    <script src="common/services/CommentService.js"></script>
-
-    <script src="common/services/TopicService.js"></script>
-    <script src="common/services/GroupService.js"></script>
-
-    <script src="common/services/LoginService.js"></script>
-    <script src="common/services/SocketService.js"></script>
-    <script src="common/services/MarkdownService.js"></script>
-    <script src="common/services/HighlightService.js"></script>
-
-
-    <script src="common/controllers/MainCtrl.js"></script>
-
-    <script src="user/kusemaUser.js"></script>
-    <script src="user/questionList/questionList.js"></script>
-    <script src="user/questionFull/questionFull.js"></script>
-
-
-    <script src="common/directives/needsLogin.js"></script>
-
-    <script src="common/components/kusema.components.js"></script>
-    <script src="common/components/EditContentForm/editContentForm.js"></script>
-    <script src="common/components/UserMenu/userMenu.js"></script>
-    <script src="common/components/QuestionPreview/questionPreview.js"></script>
-    <script src="common/components/ContentCard/contentCard.js"></script>
-    <script src="common/components/InlineDate/inlineDate.js"></script>
-    <script src="common/components/InlineGroup/inlineGroup.js"></script>
-    <script src="common/components/Markdown/markdown.js"></script>
-    <script src="common/components/ServerMessage/serverMessage.js"></script>
-    <script src="common/components/UserControlPanel/userControlPanel.js"></script>
+    <script src="jspm_packages/system.js"></script>
+    <script src="jspm.config.js"></script>
+    <script>
+        System.import('./bootstrap')
+        .catch(console.error.bind(console));
+    </script>
 
   </head>
 
-  <body ng-app="kusema" lang="en" ui-view ng-view ng-controller="MainController" layout="column" style="overflow: hidden">
+  <body lang="en" ui-view ng-view layout="column" style="overflow: hidden">
 
     <ng-include="'checkBrowser.html'"></ng-include="'checkBrowser.html'">
-
 
 </body>
 

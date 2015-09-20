@@ -23,7 +23,8 @@ var inlineDateController = function($scope) {
 		}
 	}
 
+import {addModule} from 'kusema';
 	
-kusema.addModule('kusema.components.inlineDate')
+addModule('kusema.components.inlineDate')
 		.directive('kusemaInlineDate', inlineDateDirective)
 		.controller('kusemaInlineDateController', inlineDateController);

@@ -38,6 +38,8 @@ markdownController.prototype.updateOutput = function() {
 	}
 } 
 
-kusema.addModule('kusema.components.markdown')
+import {addModule} from 'kusema';
+
+addModule('kusema.components.markdown')
       .directive('kusemaMarkdown', markdownDirective)
       .controller('markdownController', ['markdownService', '$sce', markdownController])

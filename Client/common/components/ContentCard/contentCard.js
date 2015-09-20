@@ -179,11 +179,12 @@ var contentCardCommentController = function(commentService, loginService) {
 		}
 	}
 
-	
-kusema.addModule('kusema.components.contentCard')
+import {addModule} from 'kusema';
+
+addModule('kusema.components.contentCard')
 		.directive('kusemaContentCard', contentCardDirective)
 		.controller('kusemaContentCardController', ['$scope', '$timeout', 'commentService', 'loginService', 'socketFactory', contentCardController]);
 
-kusema.addModule('kusema.components.contentCard.comment')
+addModule('kusema.components.contentCard.comment')
       .directive('kusemaContentCardComment', contentCardCommentDirective)
       .controller('kusemaContentCardCommentController', ['commentService', 'loginService', contentCardCommentController]);

@@ -128,6 +128,8 @@ var editContentFormController = function($scope, baseContentService, groupServic
 
 //}
 
-kusema.addModule('kusema.components.editContent')
+import {addModule} from 'kusema';
+
+addModule('kusema.components.editContent')
     .directive('kusemaEditContentForm', editContentFormDirective)
     .controller('editContentFormController', ['$scope', 'baseContentService', 'groupService', editContentFormController]);

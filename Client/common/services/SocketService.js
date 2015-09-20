@@ -30,4 +30,5 @@ function socketService(kusemaConfig) {
   return socket;
 }
 
+import kusema from 'kusema';
 kusema.factory('socketFactory', ['kusemaConfig', socketService]);

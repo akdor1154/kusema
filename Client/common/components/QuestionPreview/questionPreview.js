@@ -24,7 +24,9 @@ var questionPreviewController = function($scope) {
 	questionPreviewController.prototype.updateGrossHackyList = function() {
 		this.groupsAndTopics = [this.question.group].concat(this.question.topics);
 	}
-	
-kusema.addModule('kusema.components.questionPreview')
+
+import {addModule} from 'kusema';
+
+addModule('kusema.components.questionPreview')
 		.directive('kusemaQuestionPreview', questionPreviewDirective)
 		.controller('kusemaQuestionPreviewController', questionPreviewController);
