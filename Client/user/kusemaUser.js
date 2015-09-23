@@ -46,9 +46,9 @@ KusemaUserController.prototype.toggle = function(id) {
 	this.$mdSidenav(id).toggle();
 }
 
+import kusema from 'kusema';
 
-
-export default angular.module('kusema.user', ['ngMaterial', 'kusema'])
+export default kusema.addModule('kusema.user', ['ngMaterial'])
 	   .config(['$stateProvider', KusemaUserConfig])
 	   .directive('kusemaUser', KusemaUserDirective)
 	   .controller('kusemaUserController', ['$scope', '$mdSidenav', 'loginService', KusemaUserController]);

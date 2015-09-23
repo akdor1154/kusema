@@ -10,7 +10,8 @@ var kusema = angular.module('kusema', [
 'ui.router',
 'door3.css',
 'kusema.config',
-'kusema.user'
+'kusema.user',
+'kusema.components'
 ]);
 
 kusema.models = {};
@@ -82,6 +83,7 @@ var addModule = function (moduleName, dependencies, autoRequire) {
   }
   var splitName = moduleName.split(".");
   var parentChain = splitName.slice(0,-1);
+  var moduleBaseName = splitName[splitName.length-1];
   var parent = kusema;
   if (parentChain.length > 0 && parentChain[0] == "kusema") {
     parentChain = parentChain.slice(1);
@@ -89,13 +91,16 @@ var addModule = function (moduleName, dependencies, autoRequire) {
     moduleName = "kusema."+moduleName;
   }
 
+  for (var property of parentChain) {
+    parent = parent[property];
+  }
 
-  var module = angular.module(moduleName, dependencies);
+  parent[moduleBaseName] = angular.module(moduleName, dependencies);
   if (autoRequire) {
     parent.requires.push(moduleName);
   }
 
-  return parent;
+  return parent[moduleBaseName];
 }
 
 kusema.addModule = addModule;
