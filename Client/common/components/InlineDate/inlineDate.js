@@ -12,10 +12,10 @@ var inlineDateDirective = function() {
 		};
 	};
 //}
-var inlineDateController = function($scope) {
+var inlineDateController = function() {
 		return this;
 	}
-	inlineDateController.prototype.format = function($scope) {
+	inlineDateController.prototype.format = function() {
 		if (this.date instanceof Date) {
 			return this.date.toLocaleString();
 		} else {

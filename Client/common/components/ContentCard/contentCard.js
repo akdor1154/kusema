@@ -1,5 +1,7 @@
 'use strict';
 
+import * as models from 'common/models';
+
 var contentCardDirective = function() {
 		return {
 			bindToController: {
@@ -53,7 +55,7 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		}.bind(this));
 	}
 	contentCardController.prototype.updateSubscription = function() {
-		if (this.content instanceof BaseContent) {
+		if (this.content instanceof models.BaseContent) {
 			if (this.subscription) this.subscription.cancel();
 			if (this.commentFactory) {
 				this.subscription = this.commentFactory.subscribeTo(this.content, this.commentsChanged.bind(this));
