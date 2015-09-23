@@ -1,5 +1,7 @@
 'use strict';
 
+import io from 'socket.io-client';
+
 function contentId(content) {
   var id = '';
   if (!content) {
