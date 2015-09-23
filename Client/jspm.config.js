@@ -1,5 +1,5 @@
 System.config({
-  baseURL: "/",
+  baseURL: "lib",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -9,13 +9,28 @@ System.config({
     ]
   },
   paths: {
-    "github:*": "jspm_packages/github/*",
-    "npm:*": "jspm_packages/npm/*"
+    "*.html.js": "*.html",
+    "github:*": "../jspm_packages/github/*",
+    "npm:*": "../jspm_packages/npm/*"
   },
   buildCSS: false,
 
+  packages: {
+    "../lib": {
+      "defaultExtension": false
+    }
+  },
+
+  meta: {
+    "*.html": {
+      "loader": "text"
+    }
+  },
+
   map: {
     "angular": "github:angular/bower-angular@1.4.6",
+    "angular-animate": "github:angular/bower-angular-animate@1.4.6",
+    "angular-aria": "github:angular/bower-angular-aria@1.4.6",
     "angular-css": "npm:angular-css@1.0.7",
     "angular-material": "github:angular/bower-material@0.11.0",
     "angular-route": "github:angular/bower-angular-route@1.4.6",
@@ -26,6 +41,7 @@ System.config({
     "highlightjs": "github:components/highlightjs@8.8.0",
     "markdown-it": "npm:markdown-it@4.4.0",
     "socket.io-client": "github:socketio/socket.io-client@1.3.6",
+    "text": "github:systemjs/plugin-text@0.0.2",
     "github:angular-ui/ui-router@0.2.15": {
       "angular": "github:angular/bower-angular@1.4.6"
     },
