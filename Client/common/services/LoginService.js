@@ -102,6 +102,12 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 				subscriptions.groups = this.groupService.getGroups(subscriptions.groups);
 				subscriptions.topics = this.groupService.getTopics(subscriptions.topics)
 			}
+		}.bind(this) )
+		.catch( function(e) {
+			console.error(e);
+			console.error(e.stack);
+		})
+		.then( function() {
 			this.bindables.user = user;
 			return user;
 		}.bind(this) );
