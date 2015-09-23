@@ -1,8 +1,11 @@
 'use strict';
 
-var MarkdownService = function(hljs) {
+import hljs from 'highlightjs';
+import markdownIt from 'markdown-it';
+
+var MarkdownService = function() {
 	console.log('markdown');
-	return window.markdownit({
+	return markdownIt({
 		'html': false,
 		'linkify': true,
 		'breaks': true,
@@ -19,4 +22,4 @@ var MarkdownService = function(hljs) {
 }
 
 import kusema from 'kusema';
-kusema.factory('markdownService', ['highlightService', MarkdownService]);
+kusema.factory('markdownService', [MarkdownService]);

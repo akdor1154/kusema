@@ -29,4 +29,4 @@ import {addModule} from 'kusema';
 
 addModule('kusema.components.questionPreview')
 		.directive('kusemaQuestionPreview', questionPreviewDirective)
-		.controller('kusemaQuestionPreviewController', questionPreviewController);
+		.controller('kusemaQuestionPreviewController', ['$scope', questionPreviewController]);
