@@ -1,6 +1,8 @@
+import userMenuTemplate from './userMenuTemplate.html';
+
 var userMenuDirective = function() {
 		return {
-			templateUrl: 'common/components/UserMenu/userMenuTemplate.html',
+			template: userMenuTemplate,
 			controller: 'kusemaUserMenuController',
 			controllerAs: 'c'
 		};
@@ -63,18 +65,19 @@ var userMenuController = function($scope, $timeout, $mdMenu, $q, loginService) {
 		this.loginService.logout();
 	}
 
-
+import notLoggedInTemplate from './notLoggedInTemplate.html';
 var userMenuNotLoggedInDirective = function() {
 	return {
 		scope: true,
-		templateUrl: 'common/components/UserMenu/notLoggedInTemplate.html'
+		template: notLoggedInTemplate
 	};
 };
 
+import loggedInTemplate from './loggedInTemplate.html';
 var userMenuLoggedInDirective = function() {
 	return {
 		scope: true,
-		templateUrl: 'common/components/UserMenu/loggedInTemplate.html'
+		template: loggedInTemplate
 	}
 }
 

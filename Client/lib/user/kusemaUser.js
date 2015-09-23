@@ -29,7 +29,7 @@ var KusemaUserDirective = function() {
 		template: template,
 		controller: 'kusemaUserController',
 		controllerAs: 'c',
-		css: 'user/kusemaUser.css'
+		css: 'lib/user/kusemaUser.css'
 	};
 };
 

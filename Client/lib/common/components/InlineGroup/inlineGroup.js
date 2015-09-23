@@ -1,12 +1,14 @@
 'use strict';
 
+import template from './inlineGroup.html';
+
 var inlineGroupDirective = function() {
 		return {
 			bindToController: {
 				'group': '='
 			},
 			scope: {},
-			templateUrl: 'common/components/InlineGroup/inlineGroup.html',
+			template: template,
 			controller: 'kusemaInlineGroupController',
 			controllerAs: 'c',
 		};

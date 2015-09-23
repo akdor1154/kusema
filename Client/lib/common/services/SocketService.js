@@ -1,6 +1,6 @@
 'use strict';
 
-//import io from 'socket.io-client';
+import io from 'socket.io-client';
 
 function contentId(content) {
   var id = '';

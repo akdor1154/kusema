@@ -1,3 +1,5 @@
+import template from './editContentFormTemplate.html';
+
 var editContentFormDirective = function() {
         return {
             scope: {
@@ -9,7 +11,7 @@ var editContentFormDirective = function() {
                 contentType: '@',
                 outsideContent: '=content',
             },
-            templateUrl: 'common/components/EditContentForm/editContentFormTemplate.html',
+            template: template,
             controller: 'editContentFormController',
             controllerAs: 'c'
         };

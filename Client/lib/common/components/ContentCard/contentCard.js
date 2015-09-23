@@ -12,8 +12,8 @@ var contentCardDirective = function() {
 			scope: {
 				'contentType': '@'
 			},
-			templateUrl: 'contentCardTemplate.html',
-			css: 'common/components/ContentCard/contentCard.css',
+			template: template,
+			css: 'lib/common/components/ContentCard/contentCard.css',
 			controller: 'kusemaContentCardController',
 			controllerAs: 'c',
 		};
@@ -86,6 +86,7 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 		this.writingComment = false;
 	}
 
+import commentTemplate from './contentCardCommentTemplate.html';
 var contentCardCommentDirective = function() {
 	return {
 		bindToController: {
@@ -95,7 +96,7 @@ var contentCardCommentDirective = function() {
 			'onFinishedEditing': '&'
 		},
 		scope: {},
-		templateUrl: 'common/components/ContentCard/contentCardCommentTemplate.html',
+		template: commentTemplate,
 		controller: 'kusemaContentCardCommentController',
 		controllerAs: 'c',
 	}

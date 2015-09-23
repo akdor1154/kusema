@@ -1,12 +1,14 @@
+import template from './questionPreviewTemplate.html';
+
 var questionPreviewDirective = function() {
 		return {
 			scope: {
 				'question': '='
 			},
-			templateUrl: 'common/components/QuestionPreview/questionPreviewTemplate.html',
+			template: template,
 			controller: 'kusemaQuestionPreviewController',
 			controllerAs: 'c',
-			css: 'common/components/QuestionPreview/questionPreview.css'
+			css: 'lib/common/components/QuestionPreview/questionPreview.css'
 		};
 	};
 //}

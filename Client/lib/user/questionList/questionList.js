@@ -26,13 +26,15 @@
 
 //kusema.controller('SearchController', SearchController);
 
+import questionListTemplate from './questionListTemplate.html'
+
 var QuestionListDirective = function() {
 	return {
 		scope: {},
 		bindToController: {
 			'group': '='
 		},
-		templateUrl: 'user/questionList/questionListTemplate.html',
+		template: questionListTemplate,
 		controller: 'questionListController',
 		controllerAs: 'c'
 	};

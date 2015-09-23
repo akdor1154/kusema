@@ -1,12 +1,14 @@
 'use strict';
 
+import template from './inlineDate.html';
+
 var inlineDateDirective = function() {
 		return {
 			bindToController: {
 				'date': '='
 			},
 			scope: {},
-			templateUrl: 'common/components/InlineDate/inlineDate.html',
+			template: template,
 			controller: 'kusemaInlineDateController',
 			controllerAs: 'c',
 		};

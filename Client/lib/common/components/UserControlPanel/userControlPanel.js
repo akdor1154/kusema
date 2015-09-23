@@ -1,6 +1,8 @@
+import template from './userControlPanelTemplate.html';
+
 var UserControlPanelDirective = function() {
 	return {
-		templateUrl: 'common/components/UserControlPanel/userControlPanelTemplate.html',
+		template: template,
 		controller: 'userControlPanelController',
 		controllerAs: 'c'
 	}

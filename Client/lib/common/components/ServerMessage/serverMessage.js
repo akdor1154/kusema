@@ -1,3 +1,5 @@
+import template from './serverMessageTemplate.html';
+
 var serverMessageDirective = function() {
 	return {
 		scope: {},
@@ -5,10 +7,10 @@ var serverMessageDirective = function() {
 			'message': '=',
 			'messagePrefix': '@'
 		},
-		templateUrl: 'common/components/ServerMessage/serverMessageTemplate.html',
+		template: template,
 		controller: 'kusemaServerMessageController',
 		controllerAs: 'c',
-		css: 'common/components/ServerMessage/serverMessage.css'
+		css: 'lib/common/components/ServerMessage/serverMessage.css'
 	};
 }
 

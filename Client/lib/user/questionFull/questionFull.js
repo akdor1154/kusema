@@ -1,9 +1,9 @@
 'use strict';
-
+import questionFullTemplate from './questionFullTemplate.html';
 var QuestionFullDirective = function() {
 	return {
 		scope: {},
-		templateUrl: 'user/questionFull/questionFullTemplate.html',
+		template: questionFullTemplate,
 		controller: 'questionFullController',
 		controllerAs: 'c'
 	};
