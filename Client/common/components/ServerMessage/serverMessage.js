@@ -14,7 +14,6 @@ var serverMessageDirective = function() {
 
 
 var serverMessageController = function() {
-	console.log('message!!');
 	this.setMessageProperties();
 }
 
@@ -25,7 +24,10 @@ serverMessageController.prototype = Object.create(Object.prototype, {
 			return this._message;
 		},
 		set: function(newMessage) {
-			console.log('setting message');
+			if (newMessage) {
+				console.error(newMessage);
+				console.error(newMessage.stack);
+			}
 			this._message = newMessage;
 			this.setMessageProperties();
 		}

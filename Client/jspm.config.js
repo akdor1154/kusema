@@ -12,6 +12,7 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
+  buildCSS: false,
 
   map: {
     "angular": "github:angular/bower-angular@1.4.6",

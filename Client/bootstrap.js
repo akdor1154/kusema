@@ -8,9 +8,11 @@ import 'common/services';
 import 'user/kusemaUser';
 
 import kusema from './kusema';
-console.log(kusema._invokeQueue);
-angular.element(document).ready(function() {
-	angular.bootstrap(document, [kusema.name], {strictDi: true});
-});
 
+function bootstrap() {
+	angular.element(document).ready(function() {
+		angular.bootstrap(document, [kusema.name], {strictDi: true});
+	});
+}
 
+bootstrap();

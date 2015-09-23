@@ -10,11 +10,10 @@ var kusema = angular.module('kusema', [
 'ui.router',
 'door3.css',
 'kusema.config',
-'kusema.user',
-'kusema.components'
+'kusema.user'
 ]);
 
-kusema.models = {};
+kusema.modules = {};
 
 kusema.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$mdThemingProvider', '$locationProvider', function (
                 $stateProvider,
@@ -47,7 +46,6 @@ kusema.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', '$mdThem
     .when('','/kusema')
     .when('/','/kusema');
 
-  
 }]);
 
 kusema.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
@@ -59,9 +57,9 @@ kusema.run(['$rootScope', '$stateParams', function($rootScope, $stateParams) {
 kusema.addModule(string moduleName, dependencies=[], autoRequire=true)
 
  adds a module by name and by property, and automatically makes
- its parent require it.
+ kusema require it.
  kusema.addModule('components');
- => kusema.components = angular.module('kusema.components', []);
+ => kusema.modules.components = angular.module('kusema.components', []);
     kusema.requires.push('kusema.components');
 
   if you don't want to automatically have this module's parents require it,
@@ -70,6 +68,10 @@ kusema.addModule(string moduleName, dependencies=[], autoRequire=true)
   module is always assumed to be a child of kusema, so
   addModule('kusema.components') has exactly the same effect as
   addModule('components') .
+
+  This used to do some fanciness to create a tree structure of modules
+  For various reasons that is a PITA with systemjs/jspm, so now everthing
+  just gets added flatly under kusema.modules.
 */
 var addModule = function (moduleName, dependencies, autoRequire) {
   if (dependencies === undefined) {
@@ -84,23 +86,24 @@ var addModule = function (moduleName, dependencies, autoRequire) {
   var splitName = moduleName.split(".");
   var parentChain = splitName.slice(0,-1);
   var moduleBaseName = splitName[splitName.length-1];
-  var parent = kusema;
+  var moduleNameNoPrefix;
+
+  // remove 'kusema.' from start of module names
   if (parentChain.length > 0 && parentChain[0] == "kusema") {
     parentChain = parentChain.slice(1);
+    moduleNameNoPrefix = splitName.slice(1).join('.');
   } else {
-    moduleName = "kusema."+moduleName;
+    moduleName = 'kusema.'+moduleName;
+    moduleNameNoPrefix = moduleName
   }
 
-  for (var property of parentChain) {
-    parent = parent[property];
-  }
-
-  parent[moduleBaseName] = angular.module(moduleName, dependencies);
+  var module = angular.module(moduleName, dependencies);
+  kusema.modules[moduleNameNoPrefix] = module;
   if (autoRequire) {
-    parent.requires.push(moduleName);
+    kusema.requires.push(moduleName);
   }
 
-  return parent[moduleBaseName];
+  return module;
 }
 
 kusema.addModule = addModule;
