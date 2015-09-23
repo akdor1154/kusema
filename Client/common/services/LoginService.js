@@ -99,8 +99,12 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 		.then( function() {
 			console.log('yay');
 			for (var subscriptions of [user.subscriptions, user.authcateSubscriptions, user.manualSubscriptions]) {
-				subscriptions.groups = this.groupService.getGroups(subscriptions.groups);
-				subscriptions.topics = this.groupService.getTopics(subscriptions.topics)
+				subscriptions.groups = (subscriptions.groups)
+									 ? this.groupService.getGroups(subscriptions.groups)
+									 : [];
+				subscriptions.topics = (subscriptions.topics)
+								     ? this.groupService.getTopics(subscriptions.topics)
+								     : [];
 			}
 		}.bind(this) )
 		.catch( function(e) {

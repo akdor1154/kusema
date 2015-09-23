@@ -105,6 +105,8 @@ var QuestionListController = function(questionFactory, $mdDialog, $scope) {
 		this.hideWriter();
 	}
 
-kusema.addModule('kusema.user.questionList', ['ngMaterial'] )
+import {addModule} from 'kusema';
+
+addModule('kusema.user.questionList', ['ngMaterial'] )
 	  .directive('kusemaQuestionList', QuestionListDirective)
 	  .controller('questionListController', ['questionService', '$mdDialog', '$scope', QuestionListController])

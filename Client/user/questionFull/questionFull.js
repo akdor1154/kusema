@@ -34,7 +34,9 @@ var QuestionFullController = function($scope, $timeout, $stateParams, questionFa
 
 //} QuestionController
 
-kusema.addModule('kusema.user.questionFull')
+import {addModule} from 'kusema';
+
+addModule('kusema.user.questionFull')
       .directive('kusemaQuestionFull', QuestionFullDirective)
 	  .controller('questionFullController', ['$scope', '$timeout', '$stateParams', 'questionService', 'commentService', QuestionFullController]);
 

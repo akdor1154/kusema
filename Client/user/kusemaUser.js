@@ -1,5 +1,8 @@
 import 'kusema';
 
+import './questionList/questionList';
+import './questionFull/questionFull';
+
 var KusemaUserConfig = function($stateProvider) {
 	$stateProvider
 		.state('user.home', {
