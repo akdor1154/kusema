@@ -111,3 +111,5 @@ export {addModule};
 
 
 export default kusema;
+
+[1,2,3,4,5].map((n) => `this is ${n} times cooler than before!`).map(console.log.bind(console))
