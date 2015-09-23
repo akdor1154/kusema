@@ -7,18 +7,22 @@
     <meta charset="utf-8">
     <title>kusema</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="bower_components/angular-material/angular-material.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="styles/common.css">
-    <link rel="stylesheet" href="bower_components/highlightjs/styles/github.css">
 
+    <!-- development -->
     <script src="jspm_packages/system.js"></script>
     <script src="jspm.config.js"></script>
     <script>
         System.import('bootstrap.js')
         .catch(console.error.bind(console));
     </script>
+    <!-- end development -->
+
+    <!-- production
+    <script src="lib/build.js"></script>
+    <!-- end production-->
 
   </head>
 
