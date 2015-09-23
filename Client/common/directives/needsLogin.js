@@ -59,5 +59,7 @@ var needsLoginController = function($scope, loginService) {
 		return loginResult && userResult;
 	}
 
-kusema.user.directive('kusemaNeedsLogin', needsLoginDirective)
+import kusema from 'kusema';
+console.log(kusema.modules);
+kusema.modules.user.directive('kusemaNeedsLogin', needsLoginDirective)
 		   .controller('needsLoginController', ['$scope', 'loginService', needsLoginController]);

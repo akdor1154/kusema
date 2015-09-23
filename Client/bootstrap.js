@@ -6,6 +6,7 @@ import './config';
 import 'common/components/components';
 import 'common/services';
 import 'user/kusemaUser';
+import 'common/directives';
 
 import kusema from './kusema';
 

@@ -95,9 +95,12 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 	LoginService.prototype.populateUser = function(userData) {
 		var user = userData;
 		console.log('yay?');
+
 		return this.groupService.waitForGroups
 		.then( function() {
-			console.log('yay');
+			if (!user) {
+				return;
+			}
 			for (var subscriptions of [user.subscriptions, user.authcateSubscriptions, user.manualSubscriptions]) {
 				subscriptions.groups = (subscriptions.groups)
 									 ? this.groupService.getGroups(subscriptions.groups)
