@@ -3,6 +3,7 @@ kusema-user {
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 0%;
+	overflow: hidden;
 }
 
 kusema-user > section {
