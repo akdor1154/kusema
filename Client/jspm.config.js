@@ -10,8 +10,8 @@ System.config({
   },
   paths: {
     "*.html.js": "*.html",
-    "github:*": "../jspm_packages/github/*",
-    "npm:*": "../jspm_packages/npm/*"
+    "github:*": "../jspm_packages/github/*.js",
+    "npm:*": "../jspm_packages/npm/*.js"
   },
 
   packages: {

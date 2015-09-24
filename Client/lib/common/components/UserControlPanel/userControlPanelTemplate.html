@@ -5,9 +5,10 @@
 
 </style>
 
-<form style="max-width: 600px" flex>
+<div style="max-width: 600px" flex>
 
 <h2>Groups</h2>
+<em>A group is a bit like a forum &mdash; you will see questions in groups that you are a member of. You are auto-added to groups of units that you are enrolled in, but you can also add yourself to other groups if you have an interest in them.</em>
 <md-list>
 	<kusema-group-list-item
 		ng-repeat="group in c.authcateGroups"
@@ -18,13 +19,51 @@
 	></kusema-group-list-item>
 </md-list>
 
-<md-input-container>
-<label>thing</label>
-<input name="thing2" />
-</md-input-container>
+<!-- TODO: md-highlight-text should be search to "groupSearchText", but for angular-material issue 4812 -->
+<form layout="row" ng-submit="c.addGroup()">
+<md-autocomplete
+	md-selected-item="c.selectedGroup"
+	md-search-text="groupSearchText"
+	md-items="group in c.gs.filterGroups(groupSearchText)"
+	md-item-text="group.name"
+	md-floating-label="Search for a group or unit"
+	md-min-length="0"
+	flex
+	>
+	<span md-highlight-text="searchText" md-highlight-flags>{{group.name}}</span>
+</md-autocomplete>
+<md-button type="submit" class="md-icon-button"><md-icon>add</md-icon></md-button>
+</form>
+
+<h2>Topics</h2>
+<em>Topics are kind of like tags &mdash; if you choose topics that correspond with your interests, you'll get shown questions relevant to those topics.</em>
+<md-list>
+	<md-list-item ng-repeat="topic in c.manualTopics">
+		<div flex>{{topic.name}}</div>
+		<md-button class="md-icon-button deleteButton" ng-click="c.removeTopic(topic)">
+			<md-icon>remove</md-icon>
+		</md-button>
+	</md-list-item>
+</md-list>
+
+<form layout="row" ng-submit="c.addTopic()">
+<md-autocomplete
+	md-selected-item="c.selectedTopic"
+	md-search-text="topicSearchText"
+	md-items="topic in c.gs.filterTopics(topicSearchText)"
+	md-item-text="topic.name"
+	md-floating-label="Search for a topic you are interested in"
+	md-min-length="0"
+	flex
+	>
+	<span md-highlight-text="searchText" md-highlight-flags>{{topic.name}}</span>
+</md-autocomplete>
+<md-button type="submit" class="md-icon-button"><md-icon>add</md-icon></md-button>
+</form>
+
 
 <div class="md-actions" layout="row" style="justify-content: flex-end;">
-<md-button>Save</md-button>
+<md-button class="md-primary md-raised" ng-click="c.saveUser()">Save</md-button>
 </div>
-</form>
+</div>
 </md-bottom-sheet>

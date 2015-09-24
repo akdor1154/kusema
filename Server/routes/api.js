@@ -69,6 +69,7 @@ router.use(authWrite)
 // User Routes
 promisedRouter.get('/user/:userId', usersCtrl.findUserById);
 promisedRouter.get('/user/:username', usersCtrl.findUserByUsername);
+promisedRouter.put('/user/:userId/manualSubscriptions', usersCtrl.updateSubscriptions);
 
 // Question Routes
 promisedRouter.post('/questions', questionsCtrl.addQuestion);

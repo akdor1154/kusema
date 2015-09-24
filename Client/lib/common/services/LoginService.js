@@ -1,5 +1,9 @@
 'use strict';
 
+import BaseJsonService from 'common/services/BaseJsonService.js';
+var sanitizeJson = BaseJsonService.prototype.sanitizeJson;
+
+
 var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 		this.$rootScope = $rootScope;
 		this.$http = $http;
@@ -118,6 +122,13 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 			this.bindables.user = user;
 			return user;
 		}.bind(this) );
+	}
+
+	LoginService.prototype.updateManualSubscriptions = function(manualSubscriptions) {
+		var test = JSON.stringify(manualSubscriptions, sanitizeJson);
+		return this.$http.put(this.kusemaConfig.url()+'api/user/'+this.bindables.user._id+'/manualSubscriptions',
+							  JSON.stringify(manualSubscriptions, sanitizeJson))
+		.then( response => this.populateUser(response.data) );
 	}
 //} loginService
 

@@ -6,6 +6,7 @@ var TopicService = function($http, kusemaConfig) {
 		this.urlBase = 'api/topics'
 		this.bindables = {
 			topics: null,
+			topicsArray: null,
 		}
 		this._wait = {};
 		this.waitForTopics = new Promise(function(resolve, reject) {

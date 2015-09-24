@@ -51,6 +51,22 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 	GroupService.prototype.getGroups = function(groupsIDs) {
 		return groupsIDs.map(this.getGroup.bind(this));
 	}
+	GroupService.prototype._filterList = function(substr, list) {
+		substr = substr.toLowerCase();
+		if (list.filter) {
+			return list.filter(
+				(thing) => (thing.getString().toLowerCase().indexOf(substr) > -1)
+			);
+		} else {
+			return [];
+		}
+	}
+	GroupService.prototype.filterGroups = function(substr) {
+		return this._filterList(substr, this.bindables.groupsArray);
+	}
+	GroupService.prototype.filterTopics = function(substr) {
+		return this._filterList(substr, this.topicService.bindables.topicsArray);
+	}
 
 import kusema from 'kusema.js';
 kusema.service('groupService', ['$rootScope', '$http', 'topicService', 'kusemaConfig', GroupService]);
