@@ -1,9 +1,5 @@
 {
   "jspm": {
-    "directories": {
-      "baseURL": "lib",
-      "packages": "jspm_packages"
-    },
     "configFile": "jspm.config.js",
     "dependencies": {
       "angular": "github:angular/bower-angular@^1.4.6",
