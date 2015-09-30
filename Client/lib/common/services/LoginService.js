@@ -2,13 +2,13 @@
 
 import BaseJsonService from 'common/services/BaseJsonService.js';
 var sanitizeJson = BaseJsonService.prototype.sanitizeJson;
+import {serverUrl} from 'kusemaConfig.js';
 
 
-var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
+var LoginService = function($http, $rootScope, $q, groupService) {
 		this.$rootScope = $rootScope;
 		this.$http = $http;
 		this.$q = $q;
-		this.kusemaConfig = kusemaConfig;
 		this.groupService = groupService;
 		this.bindables = {
 			loginState: 0,
@@ -39,7 +39,7 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 	LoginService.prototype.loginMonashComplete = function(messageEvent) {
 	}
 	LoginService.prototype.register = function(username, password) {
-		var registerRequest = this.$http.post(this.kusemaConfig.url()+'account/register_local', {'username': username, 'password': password})
+		var registerRequest = this.$http.post(serverUrl('account/register_local'), {'username': username, 'password': password})
 		return registerRequest.then(
 			function(response) {
 				console.log('register request done');
@@ -52,7 +52,7 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 	LoginService.prototype.login = function(username, password) {
 		this.bindables.loginState = -1;
 		return this.$http.post(
-							this.kusemaConfig.url()+'account/login_local',
+							serverUrl('account/login_local'),
 							{'username': username, 'password': password}
 						)
 						.then( function(response) {
@@ -65,7 +65,7 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 						}.bind(this));
 	};
 	LoginService.prototype.logout = function() {
-		var logoutRequest = this.$http.post(this.kusemaConfig.url()+'account/logout');
+		var logoutRequest = this.$http.post(serverUrl('account/logout'));
 		this.bindables.loginState = -2;
 		return logoutRequest.then(
 			function(response) {
@@ -80,7 +80,7 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 		return this.loggedIn;
 	}
 	LoginService.prototype.checkLogin = function() {
-		var checkRequest = this.$http.get(this.kusemaConfig.url()+'account/is_logged_in');
+		var checkRequest = this.$http.get(serverUrl('account/is_logged_in'));
 		return checkRequest.then(function(response) {
 			if (response.data) {
 				this.bindables.loginState = 1;
@@ -126,13 +126,13 @@ var LoginService = function($http, $rootScope, $q, groupService, kusemaConfig) {
 
 	LoginService.prototype.updateManualSubscriptions = function(manualSubscriptions) {
 		var test = JSON.stringify(manualSubscriptions, sanitizeJson);
-		return this.$http.put(this.kusemaConfig.url()+'api/user/'+this.bindables.user._id+'/manualSubscriptions',
+		return this.$http.put(serverUrl('api/user/')+this.bindables.user._id+'/manualSubscriptions',
 							  JSON.stringify(manualSubscriptions, sanitizeJson))
 		.then( response => this.populateUser(response.data) );
 	}
 //} loginService
 
 import kusema from 'kusema.js';
-kusema.service('loginService', ['$http', '$rootScope', '$q', 'groupService', 'kusemaConfig', LoginService]);
+kusema.service('loginService', ['$http', '$rootScope', '$q', 'groupService', LoginService]);
 
 export default LoginService;

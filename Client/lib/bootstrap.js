@@ -2,7 +2,6 @@
 
 import angular from 'angular';
 
-import './config.js';
 import './common/components/components.js';
 import './common/services.js';
 import './user/kusemaUser.js';
@@ -16,4 +15,6 @@ function bootstrap() {
 	});
 }
 
-bootstrap();
+import {waitForConfig} from './kusemaConfig.js';
+
+waitForConfig.then(bootstrap);

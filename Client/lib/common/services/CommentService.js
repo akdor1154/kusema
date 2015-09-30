@@ -25,9 +25,9 @@ var CommentSubscription = function(socketFactory, commentFactory, baseContent, c
 //} CommentSubScription
 
 
-var CommentService = function($http, kusemaConfig, socketFactory) {
-		this.initCommonDeps($http, kusemaConfig, socketFactory);
-        this.urlBase = 'api/comments';
+var CommentService = function($http, socketFactory) {
+		this.initCommonDeps($http, socketFactory);
+        this.urlStem = 'api/comments';
     }
 
 	CommentService.prototype = Object.create(BaseContentService.prototype, {
@@ -48,6 +48,6 @@ var CommentService = function($http, kusemaConfig, socketFactory) {
 //} CommentService 
 
 import kusema from 'kusema.js';
-kusema.service('commentService', ['$http', 'kusemaConfig', 'socketFactory', CommentService]);
+kusema.service('commentService', ['$http', 'socketFactory', CommentService]);
 
 export default CommentService;

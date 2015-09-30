@@ -3,9 +3,9 @@
 import BaseContentService from './BaseContentService.js';
 import {Question} from 'common/models.js';
 
-var QuestionService = function($http, kusemaConfig, socketFactory, answerService, groupService) {
-		this.initCommonDeps($http, kusemaConfig, socketFactory);
-		this.urlBase = 'api/questions';
+var QuestionService = function($http, socketFactory, answerService, groupService) {
+		this.initCommonDeps($http, socketFactory);
+		this.urlStem = 'api/questions';
 		this.answerService = answerService;
 		this.groupService = groupService;
 	}
@@ -24,4 +24,4 @@ var QuestionService = function($http, kusemaConfig, socketFactory, answerService
 	    
 
 import kusema from 'kusema.js';
-kusema.service('questionService', ['$http', 'kusemaConfig', 'socketFactory', 'answerService', 'groupService', QuestionService]);
+kusema.service('questionService', ['$http', 'socketFactory', 'answerService', 'groupService', QuestionService]);
