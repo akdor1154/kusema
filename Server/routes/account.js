@@ -30,7 +30,7 @@ module.exports = function (passport) {
 				userId: req.user.id,
 				username: req.user.authcate
 			};
-			res.redirect('/common/components/UserMenu/monashLoginCallback.html?'+encodeURIComponent(JSON.stringify(userData)))
+			res.redirect('/monashLoginCallback.html?'+encodeURIComponent(JSON.stringify(userData)))
 			res.json();
 		}
 	);

@@ -12,3 +12,16 @@ exp.findUserByUsername = function (req, res, next) {
     { 'local.username': req.body.username }
   );
 };
+
+exp.updateSubscriptions = function(req, res, next) {
+	return User.findById(req.params.userId)
+	.then( function(user) {
+		if (req.body.groups) {
+			user.manualSubscriptions.groups = req.body.groups;
+		}
+		if (req.body.topics) {
+			user.manualSubscriptions.topics = req.body.topics;
+		}
+		return user.save();
+	})
+}

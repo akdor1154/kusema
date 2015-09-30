@@ -1,5 +1,5 @@
 System.config({
-  baseURL: "lib",
+  baseURL: "/",
   defaultJSExtensions: true,
   transpiler: "babel",
   babelOptions: {
@@ -9,13 +9,13 @@ System.config({
     ]
   },
   paths: {
-    "*.html.js": "*.html",
-    "github:*": "../jspm_packages/github/*",
-    "npm:*": "../jspm_packages/npm/*"
+    "*.js": "lib/*.js",
+    "github:*": "jspm_packages/github/*",
+    "npm:*": "jspm_packages/npm/*"
   },
 
   packages: {
-    "../lib": {
+    "lib": {
       "defaultExtension": false
     }
   },

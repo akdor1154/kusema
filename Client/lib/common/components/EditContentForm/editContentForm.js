@@ -90,7 +90,7 @@ var editContentFormController = function($scope, baseContentService, groupServic
     editContentFormController.prototype._checkContentType = function() {
         if (!this.baseContentService) return; // sometimes angular calls this before the constructor gets called :/
         this.contentService = this.baseContentService.getService(this.contentType || this.outsideContent);
-        this._contentType = (this.contentService) ? this.contentService.model.name : null;
+        this._contentType = (this.contentService) ? this.contentService.model.prototype.name : null;
     }
 
     editContentFormController.prototype.saveFunction = function() {};

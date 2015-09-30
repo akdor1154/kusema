@@ -121,6 +121,11 @@ var Group = function Group(groupJSON, groupService) {
         unitCode: {writable: true, value: '', enumerable: true},
         title: {writable: true, value: '', enumerable: true}
     });
+    // weirdness: if I set prototype.toString, my actually models end up with
+    // topic.toString === Object.prototype.toString. No idea why.
+    Group.prototype.getString = function() {
+        return this.name;
+    }
 
 var Topic = function Topic(topicJSON) {
         BaseJson.call(this, topicJSON);
@@ -128,5 +133,8 @@ var Topic = function Topic(topicJSON) {
     Topic.prototype = Object.create(BaseJson.prototype, {
         name: {writable: true, value: '', enumerable: true},
     });
+    Topic.prototype.getString = function() {
+        return this.name;
+    }
 
 export {BaseJson, BaseContent, Question, Answer, Comment, Group, Topic};
