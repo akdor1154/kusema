@@ -11,6 +11,12 @@ A new social platform for university students.
 - Minimalist
 - Realtime
 
+## Supported browsers
+- Chrome
+- Safari
+- IE 11+
+
+
 ## Dev Notes
 - [AngularJS best practices](https://github.com/mgechev/angularjs-style-guide)
 - [API Reference](https://github.com/nathansherburn/kusema/wiki/API-Reference)
