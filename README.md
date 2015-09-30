@@ -12,10 +12,15 @@ A new social platform for university students.
 - Realtime
 
 ## Supported browsers
+
+Mobile:
+- Chrome
+- Safari
+ 
+Desktop:
 - Chrome
 - Safari
 - IE 11+
-
 
 ## Dev Notes
 - [AngularJS best practices](https://github.com/mgechev/angularjs-style-guide)
