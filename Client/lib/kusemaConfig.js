@@ -36,9 +36,26 @@ var waitForConfig = new Promise(function(resolve, reject) {
 	_waitForConfigDeferral.reject = reject;
 })
 
-var waitForConfig = System.import('../serverConfig.json!text')
+
+var c = new Promise(function(resolve, reject) {
+	var configRequest = new XMLHttpRequest();
+	configRequest.open('GET', '/serverConfig.json');
+	console.log('config plz');
+	configRequest.onreadystatechange = function() {
+		if (configRequest.readyState == 4) {
+			if (configRequest.status == 200) {
+				console.log('got config!!');
+				resolve(configRequest.response);
+			} else {
+				console.log('no config!!');
+				reject(configRequest);
+			}
+		}
+	}
+	configRequest.send();
+})
+.catch( (e) => {console.error(e); return '{}';} )
 .then(JSON.parse)
-.catch( () => { return {} } )
 .then( function(serverConfig) {
 	kusemaConfig.setFromJson(serverConfig);
 	_waitForConfigDeferral.resolve();

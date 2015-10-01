@@ -22,6 +22,5 @@
   },
   "devDependencies": {
     "jspm": "^0.16.9"
-  },
-  "defaultExtension": false
+  }
 }
