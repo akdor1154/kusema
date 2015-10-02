@@ -2,7 +2,7 @@
 A new social platform for university students.
 
 ## Installation
-0. Install `npm` your preferred way, then type `npm install -g jspm` to install JSPM. You may need to be acting as root.
+0. Install `npm` your preferred way, then type `npm install -g jspm` to install JSPM. You may need to do this as root or via `sudo`.
 1. Point your terminal to `/Server` and type `npm install` to install server dependencies.
 2. Point your terminal to `/Client` and type `jspm install` to install client dependencies.
 3. Point your terminal to `/Server` and type `bin/kusema test` to run the server in development mode.
