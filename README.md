@@ -9,7 +9,7 @@ A new social platform for university students.
 
 ## Bundling
 1. Go to `/Client`, and type `jspm bundle-sfx bootstrap.js build.js`
-2. Uncomment the development section in `index.html`, and comment the production section. (to be made More Better soon!)
+2. Comment the development section in `index.html`, and uncomment the production section. (to be made More Better soon!)
 
 ## Principles
 - Mobile first
