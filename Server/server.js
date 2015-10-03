@@ -18,10 +18,10 @@ var mongoose       = require('mongoose');
 var cors           = require('cors');
 var passport       = require('passport');
 var expressSession = require('express-session');
+var fs             = require('fs');
 
 // Instantiate app and server
 var app            = express();
-var server         = require('http').createServer(app);
 
 var here = function(pathToJoin) {
   return path.join(__dirname, pathToJoin)
@@ -38,6 +38,21 @@ if (!options.hostname) {
 }
 if (!options.protocol) {
   options.protocol = 'http';
+}
+
+var server;
+
+try {
+  if (options.protocol == 'https') {
+    var cert = fs.readFileSync(options.cert);
+    var certKey = fs.readFileSync(options.certKey);
+    server = require('https').createServer({key: certKey, cert: cert}, app);
+  } else {
+    throw new Exception('letsUseHttp');
+  }
+} catch (e) {
+  console.error(e);
+  server = require('http').createServer(app);
 }
 
 app.options = options;
@@ -102,7 +117,7 @@ app.use(function(req, res, next) {
 });
 
 // Add routes
-var account = require(here('./routes/account'))(passport);
+var account = require(here('./routes/account'))(passport, options);
 var api 	= require(here('./routes/api'));
 var baucis  = require(here('config/baucis'));
 

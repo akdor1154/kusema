@@ -1,4 +1,5 @@
 {
 	"host": "melts-dev.eng.monash.edu",
-	"port": "8003"
+	"port": "8003",
+	"protocol": "http"
 }

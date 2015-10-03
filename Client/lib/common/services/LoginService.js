@@ -22,7 +22,7 @@ var LoginService = function($http, $rootScope, $q, groupService) {
 	});
 	LoginService.prototype.loginMonash = function() {
 		return new Promise(function(resolve, reject) {
-			this.casPopup = window.open('/account/login_monash', 'loginPopup', 'width=400', 'height=400');
+			this.casPopup = window.open(serverUrl('account/login_monash'), 'loginPopup', 'width=400', 'height=400');
 			var loginMonashCallback = function(messageEvent) {
 				if (messageEvent.origin !== window.location.origin) {
 					console.error('event origin'+event.origin+' was not the same as this page: '+window.location.origin);

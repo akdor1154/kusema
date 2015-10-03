@@ -7,6 +7,6 @@
 		"hostname": "melts-dev.eng.monash.edu",
 		"protocol": "https"
 	},
-	"cert": "/path/to/public/key.crt",
-	"certKey": "/path/to/private.key"
+	"cert": "/etc/pki/tls/certs/localhost.crt",
+	"certKey": "/etc/pki/tls/private/localhost.key"
 }
