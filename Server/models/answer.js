@@ -18,11 +18,36 @@ answerSchema.index({ downVotes: 1 });
 answerSchema.path('message').index({text : true});
 
 answerSchema.pre('save', function(next) {
-    Question.update({_id: this.question},{$addToSet:{'answers': this._id}}, next);
-})
+    Question.update(
+        { _id: this.question },
+
+        { $addToSet:
+                {'answers': this._id}
+        },
+        
+        next
+    );
+});
+
 answerSchema.pre('remove', function(next) {
     Question.update({_id: this.question},{$pull:{'answers': this._id}}, next);
-})
+});
+
+answerSchema.post('save', function() {
+
+    //TODO if slow, uncomment the above 
+    // manual inc instead of searching for every match in
+    // the answers collection
+    Question.findById(this.question)
+    .then( function(question) {
+        return question.setNumAnswers();
+    })
+    .then( function(question) {
+        return question.save();
+    })
+    //TODO end stuff to delete
+
+});
 
 answerSchema.methods.setFromJSON = function(data, userId) {
     this.__proto__.__proto__.setFromJSON.call(this, data, userId);

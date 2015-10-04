@@ -25,13 +25,30 @@ commentSchema.index({ downVotes: 1 });
 commentSchema.path('message').index({text : true});
 
 commentSchema.pre('save', function(next) {
-	console.log('updating daddy');
-	contentMethods.BaseContent.update({_id: this.parent},{$addToSet:{'comments': this._id}}, next);
-	console.log('daddy updated');
+	contentMethods.BaseContent.update({_id: this.parent},{$addToSet:{'comments': this._id}}, next)
 })
 commentSchema.pre('remove', function(next) {
 	contentMethods.BaseContent.update({_id: this.parent},{$pull:{'comments': this._id}}, next);
 })
+
+commentSchema.post('save', function() {
+
+	//DRY way, slower
+	console.log('finding '+this.parent);
+	return this.findRootQuestion()
+	.then(function(question) {
+		console.log('got question:'+question.title);
+		return Promise.all([
+			question.setNumComments(),
+			question.setDateLastReply()
+		]).then( function() { console.log('updated question'); return question });
+	})
+	.then(function(question) {
+		return question.save();
+	})
+
+})
+
 commentSchema.post('save', emitChanged);
 commentSchema.post('remove', emitChanged);
 
@@ -41,6 +58,21 @@ commentSchema.methods.setFromJSON = function(data, userId) {
 	if (data.parent && !this.parent) {
 			this.parent = data.parent;
 		}
+}
+
+commentSchema.methods.findRootQuestion = function() {
+	return contentMethods.BaseContent.findOne({
+			$or: [
+
+				{
+					_id: this.parent,
+					__t: 'Question',
+				},
+
+				{'answers': this.parent}
+
+			]
+		}).exec();
 }
 
 
