@@ -21,7 +21,11 @@ var QuestionService = function($http, socketFactory, answerService, groupService
                         return this.createClientModels(response.data);
                     }.bind(this));
 	    };
-	    
+	   
+	QuestionService.prototype.getFeed = function(requestNumber) {
+		return this.$http.get(this.urlBase+'/feed/'+requestNumber)
+				.then( (response) => this.createClientModels(response.data) );
+	}
 
 import kusema from 'kusema.js';
 kusema.service('questionService', ['$http', 'socketFactory', 'answerService', 'groupService', QuestionService]);
