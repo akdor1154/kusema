@@ -1,6 +1,7 @@
 'use strict';
 
 var Question = require('../models/question');
+var User = require('../models/user');
 
 var exp = module.exports;
 

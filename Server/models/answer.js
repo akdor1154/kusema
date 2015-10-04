@@ -1,6 +1,6 @@
 var mongoose        = require('mongoose');
 var ObjectId        = mongoose.Schema.Types.ObjectId;
-var Question        = require('../models/question');
+var Question        = require('./question');
 var media           = require('./common/media');
 var contentMethods  = require('./common/contentMethods');
 
@@ -56,7 +56,6 @@ answerSchema.methods.setFromJSON = function(data, userId) {
 
 // Validation
 answerSchema.path('question').validate(function (value, respond) {
-
     Question.count({_id: value}, function (err, doc) {
         if (err || !doc) {
             console.error(err);

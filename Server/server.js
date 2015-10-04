@@ -48,7 +48,7 @@ try {
     var certKey = fs.readFileSync(options.certKey);
     server = require('https').createServer({key: certKey, cert: cert}, app);
   } else {
-    throw new Exception('letsUseHttp');
+    throw new Error('letsUseHttp');
   }
 } catch (e) {
   console.error(e);
@@ -109,8 +109,10 @@ app.use(function(req, res, next) {
   res.mjson = function(mongooseDocument) {
     if (mongooseDocument.toJSON) {
       res.json(mongooseDocument.toJSON());
-    } else {
+    } else if (mongooseDocument[0] && mongooseDocument[0].toJSON) {
       res.json(mongooseDocument.map(function(realDoc) { return realDoc.toJSON();}));
+    } else {
+      res.json(mongooseDocument);
     }
   };
   next();
