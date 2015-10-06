@@ -40,47 +40,23 @@ var QuestionListDirective = function() {
 	};
 }
 
-var QuestionListController = function(questionFactory, $mdDialog, $scope) {
+var QuestionListController = function(questionService, $mdDialog, $scope) {
 		this.allowMoreRequests = true;
 		this.writerOpen = false;
 		this.$scope = $scope;
 		this.$mdDialog = $mdDialog;
 		this.test = "hello";
-		this.questions = {
-	      numberOfRequestsForQuestions: 1,
-	      questionsList: [],
-	      add: function(responseJSON) {
-	        this.questionsList.push(questionFactory.createClientModel(responseJSON));
-	      },
-	      addQuestions: function(questions) {
-	        this.questionsList = questions;
-	      },
-	      delete: function(id) {
-	        var questionIndex = this.getIndexOf(id);
-	        if (questionIndex) {
-	            this.questionsList.splice(questionIndex, 1);
-	        }
-	      },
-	      getIndexOf: function(id) {
-	        var possibleQuestions = this.questionsList.filter(function(question) {return question._id == id;});
-	        if (possibleQuestions.length > 0) {
-	            return possibleQuestions[0]
-	        } else {
-	            return null;
-	        }
-	      }
-	    };
+		this.questions = []
 
-	    questionFactory.getNextTenQuestions(0, this.group)
-	    .then(
-	        function (quest) {
-	            this.questions.addQuestions(quest);
-	        }.bind(this),
-	        function (error) {
-	            console.error('Unable to load questions: ' + error + error.message);
-	        }
-	    );
+	    questionService.getFeed(0, this.group)
+	    .then( this.addQuestions.bind(this) )
+	    .catch( console.error.bind(console) );
 
+	}
+
+	QuestionListController.prototype.addQuestions = function(questions) {
+		//TODO: infinite scroll?
+		this.questions = questions;
 	}
 
 

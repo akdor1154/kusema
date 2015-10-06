@@ -1,30 +1,26 @@
 'use strict';
 
 import {BaseJson} from 'common/models.js';
+import {serverUrl} from 'kusemaConfig.js';
 
-var BaseJsonService = function($http, kusemaConfig) {
-		this.initCommonDeps($http, kusemaConfig);
-		this.serverURL = kusemaConfig.url();
+var BaseJsonService = function($http) {
+		this.initCommonDeps($http);
 		return this;
 	}
 
 	BaseJsonService.prototype = Object.create(Object.prototype, {
 		serverURL: {writable: true, enumerable: false, value: ''},
-		_urlStem: {writable: true, enumerable: false, value: ''},
+		urlStem: {writable: true, enumerable: false, value: ''},
 		urlBase: {
 			get: function() {
-				return this.serverURL+this._urlStem
-			},
-			set: function(urlStem) {
-				this._urlStem = urlStem;
+				return serverUrl(this.urlStem)
 			}
 		},
 		model: {writable: false, enumerable: false, value: BaseJson}
 	});
 
-	BaseJsonService.prototype.initCommonDeps = function($http, kusemaConfig) {
+	BaseJsonService.prototype.initCommonDeps = function($http) {
 			this.$http = $http;
-			this.kusemaConfig = kusemaConfig
 	}
 	BaseJsonService.prototype.createClientModel = function(responseJSON) {
 	    return new this.model(responseJSON, this);
@@ -60,6 +56,6 @@ var BaseJsonService = function($http, kusemaConfig) {
     };
 
 import kusema from 'kusema.js';
-kusema.service('baseJsonService', ['$http', 'kusemaConfig', BaseJsonService]);
+kusema.service('baseJsonService', ['$http', BaseJsonService]);
 
 export default BaseJsonService;

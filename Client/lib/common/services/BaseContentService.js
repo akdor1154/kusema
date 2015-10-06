@@ -3,8 +3,8 @@
 import BaseJsonService from './BaseJsonService.js';
 import {BaseContent} from 'common/models.js';
 
-var BaseContentService = function($http, kusemaConfig, socketFactory, questionService, answerService, commentService) {
-		this.initCommonDeps($http, kusemaConfig, socketFactory);
+var BaseContentService = function($http, socketFactory, questionService, answerService, commentService) {
+		this.initCommonDeps($http, socketFactory);
 		this.questionService = questionService;
 		this.answerService = answerService;
 		this.commentService = commentService;
@@ -14,8 +14,8 @@ var BaseContentService = function($http, kusemaConfig, socketFactory, questionSe
 		model: {writable: false, enumerable: false, value: BaseContent}
 	});
 
-	BaseContentService.prototype.initCommonDeps = function($http, kusemaConfig, socketFactory) {
-        BaseJsonService.prototype.initCommonDeps.call(this, $http, kusemaConfig);
+	BaseContentService.prototype.initCommonDeps = function($http, socketFactory) {
+        BaseJsonService.prototype.initCommonDeps.call(this, $http);
 		this.socketFactory = socketFactory;
 	}
 
@@ -76,6 +76,6 @@ var BaseContentService = function($http, kusemaConfig, socketFactory, questionSe
 //} BaseContentService
 
 import kusema from 'kusema.js';
-kusema.service('baseContentService', ['$http', 'kusemaConfig', 'socketFactory', 'questionService', 'answerService', 'commentService', 'baseJsonService', BaseContentService]);
+kusema.service('baseContentService', ['$http', 'socketFactory', 'questionService', 'answerService', 'commentService', BaseContentService]);
 
 export default BaseContentService;

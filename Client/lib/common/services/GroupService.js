@@ -1,11 +1,11 @@
 import BaseJsonService from './BaseJsonService.js';
 import {Group} from 'common/models.js';
 
-var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
-		this.initCommonDeps($http, kusemaConfig);
+var GroupService = function($rootScope, $http, topicService) {
+		this.initCommonDeps($http);
 		this.topicService = topicService;
 		this.rootScope = $rootScope;
-		this.urlBase = 'api/groups'
+		this.urlStem = 'api/groups'
 		this.bindables = {
 			groups: null,
 			groupsArray: null, // there are some places where we need to lookup by key, and others where we need an array :(
@@ -69,6 +69,6 @@ var GroupService = function($rootScope, $http, topicService, kusemaConfig) {
 	}
 
 import kusema from 'kusema.js';
-kusema.service('groupService', ['$rootScope', '$http', 'topicService', 'kusemaConfig', GroupService]);
+kusema.service('groupService', ['$rootScope', '$http', 'topicService', GroupService]);
 
 export default GroupService;

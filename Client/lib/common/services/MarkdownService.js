@@ -14,7 +14,9 @@ var MarkdownService = function() {
 				try {
 					console.log('highlighting');
 					return hljs.highlight(language, code).value;
-				} catch (e) {}
+				} catch (e) {
+					console.log('highlight error');
+				}
 			}
 			return '';
 		}

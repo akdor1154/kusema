@@ -27,38 +27,42 @@ System.config({
   },
 
   map: {
-    "angular": "github:angular/bower-angular@1.4.6",
-    "angular-animate": "github:angular/bower-angular-animate@1.4.6",
-    "angular-aria": "github:angular/bower-angular-aria@1.4.6",
-    "angular-css": "npm:angular-css@1.0.7",
-    "angular-material": "github:angular/bower-material@0.11.0",
+    "angular": "github:angular/bower-angular@1.4.7",
+    "angular-animate": "github:angular/bower-angular-animate@1.4.7",
+    "angular-aria": "github:angular/bower-angular-aria@1.4.7",
+    "angular-css": "github:door3/angular-css@1.0.7",
+    "angular-material": "github:angular/bower-material@0.11.1",
     "angular-route": "github:angular/bower-angular-route@1.4.6",
     "angular-ui-router": "github:angular-ui/ui-router@0.2.15",
     "babel": "npm:babel-core@5.8.25",
-    "babel-runtime": "npm:babel-runtime@5.8.24",
-    "clean-css": "npm:clean-css@3.4.4",
-    "core-js": "npm:core-js@1.1.4",
+    "babel-runtime": "npm:babel-runtime@5.8.25",
+    "clean-css": "npm:clean-css@3.4.5",
+    "core-js": "npm:core-js@1.2.0",
+    "door3/angular-css": "github:door3/angular-css@1.0.7",
     "highlightjs": "github:components/highlightjs@8.8.0",
     "markdown-it": "npm:markdown-it@4.4.0",
     "socket.io-client": "github:socketio/socket.io-client@1.3.6",
     "text": "github:systemjs/plugin-text@0.0.2",
     "github:angular-ui/ui-router@0.2.15": {
-      "angular": "github:angular/bower-angular@1.4.6"
+      "angular": "github:angular/bower-angular@1.4.7"
     },
-    "github:angular/bower-angular-animate@1.4.6": {
-      "angular": "github:angular/bower-angular@1.4.6"
+    "github:angular/bower-angular-animate@1.4.7": {
+      "angular": "github:angular/bower-angular@1.4.7"
     },
-    "github:angular/bower-angular-aria@1.4.6": {
-      "angular": "github:angular/bower-angular@1.4.6"
+    "github:angular/bower-angular-aria@1.4.7": {
+      "angular": "github:angular/bower-angular@1.4.7"
     },
     "github:angular/bower-angular-route@1.4.6": {
-      "angular": "github:angular/bower-angular@1.4.6"
+      "angular": "github:angular/bower-angular@1.4.7"
     },
-    "github:angular/bower-material@0.11.0": {
-      "angular": "github:angular/bower-angular@1.4.6",
-      "angular-animate": "github:angular/bower-angular-animate@1.4.6",
-      "angular-aria": "github:angular/bower-angular-aria@1.4.6",
-      "css": "github:systemjs/plugin-css@0.1.17"
+    "github:angular/bower-material@0.11.1": {
+      "angular": "github:angular/bower-angular@1.4.7",
+      "angular-animate": "github:angular/bower-angular-animate@1.4.7",
+      "angular-aria": "github:angular/bower-angular-aria@1.4.7",
+      "css": "github:systemjs/plugin-css@0.1.18"
+    },
+    "github:door3/angular-css@1.0.7": {
+      "angular": "github:angular/bower-angular@1.4.7"
     },
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.3.0"
@@ -119,7 +123,7 @@ System.config({
     "npm:assert@1.3.0": {
       "util": "npm:util@0.10.3"
     },
-    "npm:babel-runtime@5.8.24": {
+    "npm:babel-runtime@5.8.25": {
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
     "npm:buffer@3.5.0": {
@@ -127,7 +131,7 @@ System.config({
       "ieee754": "npm:ieee754@1.1.6",
       "is-array": "npm:is-array@1.0.1"
     },
-    "npm:clean-css@3.4.4": {
+    "npm:clean-css@3.4.5": {
       "buffer": "github:jspm/nodelibs-buffer@0.1.0",
       "commander": "npm:commander@2.8.1",
       "fs": "github:jspm/nodelibs-fs@0.1.2",
@@ -148,7 +152,7 @@ System.config({
       "path": "github:jspm/nodelibs-path@0.1.0",
       "process": "github:jspm/nodelibs-process@0.1.1"
     },
-    "npm:core-js@1.1.4": {
+    "npm:core-js@1.2.0": {
       "fs": "github:jspm/nodelibs-fs@0.1.2",
       "process": "github:jspm/nodelibs-process@0.1.1",
       "systemjs-json": "github:systemjs/plugin-json@0.1.0"

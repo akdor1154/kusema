@@ -9,7 +9,6 @@ var kusema = angular.module('kusema', [
 'ngMaterial',
 'ui.router',
 'door3.css',
-'kusema.config',
 'kusema.user'
 ]);
 

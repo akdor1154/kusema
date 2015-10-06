@@ -1,6 +1,7 @@
 'use strict';
 
 import io from 'socket.io-client';
+import kusemaConfig from 'kusemaConfig.js';
 
 function contentId(content) {
   var id = '';
@@ -14,10 +15,9 @@ function contentId(content) {
   return {'contentId': id};
 }
 
-function socketService(kusemaConfig) {
-  this.kusemaConfig = kusemaConfig;
+function socketService() {
 
-  var socket = io.connect(kusemaConfig.url());
+  var socket = io.connect(kusemaConfig.url);
   console.log('socketService called');
 
   socket.watchContent = function(content) {
@@ -33,4 +33,4 @@ function socketService(kusemaConfig) {
 }
 
 import kusema from 'kusema.js';
-kusema.factory('socketFactory', ['kusemaConfig', socketService]);
+kusema.factory('socketFactory', socketService);

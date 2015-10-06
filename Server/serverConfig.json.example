@@ -1,5 +1,12 @@
 {
 	"port": 8003,
 	"hostname": "melts-dev.eng.monash.edu",
-	"protocol": "http"
+	"protocol": "https",
+	"client": {
+		"port": "8001",
+		"hostname": "melts-dev.eng.monash.edu",
+		"protocol": "https"
+	},
+	"cert": "/path/to/public/key.crt",
+	"certKey": "/path/to/private.key"
 }

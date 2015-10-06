@@ -1,8 +1,9 @@
 var express  = require('express');
 var router   = express.Router();
 var ldap 	= require('../services/ldapClient');
+var url     = require('url');
 
-module.exports = function (passport) {
+module.exports = function (passport, options) {
 
 	// Account Routes
 	
@@ -30,7 +31,8 @@ module.exports = function (passport) {
 				userId: req.user.id,
 				username: req.user.authcate
 			};
-			res.redirect('/monashLoginCallback.html?'+encodeURIComponent(JSON.stringify(userData)))
+			var urlBase = url.format(options.client || options);
+			res.redirect(urlBase+'/monashLoginCallback.html?'+encodeURIComponent(JSON.stringify(userData)))
 			res.json();
 		}
 	);
