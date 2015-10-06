@@ -1,5 +1,6 @@
 var Answer = require('../models/answer');
 var ObjectId = require('mongoose').Types.ObjectId;
+var Interaction = require('../models/interaction.js');
 
 var exp = module.exports;
 
@@ -19,6 +20,7 @@ exp.addByQuestionId = function(req, res, next) {
 
     return answer.save()
     .then( function(answer) {
+            Interaction.log(req.user._id, 'post', answer);
             // if we want our plugins to run, i.e. autopopulation, then we need to run a db find :(
             return Answer.findById(answer._id)
     });
@@ -32,7 +34,6 @@ exp.updateAnswer = function(req, res, next) {
         return answer.save();
     })
     .then( function(answer) {
-        console.log(answer);
         return answer.populate('author');
     })
     .then(function(answer) {

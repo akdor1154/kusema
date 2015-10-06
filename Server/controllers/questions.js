@@ -2,11 +2,34 @@
 
 var Question = require('../models/question');
 var User = require('../models/user');
+var Interaction = require('../models/interaction');
 
 var exp = module.exports;
 
 exp.findByQuestionId = function (req, res, next) {
-  return Question.findById(req.params.questionId)
+
+
+  var q = Question.findById(req.params.questionId)
+  console.log('just found');
+  if (req.user && req.user._id) {
+    q.then(function(question) {
+      console.log('about to log');
+      Interaction.log(req.user._id, 'read', question);
+    })
+    .catch(function(error) {
+      console.error(error);
+    })
+  }
+
+  return q;
+  /*
+  .then( function(question) {
+    return question.setStats()
+  })
+  .then( function(question) {
+    return question.save();
+  });
+  */
 };
 
 exp.nextTenQuestions = function (req, res, next) {
@@ -76,7 +99,14 @@ exp.addQuestion = function (req, res, next) {
   question.setFromJSON(req.body, req.user._id);
   question.upVotes.     push(req.user._id);
 
-  return question.save()
+
+  var s = question.save();
+
+  s.then( function(question) {
+    Interaction.log(req.user._id, 'post', question);
+  });
+
+  return s;
 };
 
 exp.updateQuestion = function (req, res, next) {
