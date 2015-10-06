@@ -30,6 +30,8 @@ var BaseJson = function BaseJson(contentJSON, factory) {
 
 var BaseContent = function BaseContent(contentJSON, factory) {
         BaseJson.call(this, contentJSON, factory);
+        this.upVotes = new Set(this.upVotes);
+        this.downVotes = new Set(this.downVotes)
     	return this;
     }
     BaseContent.prototype = Object.create(BaseJson.prototype, {
@@ -39,19 +41,24 @@ var BaseContent = function BaseContent(contentJSON, factory) {
         authorName: { writable: true, value: "", enumerable: true},
         message: { writable: true, value: 0, enumerable: true },
         comments: { writable: true, value: [], enumerable: true},
-        upVotes: { writable: true, value: 0, enumerable: true },
-        downVotes: { writable: true, value: 0, enumerable: true},
+        upVotes: { writable: true, value: [], enumerable: true },
+        downVotes: { writable: true, value: [], enumerable: true},
         score: {get: function() {
-            return this.upVotes - this.downVotes;
+            return this.upVotes.size - this.downVotes.size;
         }},
     });
     BaseContent.prototype.upVote = function() {
-        this.factory.upVote(this._id);
-        this.upVotes++;       
+        this.factory.upVote(this._id)
+        .then( (userId) => {this.upVotes.add(userId); this.downVotes.delete(userId)});
+              
     };
     BaseContent.prototype.downVote = function() {
-        this.factory.downVote(this._id);
-        this.downVotes++;          
+        this.factory.downVote(this._id)
+        .then( (userId) => {this.downVotes.add(userId); this.upVotes.delete(userId)} );          
+    };
+    BaseContent.prototype.removeVotes = function() {
+        this.factory.removeVotes(this._id)
+        .then( (userId) => {this.downVotes.delete(userId); this.upVotes.delete(userId)} );          
     };
     BaseContent.prototype.delete = function() {
         this.factory.delete(this._id);   

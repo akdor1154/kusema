@@ -1,48 +1,67 @@
-<md-card ng-switch on="c.mode">
+<md-card ng-switch on="c.mode" ng-class="{upvoted: c.userHasUpvoted, downvoted: c.userHasDownvoted}">
 
 	<md-card-content ng-switch-when="view">
-	  <h2 class="md-title" ng-bind="c.content.title"></h2>
-	  <div>
-	  	<span class="usernameFloat" ng-bind="c.content.author.displayName"></span>
-	  	<span><kusema-markdown input="c.content.message"></kusema-markdown></span>
-  	  </div>
+		<h2 class="md-title" ng-bind="c.content.title"></h2>
+		<div>
+			<span class="usernameFloat" ng-bind="c.content.author.displayName"></span>
+			<span><kusema-markdown input="c.content.message"></kusema-markdown></span>
+			</div>
 	</md-card-content>
 
 	<md-card-content ng-switch-when="edit">
-	  <kusema-edit-content-form
-	  	action="edit"
-	  	on-cancel="c.finishEditingContent()"
-	  	on-submit="c.editingSubmitted(newContent)"
-	  	content="c.content"
-	  ></kusema-edit-content-form>
+		<kusema-edit-content-form
+			action="edit"
+			on-cancel="c.finishEditingContent()"
+			on-submit="c.editingSubmitted(newContent)"
+			content="c.content"
+		></kusema-edit-content-form>
 	</md-card-content>
 
 	<md-card-content ng-switch-when="create">
-	  <kusema-edit-content-form
-	  	action="create"
-	  	on-cancel="c.finishCreatingContent()"
-	  	on-submit="c.creatingSubmitted(newContent)"
-	  	content="c.content"
-	  	content-type="{{contentType}}"
-	  ></kusema-edit-content-form>
+		<kusema-edit-content-form
+			action="create"
+			on-cancel="c.finishCreatingContent()"
+			on-submit="c.creatingSubmitted(newContent)"
+			content="c.content"
+			content-type="{{contentType}}"
+		></kusema-edit-content-form>
 	</md-card-content>
 
 	<md-card-content ng-switch-default>
-	  BAD!
+		BAD!
 	</md-card-content>
 	
-	<md-card-footer>
-		<div class="footer-contents">
-			Posted on <kusema-inline-date date="c.content.dateCreated"></kusema-inline-date>
-			<span ng-if="c.content.name == 'Question'">
-				, in <kusema-inline-group group="c.content.group"></kusema-inline-group>.
-			</span>
-			<md-chips ng-model="c.content.topics" readonly="true">
-				<md-chip-template>
-					{{$chip.name}}
-				</md-chip-template>
-			</md-chips>
+	<md-card-footer layout="column">
+		<div class="footer-contents" layout="row" style="align-items: center">
+			<div class="content-score">
+				<md-button
+					class="md-icon-button upvote"
+					style="margin: 0px -1em 0px 0em"
+					ng-click="c.upvoteClicked()" >
+					<md-icon md-font-set="material-icons" style="line-height: 0.6">thumb_up</md-icon>
+				</md-button>
+
+				<span style="display: inline-block; width: 2em; text-align: center" ng-bind="c.content.score"></span>
+
+				<md-button
+					class="md-icon-button downvote"
+					style="margin: 0px 0px 0px -1em"
+					ng-click="c.downvoteClicked()" >
+					<md-icon md-font-set="material-icons" style="line-height: 1.1">thumb_down</md-icon>
+				</md-button>
+			</div>
+			<div class="content-timestamp" flex>
+				Posted on <kusema-inline-date date="c.content.dateCreated"></kusema-inline-date>
+				<span ng-if="c.content.name == 'Question'">
+					, in <kusema-inline-group group="c.content.group"></kusema-inline-group>.
+				</span>
+			</div>
 		</div>
+		<md-chips ng-model="c.content.topics" readonly="true" style="min-width: 80%">
+			<md-chip-template>
+				{{$chip.name}}
+			</md-chip-template>
+		</md-chips>
 		<md-button class="md-icon-button" kusema-needs-login needs-user="c.content.author" ng-click="c.editContent()">
 			<md-icon md-font-set="material-icons">edit</md-icon>
 		</md-button>

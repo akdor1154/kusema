@@ -4,7 +4,7 @@ import BaseJsonService from './BaseJsonService.js';
 import {BaseContent} from 'common/models.js';
 import {Injector} from 'kusema.js';
 
-var I = new Injector('$http', 'socketFactory');
+var I = new Injector('$http', 'socketFactory', 'loginService');
 var sI = new Injector('questionService', 'answerService', 'commentService');
 
 var BaseContentService = function(inheriting) {
@@ -67,11 +67,17 @@ var BaseContentService = function(inheriting) {
         		   .then(function(response) {return response.data});
     };
     BaseContentService.prototype.upVote = function (id) {
-    	return I.$http.put(this.urlBase + '/upvote/' + id);
+    	return I.$http.put(this.urlBase + '/upvote/' + id)
+    	.then( (response) => I.loginService.bindables.user._id);
     };
     BaseContentService.prototype.downVote = function (id) {
-    	return I.$http.put(this.urlBase + '/downvote/' + id);
+    	return I.$http.put(this.urlBase + '/downvote/' + id)
+    	.then( (response) => I.loginService.bindables.user._id);
     };
+    BaseContentService.prototype.removeVotes = function (id) {
+    	return I.$http.put(this.urlBase + '/removevotes/' + id)
+    	.then( (response) => I.loginService.bindables.user._id);
+    }
     BaseContentService.prototype.delete = function (id) {
         return I.$http.delete(this.urlBase + '/' + id);
     };

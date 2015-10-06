@@ -45,7 +45,24 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 			set: function(newMode) {
 				this._mode = (newMode) ? newMode : this.modes.VIEW;
 			}
-		}
+		},
+		'userHasUpvoted': {
+			get: function() {
+				try {
+					return (this.content instanceof models.BaseContent 
+							&& this.loginData.user
+							&& this.content.upVotes.has(this.loginData.user._id));
+				} catch (e) {
+					console.error(this.content);
+				}
+			}
+		},
+		'userHasDownvoted': {
+			get: function() {
+					return (this.content instanceof models.BaseContent 
+							&& this.loginData.user
+							&& this.content.downVotes.has(this.loginData.user._id));}
+			}
 	});
 	contentCardController.prototype.modes = {VIEW: "view", CREATE: "create", EDIT: "edit"};
 	contentCardController.prototype.commentsChanged = function(newComments) {
@@ -84,6 +101,12 @@ var contentCardController = function($scope, $timeout, commentFactory, loginServ
 	}
 	contentCardController.prototype.finishedWritingComment = function() {
 		this.writingComment = false;
+	}
+	contentCardController.prototype.upvoteClicked = function() {
+		return (this.userHasUpvoted) ? this.content.removeVotes() : this.content.upVote();
+	}
+	contentCardController.prototype.downvoteClicked = function() {
+		return (this.userHasDownvoted) ? this.content.removeVotes() : this.content.downVote();
 	}
 
 import commentTemplate from './contentCardCommentTemplate.html';
