@@ -79,7 +79,7 @@ var QuestionListController = function(questionService, $mdDialog, $scope) {
 		this.$mdDialog.hide();
 	}
 	QuestionListController.prototype.newQuestionPosted = function(newQuestion) {
-		this.questions.add(newQuestion);
+		this.questions.unshift(newQuestion);
 		this.hideWriter();
 	}
 

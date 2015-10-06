@@ -42,9 +42,9 @@
 	<md-autocomplete
 		md-selected-item = "c.selectedTopic"
 		md-search-text = "c.topicSearchText"
-		md-items = "topic in groupService.topicService.bindables.topicsArray"
+		md-items = "topic in topicService.bindables.topicsArray"
 		md-item-text = "topic.name"
-		md-floating-label = "Which Topics are relevant to this question?"
+		md-placeholder = "Which Topics are relevant to this question?"
 		>
 		<span md-highligt-text="c.topicSearchText">
 		{{topic.name}}
