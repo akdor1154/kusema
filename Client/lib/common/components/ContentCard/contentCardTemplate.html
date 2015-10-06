@@ -56,15 +56,19 @@
 					, in <kusema-inline-group group="c.content.group"></kusema-inline-group>.
 				</span>
 			</div>
+			<md-button class="md-icon-button"
+				kusema-needs-login
+				needs-user="c.content.author"
+				ng-click="c.editContent()"
+			>
+				<md-icon md-font-set="material-icons">edit</md-icon>
+			</md-button>
 		</div>
 		<md-chips ng-model="c.content.topics" readonly="true" style="min-width: 80%">
 			<md-chip-template>
 				{{$chip.name}}
 			</md-chip-template>
 		</md-chips>
-		<md-button class="md-icon-button" kusema-needs-login needs-user="c.content.author" ng-click="c.editContent()">
-			<md-icon md-font-set="material-icons">edit</md-icon>
-		</md-button>
 	</md-card-footer>
 </md-card>
 

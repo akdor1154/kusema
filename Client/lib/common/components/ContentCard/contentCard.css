@@ -30,13 +30,21 @@ kusema-content-card .commentView {
 kusema-content-card .commentView .message {
 	flex-grow: 1;
 }
+
 kusema-content-card .commentForm md-input-container {
 	flex-grow: 1;
+}
+
+kusema-content-card .content-timestamp {
+	font-size: 0.8em;
+	color: #888888;
+	text-align: center;
 }
 
 kusema-content-card .content-score md-icon{
 	color: #d8d8d8;
 }
+
 kusema-content-card .content-score .upvote:hover md-icon {
 	color: #F8BBD0;
 }
