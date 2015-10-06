@@ -105,8 +105,29 @@ var addModule = function (moduleName, dependencies, autoRequire) {
   return module;
 }
 
+class Injector {
+  constructor(...injectables) {
+    this._injectables = injectables;
+    this._initialized = false;
+  }
+
+  init() {
+    if (!this._initialized) {
+      this._i = angular.element(document.body).injector();
+      this.inject(...this._injectables);
+      this._initialized = true;
+    }
+  }
+
+  inject(...injectables) {
+    for (let injectable of injectables) {
+      this[injectable] = this._i.get(injectable);
+    }
+  }
+}
+
 kusema.addModule = addModule;
-export {addModule};
+export {addModule, Injector};
 
 var relativeTemplates
 

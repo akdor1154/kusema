@@ -1,8 +1,8 @@
 import BaseJsonService from './BaseJsonService.js'
 import {Topic} from 'common/models.js';
 
-var TopicService = function($http) {
-		this.initCommonDeps($http);
+var TopicService = function() {
+		BaseJsonService.call(this);
 		this.urlStem = 'api/topics'
 		this.bindables = {
 			topics: null,
@@ -43,4 +43,4 @@ var TopicService = function($http) {
 	}
 
 import kusema from 'kusema.js';
-kusema.service('topicService', ['$http', TopicService]);
+kusema.service('topicService', TopicService);

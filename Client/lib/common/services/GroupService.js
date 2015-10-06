@@ -1,10 +1,12 @@
 import BaseJsonService from './BaseJsonService.js';
 import {Group} from 'common/models.js';
+import {Injector} from 'kusema.js';
 
-var GroupService = function($rootScope, $http, topicService) {
-		this.initCommonDeps($http);
-		this.topicService = topicService;
-		this.rootScope = $rootScope;
+var I = new Injector('topicService');
+
+var GroupService = function() {
+		BaseJsonService.call(this);
+		I.init();
 		this.urlStem = 'api/groups'
 		this.bindables = {
 			groups: null,
@@ -24,7 +26,7 @@ var GroupService = function($rootScope, $http, topicService) {
 
 	GroupService.prototype.getAll = function() {
 		return BaseJsonService.prototype.getAll.call(this)
-		.then(this.topicService.waitForTopics)
+		.then(I.topicService.waitForTopics)
 		.then(function(groups) {
 			this.bindables.groups = {};
 			this.bindables.groupsArray = [];
@@ -39,10 +41,10 @@ var GroupService = function($rootScope, $http, topicService) {
 	}
 
 	GroupService.prototype.getTopics = function(topics) {
-		return this.topicService.getTopics(topics);
+		return I.topicService.getTopics(topics);
 	}
 	GroupService.prototype.getTopic = function(topic) {
-		return this.topicService.getTopic(topic);
+		return I.topicService.getTopic(topic);
 	}
 
 	GroupService.prototype.getGroup = function(groupID) {
@@ -65,10 +67,10 @@ var GroupService = function($rootScope, $http, topicService) {
 		return this._filterList(substr, this.bindables.groupsArray);
 	}
 	GroupService.prototype.filterTopics = function(substr) {
-		return this._filterList(substr, this.topicService.bindables.topicsArray);
+		return this._filterList(substr, I.topicService.bindables.topicsArray);
 	}
 
 import kusema from 'kusema.js';
-kusema.service('groupService', ['$rootScope', '$http', 'topicService', GroupService]);
+kusema.service('groupService', GroupService);
 
 export default GroupService;

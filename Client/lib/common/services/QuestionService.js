@@ -2,12 +2,14 @@
 
 import BaseContentService from './BaseContentService.js';
 import {Question} from 'common/models.js';
+import {Injector} from 'kusema.js';
 
-var QuestionService = function($http, socketFactory, answerService, groupService) {
-		this.initCommonDeps($http, socketFactory);
+var I = new Injector('$http');
+
+var QuestionService = function() {
+		BaseContentService.call(this, true);
+		I.init();
 		this.urlStem = 'api/questions';
-		this.answerService = answerService;
-		this.groupService = groupService;
 	}
 
 	QuestionService.prototype = Object.create(BaseContentService.prototype, {
@@ -16,16 +18,16 @@ var QuestionService = function($http, socketFactory, answerService, groupService
 
 	QuestionService.prototype.getNextTenQuestions = function (requestNumber, group) {
 		var groupURL = (group) ? ('/'+group) : '';
-        return this.$http.get(this.urlBase + '/tenMore' + groupURL + '/' + requestNumber)
+        return I.$http.get(this.urlBase + '/tenMore' + groupURL + '/' + requestNumber)
                     .then(function(response) {
                         return this.createClientModels(response.data);
                     }.bind(this));
 	    };
 	   
 	QuestionService.prototype.getFeed = function(requestNumber) {
-		return this.$http.get(this.urlBase+'/feed/'+requestNumber)
+		return I.$http.get(this.urlBase+'/feed/'+requestNumber)
 				.then( (response) => this.createClientModels(response.data) );
 	}
 
 import kusema from 'kusema.js';
-kusema.service('questionService', ['$http', 'socketFactory', 'answerService', 'groupService', QuestionService]);
+kusema.service('questionService', QuestionService);
