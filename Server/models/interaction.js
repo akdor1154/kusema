@@ -70,6 +70,34 @@ interactionSchema.statics.log = function(user, action, content, contentType, top
 	})
 }
 
+// see documentation in config/weightings.js first.
+
+// we want our user's score for a topic to be made up of a sum of
+// scores for each action:
+// score = score(readingQuestions) + score(postingAnswers) + etc.
+
+// however, we don't want to regenerate the whole thing each time as this will be quite slow.
+// So, using some sneaky algebra, we can actually work out how much to add, instead of regenerating the whole thing.
+//
+// recalling score(i) = atan(k*i) (forget the amplitude constants for simplicity)
+// => score(i+1) = atan(k*(i+1)) = atan(ki+k) (the score of the "next" action)
+// now, there is an addition identity for the atan function:
+// atan(x)+atan(y) = atan((x+y)/(1-xy))
+// so, we will aim to set x = k*i, and if we have some suitable y
+// such that ki+k == (x+y)/(1-xy) == (ki + y)/(1-kiy), we can then just take
+
+// score(i+1) = atan(ki) + atan(y) = score(i) + atan(y)
+
+// thus avoiding recalulating every component of our score.
+
+// to find such a y, set x=ki, and solve ki + k == (ki + y)/(1-kiy) for y.
+// This is just tedious algebra so I'll spare you some ascii maths and tell you
+// that y = 1/ (ki^2 + ki + 1/k)
+
+// now, as said before, all we need is to add atan(y) on to our score and we'll have 
+// a magical asymptoting score function over how many times the user does certain stuff!
+// yay!
+
 interactionSchema.statics.updateUserStats = function(interaction) {
 		console.log(interaction);
 	var topicPromises = interaction.topics.map( function(topic) {
