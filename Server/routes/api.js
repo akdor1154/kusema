@@ -81,6 +81,7 @@ promisedRouter.put('/questions/:questionId', questionsCtrl.updateQuestion);
 promisedRouter.delete('/questions/:questionId', questionsCtrl.deleteQuestion);
 promisedRouter.put('/questions/upvote/:questionId', questionsCtrl.upVoteQuestion);
 promisedRouter.put('/questions/downvote/:questionId', questionsCtrl.downVoteQuestion);
+promisedRouter.put('/questions/removevotes/:questionId', questionsCtrl.unVoteQuestion);
 
 // Answer Routes
 promisedRouter.get('/answers/:questionId', answersCtrl.findByQuestionId);
@@ -89,6 +90,7 @@ promisedRouter.delete('/answers/:answerId', answersCtrl.deleteAnswer);
 promisedRouter.put('/answers/:answerId', answersCtrl.updateAnswer);
 promisedRouter.put('/answers/upvote/:answerId', answersCtrl.upVoteAnswer);
 promisedRouter.put('/answers/downvote/:answerId', answersCtrl.downVoteAnswer);
+promisedRouter.put('/answers/removevotes/:answerId', answersCtrl.unVoteAnswer);
 
 // Comment Routes
 // to be called as comment?questionId=id&answerId=id
@@ -99,6 +101,8 @@ promisedRouter.delete('/comments/:commentId', commentsCtrl.deleteComment);
 promisedRouter.put('/comments/:commentId', commentsCtrl.updateComment);
 promisedRouter.put('/comments/upvote/:commentId', commentsCtrl.upVoteComment);
 promisedRouter.put('/comments/downvote/:commentId', commentsCtrl.downVoteComment);
+promisedRouter.put('/comments/removevotes/:commentId', commentsCtrl.unVoteComment);
+
 
 // Group Routes
 promisedRouter.get('/groups', groupsCtrl.findAll);

@@ -78,6 +78,7 @@ var BaseContentSchema = function() {
 
 	this.statics.upVote = upVote;
 	this.statics.downVote = downVote;
+	this.statics.removeVotes = removeVotes;
 	this.statics.setAsDeleted = setAsDeleted;
 
 	this.methods.setFromJSON = setFromJSON;

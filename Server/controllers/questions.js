@@ -95,9 +95,13 @@ exp.deleteQuestion = function(req, res, next) {
 };
 
 exp.upVoteQuestion = function(req, res, next) {
-    return Question.upVote(req.params.questionId, req.user._id)
+    return Question.upVote(req.params.questionId, req.user._id);
 };
 
 exp.downVoteQuestion = function(req, res, next) {
-    return Question.downVote(req.params.questionId, req.user._id)
+    return Question.downVote(req.params.questionId, req.user._id);
 };
+
+exp.unVoteQuestion = function(req, res, next) {
+  return Question.removeVotes(req.params.questionId, req.user._id);
+}

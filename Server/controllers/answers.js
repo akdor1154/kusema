@@ -54,3 +54,7 @@ exp.upVoteAnswer = function(req, res, next) {
 exp.downVoteAnswer = function(req, res, next) {
     return Answer.downVote(req.params.answerId, req.user._id);
 };
+
+exp.unVoteAnswer = function(req, res, next) {
+    return Answer.removeVotes(req.params.answerId, req.user._id);
+};
