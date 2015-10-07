@@ -99,6 +99,18 @@ exp.feed = function ( req, res, next ) {
             {$multiply: [
               '$stats.numAnswers',
               1
+            ]},
+            {$multiply: [
+              { '$cond': [
+                /*if*/  { $eq: [
+                          '$stats.numAnswers',
+                          0
+                        ] },
+
+                /*then*/ 1,
+                /*else*/ 0
+              ] },
+              10
             ]}
           ]},
 
