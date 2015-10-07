@@ -45,14 +45,13 @@ exp.feed = function ( req, res, next ) {
 
 
   if (req.user) {
-    console.log(req.user);
+    var interestedScores;
     try {
       interestedScores = Object.keys(req.user.stats.topicScores).filter(function(topic) {
         return req.user.stats.topicScores[topic] > 0.5;
-      }).map(function(topic) {
-        return req.user.stats.topicScores[topic];
       });
     } catch (e) {
+        console.error(e);
         console.error('couldn\'t get interested topics for '+req.user.username);
     }
 
@@ -60,7 +59,8 @@ exp.feed = function ( req, res, next ) {
       $match: { $or: [
         { 'group': { $in: req.user.authcateSubscriptions.groups } },
         { 'group': { $in: req.user.manualSubscriptions.groups } },
-        { 'topic': { $in: interestedScores } }
+        { 'topics': { $in: interestedScores } },
+        { 'author': req.user._id }
       ] }
     }
 
