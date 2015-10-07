@@ -17,7 +17,10 @@ var GroupService = function() {
 			this._wait.resolve = resolve;
 			this._wait.reject = reject;
 		}.bind(this));
-		this.getAll();
+		this.getAll()
+		.catch(function(error) {
+			console.log(error);
+		});
 	}
 
 	GroupService.prototype = Object.create(BaseJsonService.prototype, {
@@ -25,8 +28,8 @@ var GroupService = function() {
 	});
 
 	GroupService.prototype.getAll = function() {
-		return BaseJsonService.prototype.getAll.call(this)
-		.then(I.topicService.waitForTopics)
+		return I.topicService.waitForTopics
+		.then(BaseJsonService.prototype.getAll.bind(this))
 		.then(function(groups) {
 			this.bindables.groups = {};
 			this.bindables.groupsArray = [];
@@ -34,7 +37,6 @@ var GroupService = function() {
 				this.bindables.groups[group._id] = group;
 				this.bindables.groupsArray.push(group);
 			}
-			console.log('waiting for groups done!');
 			this._wait.resolve();
 			return this.bindables.groups;
 		}.bind(this));

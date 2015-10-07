@@ -13,7 +13,10 @@ var TopicService = function() {
 			this._wait.resolve = resolve;
 			this._wait.reject = reject;
 		}.bind(this));
-		this.getAll();
+		this.getAll()
+		.catch(function(error) {
+			console.error(error);
+		});
 	}
 
 	TopicService.prototype = Object.create(BaseJsonService.prototype, {
@@ -21,7 +24,7 @@ var TopicService = function() {
 	});
 
 	TopicService.prototype.getAll = function() {
-		BaseJsonService.prototype.getAll.call(this)
+		return BaseJsonService.prototype.getAll.call(this)
 		.then(function(topics) {
 			this.bindables.topics = {};
 			this.bindables.topicsArray = [];
