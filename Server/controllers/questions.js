@@ -132,10 +132,17 @@ exp.feed = function ( req, res, next ) {
       {$sort:
         {sortScore: -1}
       },
+
+      {$skip: requestNumber * 10},
+      {$limit: 10}
   ]);
+
 
   return questionsToGive.exec()
   .then( function(questions) {
+    if (questions.length == 0 ) {
+      res.status(204);
+    }
     return User.populate(questions, {path: 'author'});
   });
 }
