@@ -42,8 +42,42 @@ exp.nextTenQuestions = function (req, res, next) {
 };
 
 exp.feed = function ( req, res, next ) {
+
+
+  if (req.user) {
+    console.log(req.user);
+    try {
+      interestedScores = Object.keys(req.user.stats.topicScores).filter(function(topic) {
+        return req.user.stats.topicScores[topic] > 0.5;
+      }).map(function(topic) {
+        return req.user.stats.topicScores[topic];
+      });
+    } catch (e) {
+        console.error('couldn\'t get interested topics for '+req.user.username);
+    }
+
+    var orQuery = {
+      $match: { $or: [
+        { 'group': { $in: req.user.authcateSubscriptions.groups } },
+        { 'group': { $in: req.user.manualSubscriptions.groups } },
+        { 'topic': { $in: interestedScores } }
+      ] }
+    }
+
+  } else {
+    var orQuery = {$match: {__t: 'Question'}}
+  }
+
+
+  var requestNumber = req.params.requestNumber || 0;
+
   var questionsToGive = Question.aggregate([
-      { $match: {__t: 'Question'}},
+      { $match: {
+        __t: 'Question'
+        //dateCreated: { $gt: new Date() - 1000 * 60 * 60 * 24 * 30 * 2 } // exclude < two months ago, otherwise this query will be chockers
+      } },
+
+      orQuery,
 
       {$project: 
         {sortScore: 
