@@ -42,9 +42,11 @@ var QuestionListDirective = function() {
 		link: function(scope, element, attrs) {
 			element.parent().bind('scroll', function(event) {
 				var content = event.target
-				if (content.scrollHeight - content.scrollTop - content.clientHeight < 40) { // pixels to bottom
-					scope.c.getNextPage();
-				}
+				window.requestAnimationFrame(function() {
+					if (content.scrollHeight - content.scrollTop - content.clientHeight < 40) { // pixels to bottom
+						scope.c.getNextPage();
+					}		
+				})
 			});
 		}
 	};
