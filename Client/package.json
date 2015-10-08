@@ -16,7 +16,6 @@
       "text": "github:systemjs/plugin-text@^0.0.2"
     },
     "devDependencies": {
-      "core-js": "npm:core-js@^1.1.4",
       "traceur": "github:jmcriffey/bower-traceur@^0.0.91",
       "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.91"
     },
@@ -39,7 +38,7 @@
     "jspm": "^0.16.11"
   },
   "scripts": {
-    "build-deps": "bin/buildDeps.js",
+    "buildDeps": "bin/buildDeps.js",
     "build": "bin/build.js"
   }
 }
