@@ -14,9 +14,12 @@
 
     <!-- development -->
     <script src="jspm_packages/system.js"></script>
-    <script src="deps.js"></script>
     <script src="jspm.config.js"></script>
     <script>
+        System.import('./deps.js')
+        .catch( function(error) {
+            console.error('No dependency bundle found. If you want development to be less of a headache, you can pre-bundle deps by running npm run-script buildDeps in the Client directory.')
+            });
         System.import('bootstrap.js')
         .catch(console.error.bind(console));
     </script>

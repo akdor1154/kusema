@@ -1,7 +1,7 @@
 System.config({
   baseURL: "/",
   defaultJSExtensions: true,
-  transpiler: "babel",
+  transpiler: "traceur",
   babelOptions: {
     "optional": [
       "runtime",
@@ -43,6 +43,8 @@ System.config({
     "markdown-it": "npm:markdown-it@4.4.0",
     "socket.io-client": "github:socketio/socket.io-client@1.3.6",
     "text": "github:systemjs/plugin-text@0.0.2",
+    "traceur": "github:jmcriffey/bower-traceur@0.0.91",
+    "traceur-runtime": "github:jmcriffey/bower-traceur-runtime@0.0.91",
     "github:angular-ui/ui-router@0.2.15": {
       "angular": "github:angular/bower-angular@1.4.7"
     },
