@@ -23,6 +23,9 @@ System.config({
   meta: {
     "*.html": {
       "loader": "text"
+    },
+    "*.css": {
+      "loader": "css"
     }
   },
 
@@ -34,6 +37,7 @@ System.config({
     "angular-material": "github:angular/bower-material@0.11.2",
     "angular-ui-router": "github:angular-ui/ui-router@0.2.15",
     "clean-css": "npm:clean-css@3.4.5",
+    "css": "github:systemjs/plugin-css@0.1.18",
     "door3/angular-css": "github:door3/angular-css@1.0.7",
     "highlightjs": "github:components/highlightjs@8.8.0",
     "markdown-it": "npm:markdown-it@4.4.0",
