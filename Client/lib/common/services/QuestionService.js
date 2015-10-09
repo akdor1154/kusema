@@ -24,8 +24,9 @@ var QuestionService = function() {
                     }.bind(this));
 	    };
 	   
-	QuestionService.prototype.getFeed = function(requestNumber) {
-		return I.$http.get(this.urlBase+'/feed/'+requestNumber)
+	QuestionService.prototype.getFeed = function(requestNumber, group) {
+		var groupURL = (group) ? (group+'/') : '';
+		return I.$http.get(this.urlBase+'/feed/'+groupURL+requestNumber)
 				.then( (response) => {
 					if (response.status == 204) {
 						return I.$q.reject(new Error('No more questions'));

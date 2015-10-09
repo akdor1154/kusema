@@ -60,14 +60,19 @@ var QuestionListController = function($mdDialog, $scope) {
 		this.writerOpen = false;
 		this.$scope = $scope;
 		this.$mdDialog = $mdDialog;
-		this.test = "hello";
+		this.init();
+		console.log('kusema user group:');
+		console.log(this.group);
+		$scope.$on('loginChanged', this.init.bind(this));
+	}
+
+	QuestionListController.prototype.init = function() {
 		this.questions = []
 		this.requestNumber = 0;
 		this.requesting = false;
 		this.noMore = false
 
 		this.getNextPage();
-
 	}
 
 	QuestionListController.prototype.getNextPage = function() {
@@ -78,7 +83,6 @@ var QuestionListController = function($mdDialog, $scope) {
 
 		var g = I.questionService.getFeed(this.requestNumber, this.group)
 		.then( (questions) => {
-			console.log('adding')
 			this.addQuestions(questions);
 		} )
 		.catch( (error) => {
