@@ -82,7 +82,14 @@ class KusemaUserController {
 	}
 
 	get knownGroups() {
-		return I.loginService.bindables.user.subscriptions.groups.concat(Object.values(this.dummyGroups))
+		console.log(I.loginService.bindables);
+		var subs;
+		if (I.loginService.bindables.user) {
+			subs = I.loginService.bindables.user.subscriptions.groups;
+		} else {
+			subs = [];
+		}
+		return subs.concat(Object.keys(this.dummyGroups).map((key) => this.dummyGroups[key]));
 	}
 
 
