@@ -80,7 +80,7 @@ var LoginService = function() {
 	}
 	LoginService.prototype.checkLogin = function() {
 		var checkRequest = I.$http.get(serverUrl('account/is_logged_in'));
-		return checkRequest.then(function(response) {
+		return checkRequest.then( (response) => {
 			if (response.data) {
 				this.bindables.loginState = 1;
 			} else {
@@ -88,39 +88,42 @@ var LoginService = function() {
 			}
 			console.log(this.bindables);
 			return this.populateUser(response.data);
-		}.bind(this) )
-		.then( function(user) {
-			console.log('wat');
-			console.log(this.bindables);
-			I.$rootScope.$broadcast('loginChanged');
-		}.bind(this) );
+		} );
 	}
 	LoginService.prototype.populateUser = function(userData) {
 		var user = userData;
-		console.log('yay?');
 
 		return I.groupService.waitForGroups
 		.then( function() {
-			if (!user) {
-				return;
+			if (user) {
+				for (var subscriptions of [user.subscriptions, user.authcateSubscriptions, user.manualSubscriptions]) {
+					subscriptions.groups = (subscriptions.groups)
+										 ? I.groupService.getGroups(subscriptions.groups)
+										 : [];
+					subscriptions.topics = (subscriptions.topics)
+									     ? I.groupService.getTopics(subscriptions.topics)
+									     : [];
+				}
 			}
-			for (var subscriptions of [user.subscriptions, user.authcateSubscriptions, user.manualSubscriptions]) {
-				subscriptions.groups = (subscriptions.groups)
-									 ? I.groupService.getGroups(subscriptions.groups)
-									 : [];
-				subscriptions.topics = (subscriptions.topics)
-								     ? I.groupService.getTopics(subscriptions.topics)
-								     : [];
+
+			var oldUser = this.bindables.user;
+
+			this.bindables.user = user;
+
+			if ( (oldUser != user)
+			   && !(oldUser && user && oldUser.old != user._id ) ) {
+				I.$rootScope.$broadcast('loginChanged');
+				console.log('login changed');
+			} else {
+				console.log('login checked, but unchanged');
 			}
+			return user;
+
 		}.bind(this) )
 		.catch( function(e) {
 			console.error(e);
 			console.error(e.stack);
 		})
-		.then( function() {
-			this.bindables.user = user;
-			return user;
-		}.bind(this) );
 	}
 
 	LoginService.prototype.updateManualSubscriptions = function(manualSubscriptions) {
