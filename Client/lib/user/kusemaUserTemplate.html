@@ -2,7 +2,7 @@
 <md-toolbar>
   <div class="md-toolbar-tools">
     <div class="settings-padding" ng-style="{width: $mdMedia('gt-md') ? '300px' : 'auto'}">
-      <md-button class="md-icon-button" aria-label="Settings" ng-click="toggle('group-navigation')">
+      <md-button class="md-icon-button" aria-label="Settings" ng-click="c.toggle('group-navigation')">
         <md-icon md-font-library="material-icons">favorite</md-icon>
       </md-button>
     </div>
@@ -18,19 +18,16 @@
 
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="group-navigation" md-is-locked-open="$mdMedia('gt-md')" style="width: 300px;">
     <md-list>
-    <md-list-item class="md-1-line"><h2>Groups</h2></md-list-item>
+    <group-list-item group="c.dummyGroups.kusema"></group-list-item>
+    <group-list-item group="c.dummyGroups.all"></group-list-item>
     <md-divider></md-divider>
-    <md-list-item
-      ng-repeat="group in loginData.user.subscriptions.groups"
-      class="md-2-line"
-      ui-sref="user.group({groupID: group._id})"
-      ng-click="c.goToGroup(group._id)">
-      <div class="md-list-item-text">
-        <h3 ng-bind="group.unitCode"></h3>
-        <p ng-bind="group.title"></p>
-      </div>
-    </md-list-item>
+    <group-list-item ng-repeat="group in this.loginData.user.subscriptions.groups">
+    </group-list-item>
     <md-divider></md-divider>
+    <group-list-item
+      group="c.currentGroup"
+      ng-if="c.currentGroup && c.knownGroups.indexOf(c.currentGroup) < 0">
+    </group-list-item>
     <md-list-item>
       <md-autocomplete
         md-selected-item="selectedGroup"

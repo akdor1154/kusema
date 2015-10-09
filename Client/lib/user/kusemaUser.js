@@ -2,6 +2,9 @@ import 'kusema.js';
 
 import './questionList/questionList.js';
 import './questionFull/questionFull.js';
+
+import './components/GroupListItem/groupListItem.js';
+
 import template from './kusemaUserTemplate.html';
 
 import {Injector} from 'kusema.js';
@@ -37,26 +40,52 @@ var KusemaUserDirective = function() {
 
 var I = new Injector('loginService', 'groupService', '$state');
 
-var KusemaUserController = function($scope, $mdSidenav) {
-	I.init();
-	this.$mdSidenav = $mdSidenav;
-	$scope.toggle = this.toggle.bind(this);
-	$scope.loginData = I.loginService.bindables;
-	this.gs = I.groupService;
-	console.log($scope);
-	$scope.searchGroups = function() {
-		return $scope.loginData.subscriptions.groups;
+class KusemaUserController {
+	constructor($scope, $mdSidenav) {
+		I.init();
+		this.$mdSidenav = $mdSidenav;
+		this.loginData = I.loginService.bindables;
+		this.gs = I.groupService;
+		this.dummyGroups = {
+			'kusema': {
+				unitCode: 'Kusema',
+				title: 'Your own personal feed'
+			},
+			'all': {
+				unitCode: 'All Questions',
+				title: 'Hungry for content?\nView questions from all groups',
+				_id: 'all'
+			}
+		}
 	}
-}
-KusemaUserController.prototype = Object.create(Object.prototype);
 
-KusemaUserController.prototype.toggle = function(id) {
-	console.log('sup');
-	this.$mdSidenav(id).toggle();
-}
-KusemaUserController.prototype.goToGroup = function(newGroup) {
-	if (!newGroup) return;
-	I.$state.go('user.group', {groupID: newGroup});
+	toggle(id) {
+		console.log('sup');
+		this.$mdSidenav(id).toggle();
+	}
+
+	goToGroup(newGroup) {
+		if (!newGroup) {
+			I.$state.go('user.home');
+		}
+		I.$state.go('user.group', {groupID: newGroup});
+	}
+
+	get currentGroup() {
+		if (!I.$state.params.groupID) {
+			return this.dummyGroups.kusema;
+		} else if (I.$state.params.groupID == 'all') {
+			return this.dummyGroups.all
+		} else {
+			return I.groupService.getGroup(I.$state.params.groupID);
+		}
+	}
+
+	get knownGroups() {
+		return I.loginService.bindables.user.subscriptions.groups.concat(Object.values(this.dummyGroups))
+	}
+
+
 }
 
 import kusema from 'kusema.js';

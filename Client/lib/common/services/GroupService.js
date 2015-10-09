@@ -50,7 +50,11 @@ var GroupService = function() {
 	}
 
 	GroupService.prototype.getGroup = function(groupID) {
-		return this.bindables.groups[groupID];
+		try {
+			return this.bindables.groups[groupID];
+		} catch(e) {
+			return null;
+		}
 	}
 	GroupService.prototype.getGroups = function(groupsIDs) {
 		return groupsIDs.map(this.getGroup.bind(this));

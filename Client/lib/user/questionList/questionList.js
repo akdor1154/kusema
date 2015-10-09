@@ -43,7 +43,7 @@ var QuestionListDirective = function() {
 			element.parent().bind('scroll', function(event) {
 				var content = event.target
 				window.requestAnimationFrame(function() {
-					if (content.scrollHeight - content.scrollTop - content.clientHeight < 40) { // pixels to bottom
+					if (content.scrollHeight - content.scrollTop - content.clientHeight < 80) { // pixels to bottom
 						scope.c.getNextPage();
 					}		
 				})
@@ -52,7 +52,7 @@ var QuestionListDirective = function() {
 	};
 }
 
-var I = new Injector('questionService');
+var I = new Injector('questionService', '$state');
 
 var QuestionListController = function($mdDialog, $scope) {
 		I.init();
@@ -78,7 +78,7 @@ var QuestionListController = function($mdDialog, $scope) {
 	QuestionListController.prototype.getNextPage = function() {
 		if (this.requesting || this.noMore)
 			return;
-
+		console.log(I.$state);
 		this.requesting = true;
 
 		var g = I.questionService.getFeed(this.requestNumber, this.group)
