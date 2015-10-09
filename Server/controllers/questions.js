@@ -43,16 +43,21 @@ exp.nextTenQuestions = function (req, res, next) {
 
 
 var groupAggregate = function(groupId) {
+  var matchQuery = (groupId == 'all')
+    ? { $match:
+        { __t: 'Question' }
+      } 
+    : { $match: {
+        __t: 'Question',
+        group: groupId
+      } };
+
   return [
-    { $match: {
-      __t: 'Question',
-      group: groupId
-    } },
+    matchQuery,
 
     {$sort:
       {dateCreated: -1}
     }
-
   ];
 }
 
