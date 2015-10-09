@@ -10,3 +10,10 @@ kusema-user > section {
 	
 	background-color: #fbf9fb;
 }
+
+kusema-user > section > md-content, kusema-user > section > .layout-spacer {
+	background-color: transparent;
+}
+
+kusema-user md-sidenav[md-component-id=group-navigation] md-list-item {
+}

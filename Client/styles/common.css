@@ -15,7 +15,7 @@
 	font-variant: small-caps;
 }
 
-*[kusema-markdown] pre {
+*[kusema-markdown] pre, kusema-markdown pre {
 	clear: both;
 }
 

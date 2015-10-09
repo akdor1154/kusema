@@ -17,20 +17,41 @@
 <section layout="row" style="overflow: hidden">
 
 <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="group-navigation" md-is-locked-open="$mdMedia('gt-md')" style="width: 300px;">
-    <h2 class="md-subhead">Groups</h2>
-    <md-content>
-    <ul style="list-style-type: none; padding: 0;">
-    <li ng-repeat="group in loginData.user.subscriptions.groups">
-      <a ui-sref="user.group({groupID: group._id})" ng-bind="group.name"></a>
-    </li>
-    <li style="padding-bottom: 10px;"><a style="text-decoration: none;" href="">+ Make a group</a></li>
-    </ul>
-    </md-content>
+    <md-list>
+    <md-list-item class="md-1-line"><h2>Groups</h2></md-list-item>
+    <md-divider></md-divider>
+    <md-list-item
+      ng-repeat="group in loginData.user.subscriptions.groups"
+      class="md-2-line"
+      ui-sref="user.group({groupID: group._id})"
+      ng-click="c.goToGroup(group._id)">
+      <div class="md-list-item-text">
+        <h3 ng-bind="group.unitCode"></h3>
+        <p ng-bind="group.title"></p>
+      </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    <md-list-item>
+      <md-autocomplete
+        md-selected-item="selectedGroup"
+        md-selected-item-change="c.goToGroup(selectedGroup._id)"
+        md-search-text="groupSearchText"
+        md-items="group in c.gs.filterGroups(groupSearchText)"
+        md-item-text="group.name"
+        md-floating-label="Go to a group or unit"
+        md-min-length="0"
+        flex
+        >
+        <span md-highlight-text="groupSearchText" md-highlight-flags>{{group.name}}</span>
+      </md-autocomplete>
+    </md-list-item>
+    <md-list-item style="padding-bottom: 10px;"><a style="text-decoration: none;" href="">+ Make a group</a></md-list-item>
+    </md-list>
 </md-sidenav>
 
 <md-content id="content" style="flex: 0 0 600px; max-width: 100%" ui-view></md-content>
 
-<div class="kusema-centre" style="flex: 1 1 0px" class="layout-spacer"></div>
+<div style="flex: 1 1 0px" class="layout-spacer"></div>
 
 <div  class=" md-whiteframe-z2"style="width: 180px; visibility: visible; padding: 10px; box-sizing: border-box;" hide show-gt-md>
   <h2 class="md-subhead md-accent">Trending</h2>
