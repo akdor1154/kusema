@@ -41,26 +41,40 @@ exp.nextTenQuestions = function (req, res, next) {
   }
 };
 
-exp.feed = function ( req, res, next ) {
 
+var groupAggregate = function(groupId) {
+  return [
+    { $match: {
+      __t: 'Question',
+      group: groupId
+    } },
 
-  if (req.user) {
+    {$sort:
+      {dateCreated: -1}
+    }
+
+  ];
+}
+
+var feedAggregate = function(user) {
+
+ if (user) {
     var interestedScores;
     try {
-      interestedScores = Object.keys(req.user.stats.topicScores).filter(function(topic) {
-        return req.user.stats.topicScores[topic] > 0.5;
+      interestedScores = Object.keys(user.stats.topicScores).filter(function(topic) {
+        return user.stats.topicScores[topic] > 0.5;
       });
     } catch (e) {
         console.error(e);
-        console.error('couldn\'t get interested topics for '+req.user.username);
+        console.error('couldn\'t get interested topics for '+user.username);
     }
 
     var orQuery = {
       $match: { $or: [
-        { 'group': { $in: req.user.authcateSubscriptions.groups } },
-        { 'group': { $in: req.user.manualSubscriptions.groups } },
+        { 'group': { $in: user.authcateSubscriptions.groups } },
+        { 'group': { $in: user.manualSubscriptions.groups } },
         { 'topics': { $in: interestedScores } },
-        { 'author': req.user._id }
+        { 'author': user._id }
       ] }
     }
 
@@ -68,10 +82,7 @@ exp.feed = function ( req, res, next ) {
     var orQuery = {$match: {__t: 'Question'}}
   }
 
-
-  var requestNumber = req.params.requestNumber || 0;
-
-  var questionsToGive = Question.aggregate([
+  return [
       { $match: {
         __t: 'Question'
         //dateCreated: { $gt: new Date() - 1000 * 60 * 60 * 24 * 30 * 2 } // exclude < two months ago, otherwise this query will be chockers
@@ -133,12 +144,30 @@ exp.feed = function ( req, res, next ) {
         {sortScore: -1}
       },
 
-      {$skip: requestNumber * 10},
-      {$limit: 10}
-  ]);
+  ];
 
+}
 
-  return questionsToGive.exec()
+exp.feed = function ( req, res, next ) {
+
+  var requestNumber = req.params.requestNumber || 0;
+
+  var aggregateQuery; 
+
+  if (req.params.groupID) {
+    aggregateQuery = groupAggregate(req.params.groupID);
+  } else {
+    aggregateQuery = feedAggregate(req.user);
+  }
+
+  aggregateQuery.push(
+    {$skip: requestNumber * 10}
+  )
+  aggregateQuery.push(
+    {$limit: 10}
+  )
+
+  return Question.aggregate(aggregateQuery).exec()
   .then( function(questions) {
     if (questions.length == 0 ) {
       res.status(204);
