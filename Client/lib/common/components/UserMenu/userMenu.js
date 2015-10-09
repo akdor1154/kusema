@@ -4,6 +4,7 @@ import {Injector} from 'kusema.js';
 
 var userMenuDirective = function() {
 		return {
+			scope: {},
 			template: userMenuTemplate,
 			controller: 'kusemaUserMenuController',
 			controllerAs: 'c'
