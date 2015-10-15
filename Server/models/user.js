@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var objectId = mongoose.Schema.Types.ObjectId;
+var Mixed = mongoose.Schema.Types.Mixed;
 var bcrypt   = require('bcrypt');
 var Group   = require('./group');
 
@@ -25,7 +26,10 @@ var userSchema = mongoose.Schema({
         topics:         [{ type: String, ref: 'Topic'}],
     },
     isAdmin:            { type: Boolean, default: false },
-    moderatorOf:        [{ type: objectId, ref: 'Group' }]
+    moderatorOf:        [{ type: objectId, ref: 'Group' }],
+    stats:              {
+        topicScores:    { type: Mixed, default: {} }
+    }
 })
 
 // Indexes

@@ -2,53 +2,55 @@
 
 import BaseJsonService from './BaseJsonService.js';
 import {BaseContent} from 'common/models.js';
+import {Injector} from 'kusema.js';
 
-var BaseContentService = function($http, socketFactory, questionService, answerService, commentService) {
-		this.initCommonDeps($http, socketFactory);
-		this.questionService = questionService;
-		this.answerService = answerService;
-		this.commentService = commentService;
+var I = new Injector('$http', 'socketFactory', 'loginService');
+var sI = new Injector('questionService', 'answerService', 'commentService');
+
+var BaseContentService = function(inheriting) {
+		BaseJsonService.call(this);
+		I.init();
+		if (!inheriting) {
+			sI.init();
+
+			this.getService = function(serviceNameOrObject) {
+				var serviceName;
+				if (!serviceNameOrObject) {
+					serviceName = null;
+				} else {
+					if (serviceNameOrObject.__t) {
+						serviceName = serviceNameOrObject.__t;
+					} else if (serviceNameOrObject.factory) {
+						return serviceNameOrObject.factory;
+					} else if (typeof serviceNameOrObject == "string") {
+						serviceName = serviceNameOrObject;
+					}
+				}
+				
+				switch (serviceName.toLowerCase()) {
+					case 'question':
+						return sI.questionService;
+						break;
+					case 'answer':
+						return sI.answerService;
+						break;
+					case 'comment':
+						return sI.commentService;
+						break;
+					case 'basecontent':
+						console.error('a raw basecontent object is being passed around...');
+						return this;
+						break;
+				}
+			}
+
+		}
 	}
 
 	BaseContentService.prototype = Object.create(BaseJsonService.prototype, {
 		model: {writable: false, enumerable: false, value: BaseContent}
 	});
 
-	BaseContentService.prototype.initCommonDeps = function($http, socketFactory) {
-        BaseJsonService.prototype.initCommonDeps.call(this, $http);
-		this.socketFactory = socketFactory;
-	}
-
-	BaseContentService.prototype.getService = function(serviceNameOrObject) {
-		var serviceName;
-		if (!serviceNameOrObject) {
-			serviceName = null;
-		} else {
-			if (serviceNameOrObject.__t) {
-				serviceName = serviceNameOrObject.__t;
-			} else if (serviceNameOrObject.factory) {
-				return serviceNameOrObject.factory;
-			} else if (typeof serviceNameOrObject == "string") {
-				serviceName = serviceNameOrObject;
-			}
-		}
-		
-		switch (serviceName.toLowerCase()) {
-			case 'question':
-				return this.questionService;
-				break;
-			case 'answer':
-				return this.answerService;
-				break;
-			case 'comment':
-				return this.commentService;
-				break;
-			case 'basecontent':
-				console.error('a raw basecontent object is being passed around...');
-				return this;
-				break;
-		}
-	}
     BaseContentService.prototype.add = function (content, extraURL) {
     	var content;
     	if (!extraURL) {
@@ -57,25 +59,31 @@ var BaseContentService = function($http, socketFactory, questionService, answerS
     	if (extraURL) {
     		extraURL = '/'+extraURL;
     	}
-        return this.$http.post(this.urlBase+extraURL, JSON.stringify(content, this.sanitizeJson))
+        return I.$http.post(this.urlBase+extraURL, JSON.stringify(content, this.sanitizeJson))
         		   .then(this.modelFromResponse.bind(this));
     };
     BaseContentService.prototype.update = function (id, editedContent) {
-        return this.$http.put(this.urlBase + '/' + id, JSON.stringify(editedContent, this.sanitizeJson))
+        return I.$http.put(this.urlBase + '/' + id, JSON.stringify(editedContent, this.sanitizeJson))
         		   .then(function(response) {return response.data});
     };
     BaseContentService.prototype.upVote = function (id) {
-    	return this.$http.put(this.urlBase + '/upvote/' + id);
+    	return I.$http.put(this.urlBase + '/upvote/' + id)
+    	.then( (response) => I.loginService.bindables.user._id);
     };
     BaseContentService.prototype.downVote = function (id) {
-    	return this.$http.put(this.urlBase + '/dnvote/' + id);
+    	return I.$http.put(this.urlBase + '/downvote/' + id)
+    	.then( (response) => I.loginService.bindables.user._id);
     };
+    BaseContentService.prototype.removeVotes = function (id) {
+    	return I.$http.put(this.urlBase + '/removevotes/' + id)
+    	.then( (response) => I.loginService.bindables.user._id);
+    }
     BaseContentService.prototype.delete = function (id) {
-        return this.$http.delete(this.urlBase + '/' + id);
+        return I.$http.delete(this.urlBase + '/' + id);
     };
 //} BaseContentService
 
 import kusema from 'kusema.js';
-kusema.service('baseContentService', ['$http', 'socketFactory', 'questionService', 'answerService', 'commentService', BaseContentService]);
+kusema.service('baseContentService', [BaseContentService]);
 
 export default BaseContentService;

@@ -2,7 +2,6 @@
 	text-decoration: none;
 }
 
-
 .usernameFloat {
 	font-weight: bold;
 	display: block;
@@ -14,4 +13,45 @@
 
 .unitCode {
 	font-variant: small-caps;
+}
+
+*[kusema-markdown] pre, kusema-markdown pre {
+	clear: both;
+}
+
+html body .md-chips .md-chip {
+	border-radius: 50000px;
+	height: 1.7em;
+	margin: 0.4em 0.4em 0 0;
+	padding: 0 0.8em 0 0.8em;
+	font-size: 0.9em;
+	display: flex;
+	align-items: center;
+	line-height: normal;
+}
+html body .md-chips .md-chip .md-chip-content {
+	align-self: baseline;
+	line-height: 1.75em;
+}
+
+html body .md-chips .md-chip .md-chip-remove-container {
+	position: initial;
+	line-height: normal;
+}
+html body .md-chips:not(.md-readonly) .md-chip {
+	padding-right: 0.8em;
+}
+html body .md-chips .md-chip .md-chip-remove {
+	width: initial;
+	height: initial;
+	position: initial;
+}
+html body .md-chips .md-chip .md-chip-remove md-icon {
+	width: 1.3em;
+	height: 1.3em;
+	position: initial;
+	top: initial;
+	left: initial;
+	-webkit-transform: initial;
+	transform: initial;
 }

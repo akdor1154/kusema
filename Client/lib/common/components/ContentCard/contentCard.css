@@ -16,17 +16,6 @@ kusema-content-card md-card {
 	z-index: 10;
 }
 
-kusema-content-card .addCommentContainer {
-
-}
-
-kusema-content-card md-card-footer {
-	display: flex;
-	align-items: center;
-}
-kusema-content-card .footer-contents {
-	flex-grow: 1;
-}
 
 kusema-content-card .commentForm {
 	display: flex;
@@ -41,6 +30,33 @@ kusema-content-card .commentView {
 kusema-content-card .commentView .message {
 	flex-grow: 1;
 }
+
 kusema-content-card .commentForm md-input-container {
 	flex-grow: 1;
+}
+
+kusema-content-card .content-timestamp {
+	font-size: 0.8em;
+	color: #888888;
+	text-align: center;
+}
+
+kusema-content-card .content-score md-icon{
+	color: #d8d8d8;
+}
+
+kusema-content-card .content-score .upvote:hover md-icon {
+	color: #F8BBD0;
+}
+
+kusema-content-card .upvoted .content-score .upvote md-icon {
+	color: #EC407A
+}
+
+kusema-content-card .content-score .downvote:hover md-icon {
+	color: #C5CAE9;
+}
+
+kusema-content-card .downvoted .content-score .downvote md-icon {
+	color: #5C6BC0;
 }

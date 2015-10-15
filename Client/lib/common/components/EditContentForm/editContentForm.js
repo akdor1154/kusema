@@ -1,5 +1,7 @@
 import template from './editContentFormTemplate.html';
 
+import {Injector} from 'kusema.js';
+
 var editContentFormDirective = function() {
         return {
             scope: {
@@ -18,13 +20,16 @@ var editContentFormDirective = function() {
     };
 //}
 
-var editContentFormController = function($scope, baseContentService, groupService) {
+var I = new Injector('baseContentService', 'groupService', 'topicService');
+
+var editContentFormController = function($scope) {
+        I.init();
         this.$scope = $scope;
-        this.baseContentService = baseContentService;
         this.initializeContent();
         this._checkContentType();
         this.actionText = 'asdf'
-        $scope.groupService = groupService;
+        $scope.groupService = I.groupService;
+        $scope.topicService = I.topicService;
         this.groupSearchText = '';
         return this;
     }
@@ -88,8 +93,8 @@ var editContentFormController = function($scope, baseContentService, groupServic
     }
 
     editContentFormController.prototype._checkContentType = function() {
-        if (!this.baseContentService) return; // sometimes angular calls this before the constructor gets called :/
-        this.contentService = this.baseContentService.getService(this.contentType || this.outsideContent);
+        if (!I.baseContentService) return; // sometimes angular calls this before the constructor gets called :/
+        this.contentService = I.baseContentService.getService(this.contentType || this.outsideContent);
         this._contentType = (this.contentService) ? this.contentService.model.prototype.name : null;
     }
 
@@ -121,8 +126,8 @@ var editContentFormController = function($scope, baseContentService, groupServic
     }
 
     editContentFormController.prototype.searchGroups = function(searchText) {
-        console.log(this.groupService.bindables.groups);
-        return this.groupService.bindables.groupsArray;
+        console.log(I.groupService.bindables.groups);
+        return I.groupService.bindables.groupsArray;
     }
     editContentFormController.prototype.log = function() {
         console.log('ffs');
@@ -134,4 +139,4 @@ import {addModule} from 'kusema.js';
 
 addModule('kusema.components.editContent')
     .directive('kusemaEditContentForm', editContentFormDirective)
-    .controller('editContentFormController', ['$scope', 'baseContentService', 'groupService', editContentFormController]);
+    .controller('editContentFormController', ['$scope', editContentFormController]);

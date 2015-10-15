@@ -2,11 +2,34 @@
 
 var Question = require('../models/question');
 var User = require('../models/user');
+var Interaction = require('../models/interaction');
 
 var exp = module.exports;
 
 exp.findByQuestionId = function (req, res, next) {
-  return Question.findById(req.params.questionId)
+
+
+  var q = Question.findById(req.params.questionId)
+  console.log('just found');
+  if (req.user && req.user._id) {
+    q.then(function(question) {
+      console.log('about to log');
+      Interaction.log(req.user._id, 'read', question);
+    })
+    .catch(function(error) {
+      console.error(error);
+    })
+  }
+
+  return q;
+  /*
+  .then( function(question) {
+    return question.setStats()
+  })
+  .then( function(question) {
+    return question.save();
+  });
+  */
 };
 
 exp.nextTenQuestions = function (req, res, next) {
@@ -18,9 +41,59 @@ exp.nextTenQuestions = function (req, res, next) {
   }
 };
 
-exp.feed = function ( req, res, next ) {
-  var questionsToGive = Question.aggregate([
-      { $match: {__t: 'Question'}},
+
+var groupAggregate = function(groupId) {
+  var matchQuery = (groupId == 'all')
+    ? { $match:
+        { __t: 'Question' }
+      } 
+    : { $match: {
+        __t: 'Question',
+        group: groupId
+      } };
+
+  return [
+    matchQuery,
+
+    {$sort:
+      {dateCreated: -1}
+    }
+  ];
+}
+
+var feedAggregate = function(user) {
+
+ if (user) {
+    var interestedScores;
+    try {
+      interestedScores = Object.keys(user.stats.topicScores).filter(function(topic) {
+        return user.stats.topicScores[topic] > 0.5;
+      });
+    } catch (e) {
+        console.error(e);
+        console.error('couldn\'t get interested topics for '+user.username);
+    }
+
+    var orQuery = {
+      $match: { $or: [
+        { 'group': { $in: user.authcateSubscriptions.groups } },
+        { 'group': { $in: user.manualSubscriptions.groups } },
+        { 'topics': { $in: interestedScores } },
+        { 'author': user._id }
+      ] }
+    }
+
+  } else {
+    var orQuery = {$match: {__t: 'Question'}}
+  }
+
+  return [
+      { $match: {
+        __t: 'Question'
+        //dateCreated: { $gt: new Date() - 1000 * 60 * 60 * 24 * 30 * 2 } // exclude < two months ago, otherwise this query will be chockers
+      } },
+
+      orQuery,
 
       {$project: 
         {sortScore: 
@@ -42,6 +115,18 @@ exp.feed = function ( req, res, next ) {
             {$multiply: [
               '$stats.numAnswers',
               1
+            ]},
+            {$multiply: [
+              { '$cond': [
+                /*if*/  { $eq: [
+                          '$stats.numAnswers',
+                          0
+                        ] },
+
+                /*then*/ 1,
+                /*else*/ 0
+              ] },
+              10
             ]}
           ]},
 
@@ -63,10 +148,35 @@ exp.feed = function ( req, res, next ) {
       {$sort:
         {sortScore: -1}
       },
-  ]);
 
-  return questionsToGive.exec()
+  ];
+
+}
+
+exp.feed = function ( req, res, next ) {
+
+  var requestNumber = req.params.requestNumber || 0;
+
+  var aggregateQuery; 
+
+  if (req.params.groupID) {
+    aggregateQuery = groupAggregate(req.params.groupID);
+  } else {
+    aggregateQuery = feedAggregate(req.user);
+  }
+
+  aggregateQuery.push(
+    {$skip: requestNumber * 10}
+  )
+  aggregateQuery.push(
+    {$limit: 10}
+  )
+
+  return Question.aggregate(aggregateQuery).exec()
   .then( function(questions) {
+    if (questions.length == 0 ) {
+      res.status(204);
+    }
     return User.populate(questions, {path: 'author'});
   });
 }
@@ -76,7 +186,14 @@ exp.addQuestion = function (req, res, next) {
   question.setFromJSON(req.body, req.user._id);
   question.upVotes.     push(req.user._id);
 
-  return question.save()
+
+  var s = question.save();
+
+  s.then( function(question) {
+    Interaction.log(req.user._id, 'post', question);
+  });
+
+  return s;
 };
 
 exp.updateQuestion = function (req, res, next) {
@@ -95,9 +212,13 @@ exp.deleteQuestion = function(req, res, next) {
 };
 
 exp.upVoteQuestion = function(req, res, next) {
-    return Question.upVote(req.params.questionId, req.user._id)
+    return Question.upVote(req.params.questionId, req.user._id);
 };
 
 exp.downVoteQuestion = function(req, res, next) {
-    return Question.downVote(req.params.questionId, req.user._id)
+    return Question.downVote(req.params.questionId, req.user._id);
 };
+
+exp.unVoteQuestion = function(req, res, next) {
+  return Question.removeVotes(req.params.questionId, req.user._id);
+}

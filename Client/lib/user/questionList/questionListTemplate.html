@@ -1,7 +1,6 @@
 <!-- TODO turn this into a directive -->
 <kusema-question-preview ng-repeat="question in c.questions" question="question"></kusema-question-preview>
-
-</md-content>
+<md-progress-circular md-mode="{{(c.requesting) ? 'indeterminate' : ''}}" style="align-self: center"></md-progress-circular>
 
 <md-button class="md-fab" aria-label="Ask a Question" style="position: fixed; bottom: 20px; right: 20px;" ng-click="c.showWriter($event)">
   <md-icon md-font-set="material-icons">add</md-icon>

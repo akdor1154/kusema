@@ -10,3 +10,32 @@ kusema-user > section {
 	
 	background-color: #fbf9fb;
 }
+
+kusema-user > section > md-content, kusema-user > section > .layout-spacer {
+	background-color: transparent;
+}
+
+kusema-user md-sidenav[md-component-id=group-navigation] md-list-item {
+}
+
+group-list-item md-list-item.currentGroup {
+	background-color: #ffffff !important;
+	border-style: solid none;
+	border-width: 1px 0px;
+	border-color: rgba(0,0,0,0.12);
+}
+
+group-list-item md-list-item.currentGroup h3 {
+	font-weight: bold !important;
+}
+
+group-list-item md-list-item {
+	background-color: #f0f0f0;
+	border-style: solid none;
+	border-width: 1px 0px;
+	border-color: transparent;
+}
+
+kusema-user md-sidenav[md-component-id=group-navigation] md-divider {
+	margin: -1px;
+}

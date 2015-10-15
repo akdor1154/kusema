@@ -1,10 +1,12 @@
 import BaseJsonService from './BaseJsonService.js';
 import {Group} from 'common/models.js';
+import {Injector} from 'kusema.js';
 
-var GroupService = function($rootScope, $http, topicService) {
-		this.initCommonDeps($http);
-		this.topicService = topicService;
-		this.rootScope = $rootScope;
+var I = new Injector('topicService');
+
+var GroupService = function() {
+		BaseJsonService.call(this);
+		I.init();
 		this.urlStem = 'api/groups'
 		this.bindables = {
 			groups: null,
@@ -15,7 +17,10 @@ var GroupService = function($rootScope, $http, topicService) {
 			this._wait.resolve = resolve;
 			this._wait.reject = reject;
 		}.bind(this));
-		this.getAll();
+		this.getAll()
+		.catch(function(error) {
+			console.log(error);
+		});
 	}
 
 	GroupService.prototype = Object.create(BaseJsonService.prototype, {
@@ -23,8 +28,8 @@ var GroupService = function($rootScope, $http, topicService) {
 	});
 
 	GroupService.prototype.getAll = function() {
-		return BaseJsonService.prototype.getAll.call(this)
-		.then(this.topicService.waitForTopics)
+		return I.topicService.waitForTopics
+		.then(BaseJsonService.prototype.getAll.bind(this))
 		.then(function(groups) {
 			this.bindables.groups = {};
 			this.bindables.groupsArray = [];
@@ -32,21 +37,24 @@ var GroupService = function($rootScope, $http, topicService) {
 				this.bindables.groups[group._id] = group;
 				this.bindables.groupsArray.push(group);
 			}
-			console.log('waiting for groups done!');
 			this._wait.resolve();
 			return this.bindables.groups;
 		}.bind(this));
 	}
 
 	GroupService.prototype.getTopics = function(topics) {
-		return this.topicService.getTopics(topics);
+		return I.topicService.getTopics(topics);
 	}
 	GroupService.prototype.getTopic = function(topic) {
-		return this.topicService.getTopic(topic);
+		return I.topicService.getTopic(topic);
 	}
 
 	GroupService.prototype.getGroup = function(groupID) {
-		return this.bindables.groups[groupID];
+		try {
+			return this.bindables.groups[groupID];
+		} catch(e) {
+			return null;
+		}
 	}
 	GroupService.prototype.getGroups = function(groupsIDs) {
 		return groupsIDs.map(this.getGroup.bind(this));
@@ -65,10 +73,10 @@ var GroupService = function($rootScope, $http, topicService) {
 		return this._filterList(substr, this.bindables.groupsArray);
 	}
 	GroupService.prototype.filterTopics = function(substr) {
-		return this._filterList(substr, this.topicService.bindables.topicsArray);
+		return this._filterList(substr, I.topicService.bindables.topicsArray);
 	}
 
 import kusema from 'kusema.js';
-kusema.service('groupService', ['$rootScope', '$http', 'topicService', GroupService]);
+kusema.service('groupService', GroupService);
 
 export default GroupService;

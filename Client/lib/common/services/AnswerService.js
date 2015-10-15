@@ -3,8 +3,8 @@
 import BaseContentService from './BaseContentService.js'
 import {Answer} from 'common/models.js';
 
-var AnswerService = function($http, socketFactory) {
-		this.initCommonDeps($http, socketFactory);
+var AnswerService = function() {
+		BaseContentService.call(this, true);
 		this.urlStem = 'api/answers';
 	}
 
@@ -17,6 +17,6 @@ var AnswerService = function($http, socketFactory) {
 	}
 
 import kusema from 'kusema.js';
-kusema.service('answerService', ['$http', 'socketFactory', AnswerService]);
+kusema.service('answerService', AnswerService);
 
 export default AnswerService;

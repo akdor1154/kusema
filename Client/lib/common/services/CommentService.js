@@ -2,14 +2,16 @@
 
 import BaseContentService from './BaseContentService.js';
 import {Comment} from 'common/models.js';
+import {Injector} from 'kusema.js';
 
-var CommentSubscription = function(socketFactory, commentFactory, baseContent, callback) {
+var I = new Injector('$http', 'socketFactory');
+
+var CommentSubscription = function(commentFactory, baseContent, callback) {
 	    this.callback = callback;
-	    this.socketFactory = socketFactory;
 	    this.commentFactory = commentFactory;
 	    this.baseContent = baseContent;
-	    this.socketFactory.watchContent(this.baseContent);
-	    this.socketFactory.on('contentChanged', this.contentChanged.bind(this));
+	    I.socketFactory.watchContent(this.baseContent);
+	    I.socketFactory.on('contentChanged', this.contentChanged.bind(this));
 	    return this;
 	}
 	CommentSubscription.prototype.contentChanged = function(newContent) {
@@ -20,13 +22,14 @@ var CommentSubscription = function(socketFactory, commentFactory, baseContent, c
 	    }
 	}
 	CommentSubscription.prototype.cancel = function() {
-	    this.socketFactory.unwatchContent(this.baseContent);
+	    I.socketFactory.unwatchContent(this.baseContent);
 	}
 //} CommentSubScription
 
 
-var CommentService = function($http, socketFactory) {
-		this.initCommonDeps($http, socketFactory);
+var CommentService = function() {
+		BaseContentService.call(this, true);
+		I.init();
         this.urlStem = 'api/comments';
     }
 
@@ -35,7 +38,7 @@ var CommentService = function($http, socketFactory) {
 	});
 
     CommentService.prototype.getComments = function (id) {
-        return this.$http.get(this.urlBase + '/' + id)
+        return I.$http.get(this.urlBase + '/' + id)
                    .then(this.modelFromResponse.bind(this));
     };
 
@@ -43,11 +46,11 @@ var CommentService = function($http, socketFactory) {
 		return BaseContentService.prototype.add.call(this, comment, comment.parent);
     };
     CommentService.prototype.subscribeTo = function(baseContent, callback) {
-        return new CommentSubscription(this.socketFactory, this, baseContent, callback);
+        return new CommentSubscription(this, baseContent, callback);
     }
 //} CommentService 
 
 import kusema from 'kusema.js';
-kusema.service('commentService', ['$http', 'socketFactory', CommentService]);
+kusema.service('commentService', CommentService);
 
 export default CommentService;

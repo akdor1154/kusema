@@ -2,7 +2,12 @@ import 'kusema.js';
 
 import './questionList/questionList.js';
 import './questionFull/questionFull.js';
+
+import './components/GroupListItem/groupListItem.js';
+
 import template from './kusemaUserTemplate.html';
+
+import {Injector} from 'kusema.js';
 
 var KusemaUserConfig = function($stateProvider) {
 	$stateProvider
@@ -33,21 +38,61 @@ var KusemaUserDirective = function() {
 	};
 };
 
-var KusemaUserController = function($scope, $mdSidenav, loginService) {
-	console.log('yo')
-	this.$mdSidenav = $mdSidenav;
-	$scope.toggle = this.toggle.bind(this);
-	$scope.loginData = loginService.bindables;
-	console.log($scope.loginData);
-	$scope.searchGroups = function() {
-		return $scope.loginData.subscriptions.groups;
-	}
-}
-KusemaUserController.prototype = Object.create(Object.prototype);
+var I = new Injector('loginService', 'groupService', '$state');
 
-KusemaUserController.prototype.toggle = function(id) {
-	console.log('sup');
-	this.$mdSidenav(id).toggle();
+class KusemaUserController {
+	constructor($scope, $mdSidenav) {
+		I.init();
+		this.$mdSidenav = $mdSidenav;
+		this.loginData = I.loginService.bindables;
+		this.gs = I.groupService;
+		this.dummyGroups = {
+			'kusema': {
+				unitCode: 'Kusema',
+				title: 'Your own personal feed'
+			},
+			'all': {
+				unitCode: 'All Questions',
+				title: 'Hungry for content?\nView questions from all groups',
+				_id: 'all'
+			}
+		}
+	}
+
+	toggle(id) {
+		console.log('sup');
+		this.$mdSidenav(id).toggle();
+	}
+
+	goToGroup(newGroup) {
+		if (!newGroup) {
+			I.$state.go('user.home');
+		}
+		I.$state.go('user.group', {groupID: newGroup});
+	}
+
+	get currentGroup() {
+		if (!I.$state.params.groupID) {
+			return this.dummyGroups.kusema;
+		} else if (I.$state.params.groupID == 'all') {
+			return this.dummyGroups.all
+		} else {
+			return I.groupService.getGroup(I.$state.params.groupID);
+		}
+	}
+
+	get knownGroups() {
+		console.log(I.loginService.bindables);
+		var subs;
+		if (I.loginService.bindables.user) {
+			subs = I.loginService.bindables.user.subscriptions.groups;
+		} else {
+			subs = [];
+		}
+		return subs.concat(Object.keys(this.dummyGroups).map((key) => this.dummyGroups[key]));
+	}
+
+
 }
 
 import kusema from 'kusema.js';
@@ -55,4 +100,4 @@ import kusema from 'kusema.js';
 export default kusema.addModule('kusema.user', ['ngMaterial'])
 	   .config(['$stateProvider', KusemaUserConfig])
 	   .directive('kusemaUser', KusemaUserDirective)
-	   .controller('kusemaUserController', ['$scope', '$mdSidenav', 'loginService', KusemaUserController]);
+	   .controller('kusemaUserController', ['$scope', '$mdSidenav', KusemaUserController]);

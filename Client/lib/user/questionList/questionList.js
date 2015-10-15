@@ -27,6 +27,7 @@
 //kusema.controller('SearchController', SearchController);
 
 import questionListTemplate from './questionListTemplate.html'
+import {Injector} from 'kusema.js';
 
 var QuestionListDirective = function() {
 	return {
@@ -36,27 +37,66 @@ var QuestionListDirective = function() {
 		},
 		template: questionListTemplate,
 		controller: 'questionListController',
-		controllerAs: 'c'
+		css: 'lib/user/questionList/questionList.css',
+		controllerAs: 'c',
+		link: function(scope, element, attrs) {
+			element.parent().bind('scroll', function(event) {
+				var content = event.target
+				window.requestAnimationFrame(function() {
+					if (content.scrollHeight - content.scrollTop - content.clientHeight < 80) { // pixels to bottom
+						scope.c.getNextPage();
+					}		
+				})
+			});
+		}
 	};
 }
 
-var QuestionListController = function(questionService, $mdDialog, $scope) {
+var I = new Injector('questionService', '$state');
+
+var QuestionListController = function($mdDialog, $scope) {
+		I.init();
 		this.allowMoreRequests = true;
 		this.writerOpen = false;
 		this.$scope = $scope;
 		this.$mdDialog = $mdDialog;
-		this.test = "hello";
+		this.init();
+		console.log('kusema user group:');
+		console.log(this.group);
+		$scope.$on('loginChanged', this.init.bind(this));
+	}
+
+	QuestionListController.prototype.init = function() {
 		this.questions = []
+		this.requestNumber = 0;
+		this.requesting = false;
+		this.noMore = false
 
-	    questionService.getFeed(0, this.group)
-	    .then( this.addQuestions.bind(this) )
-	    .catch( console.error.bind(console) );
+		this.getNextPage();
+	}
 
+	QuestionListController.prototype.getNextPage = function() {
+		if (this.requesting || this.noMore)
+			return;
+		console.log(I.$state);
+		this.requesting = true;
+
+		var g = I.questionService.getFeed(this.requestNumber, this.group)
+		.then( (questions) => {
+			this.addQuestions(questions);
+		} )
+		.catch( (error) => {
+			this.noMore = true;
+		})
+		.then( () => { console.log('done!'); this.requesting = false;});
+
+		this.requestNumber++;
+
+		return g;
 	}
 
 	QuestionListController.prototype.addQuestions = function(questions) {
-		//TODO: infinite scroll?
-		this.questions = questions;
+		this.questions.push(...questions);
 	}
 
 
@@ -79,7 +119,7 @@ var QuestionListController = function(questionService, $mdDialog, $scope) {
 		this.$mdDialog.hide();
 	}
 	QuestionListController.prototype.newQuestionPosted = function(newQuestion) {
-		this.questions.add(newQuestion);
+		this.questions.unshift(newQuestion);
 		this.hideWriter();
 	}
 
@@ -87,4 +127,4 @@ import {addModule} from 'kusema.js';
 
 addModule('kusema.user.questionList', ['ngMaterial'] )
 	  .directive('kusemaQuestionList', QuestionListDirective)
-	  .controller('questionListController', ['questionService', '$mdDialog', '$scope', QuestionListController])
+	  .controller('questionListController', ['$mdDialog', '$scope', QuestionListController])

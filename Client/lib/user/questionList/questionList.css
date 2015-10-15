@@ -1,0 +1,10 @@
+kusema-question-list {
+	display: flex;
+	flex-direction: column;
+}
+
+kusema-question-list md-progress-circular {
+	margin-top: 10em;
+	margin-bottom: 10em !important;
+	align-self: center;
+}

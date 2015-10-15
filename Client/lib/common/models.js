@@ -1,7 +1,11 @@
 'use strict';
 
+import {Injector} from 'kusema.js';
+
+var I = new Injector('questionService', 'answerService', 'commentService', 'topicService', 'groupService');
 
 var BaseJson = function BaseJson(contentJSON, factory) {
+        I.init();
         Object.defineProperty(this, 'factory', {writable:true, value:null, enumerable: false});
         this.factory = factory;
         for (var property in Object.getPrototypeOf(this)) {
@@ -26,6 +30,8 @@ var BaseJson = function BaseJson(contentJSON, factory) {
 
 var BaseContent = function BaseContent(contentJSON, factory) {
         BaseJson.call(this, contentJSON, factory);
+        this.upVotes = new Set(this.upVotes);
+        this.downVotes = new Set(this.downVotes)
     	return this;
     }
     BaseContent.prototype = Object.create(BaseJson.prototype, {
@@ -35,19 +41,24 @@ var BaseContent = function BaseContent(contentJSON, factory) {
         authorName: { writable: true, value: "", enumerable: true},
         message: { writable: true, value: 0, enumerable: true },
         comments: { writable: true, value: [], enumerable: true},
-        upVotes: { writable: true, value: 0, enumerable: true },
-        downVotes: { writable: true, value: 0, enumerable: true},
+        upVotes: { writable: true, value: [], enumerable: true },
+        downVotes: { writable: true, value: [], enumerable: true},
         score: {get: function() {
-            return this.upVotes - this.downVotes;
+            return this.upVotes.size - this.downVotes.size;
         }},
     });
     BaseContent.prototype.upVote = function() {
-        this.factory.upVote(this._id);
-        this.upVotes++;       
+        this.factory.upVote(this._id)
+        .then( (userId) => {this.upVotes.add(userId); this.downVotes.delete(userId)});
+              
     };
     BaseContent.prototype.downVote = function() {
-        this.factory.downVote(this._id);
-        this.downVotes++;          
+        this.factory.downVote(this._id)
+        .then( (userId) => {this.downVotes.add(userId); this.upVotes.delete(userId)} );          
+    };
+    BaseContent.prototype.removeVotes = function() {
+        this.factory.removeVotes(this._id)
+        .then( (userId) => {this.downVotes.delete(userId); this.upVotes.delete(userId)} );          
     };
     BaseContent.prototype.delete = function() {
         this.factory.delete(this._id);   
@@ -64,16 +75,16 @@ var BaseContent = function BaseContent(contentJSON, factory) {
 
 var Question = function Question(questionJSON, questionService) {
         //we need this to be NON-ENUMERABLE, else we get a circular dependancy when JSON.stringifying. Unfortunately setting non-enumerable on the prototype's property is not enough :(
-        BaseContent.call(this, questionJSON, questionService);
+        BaseContent.call(this, questionJSON, I.questionService);
         if (this.answers) {
-            this.answers = questionService.answerService.createClientModels(this.answers);
+            this.answers = I.answerService.createClientModels(this.answers);
         };
-        questionService.groupService.waitForGroups.then(function() {
+        I.groupService.waitForGroups.then(function() {
             if (this.group) {
-                this.group = questionService.groupService.getGroup(this.group);
+                this.group = I.groupService.getGroup(this.group);
             }
             if (this.topics) {
-                this.topics = questionService.groupService.topicService.getTopics(this.topics);
+                this.topics = I.topicService.getTopics(this.topics);
             }
         }.bind(this));
         return this;
@@ -90,7 +101,7 @@ var Question = function Question(questionJSON, questionService) {
 
 
 var Comment = function(commentJSON, commentFactory) {
-		BaseContent.call(this, commentJSON, commentFactory);
+		BaseContent.call(this, commentJSON, I.commentService);
     }
     Comment.prototype = Object.create(BaseContent.prototype, {
         constructor: {writable: false, value: Comment, enumerable: false},
@@ -100,7 +111,7 @@ var Comment = function(commentJSON, commentFactory) {
 
 
 var Answer = function Answer(answerJSON, answerFactory) {
-        BaseContent.call(this, answerJSON, answerFactory);
+        BaseContent.call(this, answerJSON, I.answerService);
     }
     Answer.prototype = Object.create(BaseContent.prototype, {
         constructor: {writable: false, value: Answer, enumerable: false},
@@ -110,9 +121,9 @@ var Answer = function Answer(answerJSON, answerFactory) {
 
 
 var Group = function Group(groupJSON, groupService) {
-        BaseJson.call(this, groupJSON, groupService);
+        BaseJson.call(this, groupJSON, I.groupService);
         if (this.topics) {
-            this.topics = this.topics.map(function(topicID) { return groupService.topicService.getTopic(topicID); });
+            this.topics = this.topics.map(function(topicID) { return I.topicService.getTopic(topicID); });
         }
     }
     Group.prototype = Object.create(BaseJson.prototype, {

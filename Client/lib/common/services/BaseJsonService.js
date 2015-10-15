@@ -2,9 +2,12 @@
 
 import {BaseJson} from 'common/models.js';
 import {serverUrl} from 'kusemaConfig.js';
+import {Injector} from 'kusema.js';
 
-var BaseJsonService = function($http) {
-		this.initCommonDeps($http);
+var I = new Injector('$http');
+
+var BaseJsonService = function() {
+        I.init();
 		return this;
 	}
 
@@ -19,9 +22,6 @@ var BaseJsonService = function($http) {
 		model: {writable: false, enumerable: false, value: BaseJson}
 	});
 
-	BaseJsonService.prototype.initCommonDeps = function($http) {
-			this.$http = $http;
-	}
 	BaseJsonService.prototype.createClientModel = function(responseJSON) {
 	    return new this.model(responseJSON, this);
 	}
@@ -29,7 +29,7 @@ var BaseJsonService = function($http) {
 		return this.createClientModel(response.data);
 	}
     BaseJsonService.prototype.get = function (id) {
-        return this.$http.get(this.urlBase + '/' + id)
+        return I.$http.get(this.urlBase + '/' + id)
         		   .then(this.modelFromResponse.bind(this));
     };
     BaseJsonService.prototype.createClientModels = function(responseJSON) {
@@ -49,13 +49,13 @@ var BaseJsonService = function($http) {
     	}
     }
     BaseJsonService.prototype.getAll = function () {
-        return this.$http.get(this.urlBase)
+        return I.$http.get(this.urlBase)
         		   .then(function(response) {
         		   		return response.data.map(this.createClientModel.bind(this));
         		   }.bind(this));
     };
 
 import kusema from 'kusema.js';
-kusema.service('baseJsonService', ['$http', BaseJsonService]);
+kusema.service('baseJsonService', BaseJsonService);
 
 export default BaseJsonService;

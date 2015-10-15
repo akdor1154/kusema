@@ -3,6 +3,8 @@
 import hljs from 'highlightjs';
 import markdownIt from 'markdown-it';
 
+import 'highlightjs/styles/github.css!';
+
 var MarkdownService = function() {
 	console.log('markdown');
 	return markdownIt({
@@ -17,6 +19,9 @@ var MarkdownService = function() {
 				} catch (e) {
 					console.log('highlight error');
 				}
+			} else {
+				console.error(language);
+				console.error(hljs);
 			}
 			return '';
 		}
