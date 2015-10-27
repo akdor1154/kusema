@@ -189,11 +189,11 @@ exp.addQuestion = function (req, res, next) {
 
   var s = question.save();
 
-  s.then( function(question) {
+  return s.then( function(question) {
     Interaction.log(req.user._id, 'post', question);
+    return question.populate('author').execPopulate();
   });
 
-  return s;
 };
 
 exp.updateQuestion = function (req, res, next) {
