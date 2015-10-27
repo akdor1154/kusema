@@ -48,12 +48,7 @@ class QuestionFullController {
 	}
 
 	newAnswersCallback(answers) {
-		if (this.postedAnswerId) {
-			if (answers.filter(a=>a._id==this.postedAnswerId).length > 0) {
-				this.postedAnswerId = null;
-				return;
-			}
-		}
+		answers = answers.filter(a=>a._id!=this.postedAnswerId);
 		this.$scope.$apply(() => this.newAnswers(answers));
 	}
 
