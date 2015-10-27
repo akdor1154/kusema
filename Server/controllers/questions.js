@@ -204,6 +204,9 @@ exp.updateQuestion = function (req, res, next) {
     question.dateModified = new Date();
     return question.save();
   })
+  .then(function(question) {
+    return question.populate('author').execPopulate();
+  });
 };
 
 exp.deleteQuestion = function(req, res, next) {
